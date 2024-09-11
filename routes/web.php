@@ -28,7 +28,7 @@ Route::get('/register', function () {
 
 /* Super Admin role */
 Route::middleware(['auth', 'checkrole:sa'])->group(function () {
-
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 /* Client account role */

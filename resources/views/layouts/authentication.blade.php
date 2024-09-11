@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="/images/hris-logo.png" type="image/x-icon">
+    <link rel="icon" href="/images/mgar-logo.png" type="image/x-icon">
 
-    <title>NYC - HRIS</title>
+    <title>MGAR CP PORTAL</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -106,7 +106,7 @@
                         <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                             <!-- Logo -->
                             <a class="block" href="{{ route('dashboard') }}">
-                                <img src="images/nyc-logo.png" alt="logo" class="h-12">
+                                <img src="images/mgar-logo.png" alt="logo" class="h-12">
                             </a>
                         </div>
                     </div>
@@ -127,8 +127,8 @@
                 </div>
 
                 <div class="flex items-center justify-center w-full h-full login-logo animate-slide-in-right-delay">
-                    <img class="w-1/2 h-1/2 object-contain" src="{{ asset('images/hris-logo.png') }}" width="760"
-                        height="1024" alt="Authentication image" />
+                    <img class="w-1/2 h-1/2 object-contain" src="{{ asset('images/mgar-logo.png') }}" width="760"
+                        height="1024" alt="Authentication image"/>
                 </div>
             </div>
 
