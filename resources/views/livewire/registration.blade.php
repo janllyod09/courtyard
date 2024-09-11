@@ -17,8 +17,9 @@
                     <form wire:submit.prevent="submit">
                         <!-- Company Information -->
                         <div class="mb-6">
-                            <label class="block text-gray-700 font-bold mb-2" for="company_name">
+                            <label class="text-sm text-gray-700 font-bold" for="company_name">
                                 Pangalan ng Kumpanya (Name of Company):
+                                <span class="text-red-600">*</span>
                             </label>
                             <input type="text" id="company_name" wire:model.live="companyName"
                                 class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
@@ -26,8 +27,9 @@
                         </div>
 
                         <div class="mb-6">
-                            <label class="block text-gray-700 font-bold mb-2" for="name">
+                            <label class="text-sm text-gray-700 font-bold" for="name">
                                 Pangalan ng Operator:
+                                <span class="text-red-600">*</span>
                             </label>
                             <input type="text" id="name" wire:model.live="name"
                                 class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
@@ -36,16 +38,18 @@
 
                         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2" for="email">
+                                <label class="text-sm text-gray-700 font-bold" for="email">
                                     Email Address:
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="email" id="email" wire:model.live="email"
                                     class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
                                 @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2" for="contact_num">
+                                <label class="text-sm text-gray-700 font-bold" for="contact_num">
                                     Contact Number:
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="contact_num" wire:model.live="contactNum"
                                     class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
@@ -56,41 +60,43 @@
                         <!-- Permit and Contract Details -->
                         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2">
+                                <label class="text-sm text-gray-700 font-bold">
                                     Uri ng Pagmimina (Type of Mining):
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="miningType" value="surface_quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Surface o Quarry</label>
+                                        <label class="text-sm text-gray-700 ml-2">Surface o Quarry</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="miningType" value="underground" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Underground</label>
+                                        <label class="text-sm text-gray-700 ml-2">Underground</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="miningType" value="seabed" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Seabed</label>
+                                        <label class="text-sm text-gray-700 ml-2">Seabed</label>
                                     </div>
                                 </div>
                                 @error('miningType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2">
+                                <label class="text-sm text-gray-700 font-bold">
                                     Uri ng Permit o Kontrata (Permit Type):
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitType" value="ep" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">EP</label>
+                                        <label class="text-sm text-gray-700 ml-2">EP</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitType" value="mpp" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">MPP</label>
+                                        <label class="text-sm text-gray-700 ml-2">MPP</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitType" value="qcp" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">QCP</label>
+                                        <label class="text-sm text-gray-700 ml-2">QCP</label>
                                     </div>
                                 </div>
                                 @error('permitType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -99,82 +105,86 @@
                         
                         <!-- Location and Commodities -->
                         <div class="mb-6">
-                            <label class="block text-gray-700 font-bold mb-2">Lokasyon ng Permit o Kontrata (Location):</label>
+                            <label class="text-sm text-gray-700 font-bold">Lokasyon ng Permit o Kontrata (Location):
+                                <span class="text-red-600">*</span>
+                            </label>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <!-- First column for locations -->
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitLocation" value="Cavite" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Cavite</label>
+                                        <label class="text-sm text-gray-700 ml-2">Cavite</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitLocation" value="Laguna" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Laguna</label>
+                                        <label class="text-sm text-gray-700 ml-2">Laguna</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitLocation" value="Batangas" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Batangas</label>
+                                        <label class="text-sm text-gray-700 ml-2">Batangas</label>
                                     </div>
                                 </div>
                                 <!-- Second column for locations -->
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitLocation" value="Rizal" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Rizal</label>
+                                        <label class="text-sm text-gray-700 ml-2">Rizal</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="permitLocation" value="Quezon" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Quezon</label>
+                                        <label class="text-sm text-gray-700 ml-2">Quezon</label>
                                     </div>
                                 </div>
                             </div>
                             @error('permitLocation') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                         </div>
                         <div class="mb-6">
-                            <label class="block text-gray-700 font-bold mb-2">Produkto (Commodity):</label>
+                            <label class="text-sm text-gray-700 font-bold">Produkto (Commodity):
+                                <span class="text-red-600">*</span>
+                            </label>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Aggregates" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Aggregates</label>
+                                        <label class="text-sm text-gray-700 ml-2">Aggregates</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Filling Materials" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Filling Materials</label>
+                                        <label class="text-sm text-gray-700 ml-2">Filling Materials</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Pozzolan" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Pozzolan</label>
+                                        <label class="text-sm text-gray-700 ml-2">Pozzolan</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Silica" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Silica</label>
+                                        <label class="text-sm text-gray-700 ml-2">Silica</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Boulders (Marble)" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Boulders (Marble)</label>
+                                        <label class="text-sm text-gray-700 ml-2">Boulders (Marble)</label>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Sand and Gravel" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Sand and Gravel</label>
+                                        <label class="text-sm text-gray-700 ml-2">Sand and Gravel</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Shale" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Shale</label>
+                                        <label class="text-sm text-gray-700 ml-2">Shale</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Volcanic Tuff" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Volcanic Tuff</label>
+                                        <label class="text-sm text-gray-700 ml-2">Volcanic Tuff</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Boulders" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Boulders</label>
+                                        <label class="text-sm text-gray-700 ml-2">Boulders</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="checkbox" wire:model.live="product" value="Marine Aggregates" class="fw-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                        <label class="ml-2 text-gray-700">Marine Aggregates</label>
+                                        <label class="text-sm text-gray-700 ml-2">Marine Aggregates</label>
                                     </div>
                                 </div>
                             </div>
@@ -185,8 +195,9 @@
 
                         <!-- Registrant Information -->
                         <div class="mb-6">
-                            <label class="block text-gray-700 font-bold mb-2" for="registrant_name">
+                            <label class="text-sm text-gray-700 font-bold" for="registrant_name">
                                 Pangalan ng Naghrehistro (Name of Registrant):
+                                <span class="text-red-600">*</span>
                             </label>
                             <input type="text" id="registrant_name" wire:model.live="registrantName"
                                 class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
@@ -197,8 +208,9 @@
                         
                         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2" for="password">
+                                <label class="text-sm text-gray-700 font-bold" for="password">
                                     Password:
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="password" id="password" wire:model.live="password"
                                     class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
@@ -206,8 +218,9 @@
                             </div>
 
                             <div>
-                                <label class="block text-gray-700 font-bold mb-2" for="c_password">
+                                <label class="text-sm text-gray-700 font-bold" for="c_password">
                                     Confirm Password:
+                                    <span class="text-red-600">*</span>
                                 </label>
                                 <input type="password" id="c_password" wire:model.live="c_password"
                                     class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
