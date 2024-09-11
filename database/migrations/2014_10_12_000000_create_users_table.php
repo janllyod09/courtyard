@@ -15,13 +15,17 @@ return new class extends Migration
             Schema::create('users', function (Blueprint $table) {
                 $table->id('id');
                 $table->string('name');
+                $table->string('company_name');
+                $table->string('registrant_name');
                 $table->string('email', 50);
                 $table->string('password', 1000);
                 $table->string('user_role')->nullable();
                 $table->string('active_status')->nullable();
-                $table->string('emp_code')->unique()->nullable();
-                $table->unsignedBigInteger('position_id')->nullable();
-                $table->unsignedBigInteger('office_division_id')->nullable();
+                $table->string('contact_num')->unique()->nullable();
+                $table->string('mining_type')->nullable();
+                $table->string('product')->nullable();
+                $table->string('permit_type')->nullable();
+                $table->string('permit_location')->nullable();
                 $table->string('profile_photo_path')->nullable();
                 $table->rememberToken();
                 $table->timestamps();
