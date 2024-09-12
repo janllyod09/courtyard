@@ -29,10 +29,13 @@ class User extends Authenticatable
         'password',
         'user_role',
         'active_status',
-        'emp_code',
-        'position_id',
-        'office_division_id',
-        'unit_id',
+        'company_name',
+        'registrant_name',
+        'contact_num',
+        'mining_type',
+        'product',
+        'permit_type',
+        'permit_location',
         'profile_photo_path',
     ];
 
@@ -84,4 +87,5 @@ class User extends Authenticatable
                 ->orWhere('office_divisions.office_division', 'like', $term);
         });
     }
+
 }
