@@ -291,7 +291,33 @@
                                 </div>
 
                                 <div class="{{ $currentStep === 2 ? '' : 'hidden' }}">
-                                    <h1>Step 2</h1>
+                                    <div class="flex gap-2 overflow-x-auto -mb-2">
+                                        <button @click="selectedTab = 'org'" 
+                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'org', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'org' }" 
+                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
+                                            Organization
+                                        </button>
+                                        <button @click="selectedTab = 'role'" 
+                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'role', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'role' }" 
+                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
+                                            Admin Role
+                                        </button>
+                                        <button @click="selectedTab = 'pos'" 
+                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'pos', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'pos' }" 
+                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
+                                            Employee Settings
+                                        </button>
+                                        <button @click="selectedTab = 'settings'" 
+                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'settings', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'settings' }" 
+                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
+                                            HR Settings
+                                        </button>
+                                        <button @click="selectedTab = 'sgstep'" 
+                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'sgstep', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'sgstep' }" 
+                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
+                                            SG/STEP 
+                                        </button>
+                                    </div>
 
 
                                     <div class="w-full flex justify-between items-center">

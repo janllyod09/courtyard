@@ -15,7 +15,7 @@ class ReportTable extends Component
 
     public $date;
     public $create = true;
-    public $currentStep = 1;
+    public $currentStep = 2;
 
     public function render()
     {
