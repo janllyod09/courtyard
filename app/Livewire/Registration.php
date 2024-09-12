@@ -67,7 +67,7 @@ class Registration extends Component
             'password' => Hash::make($this->password),
             'company_name' => $this->companyName,
             'registrant_name' => $this->registrantName,
-            'user_role' => 'emp',
+            'user_role' => 'client',
             'contact_num' => $this->contactNum,
             'mining_type' => json_encode($this->miningType),
             'permit_type' => json_encode($this->permitType),
