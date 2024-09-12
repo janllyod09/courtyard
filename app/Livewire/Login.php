@@ -35,9 +35,9 @@ class Login extends Component
         if (Auth::attempt($credentials, $this->remember)) {
             $user = Auth::user();
 
-            if ($user->user_role === 'emp') {
+            if ($user->user_role === 'client') {
                 return app(LoginResponse::class)->toResponse($this->request)->intended('/home');
-            } else if (in_array($user->user_role, ['sa', 'hr', 'sv', 'pa'])) {
+            } else {
                 return app(LoginResponse::class)->toResponse($this->request)->intended('/dashboard');
             }
         } else {

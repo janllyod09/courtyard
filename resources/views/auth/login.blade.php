@@ -5,7 +5,6 @@
                 transform: translateX(-100%);
                 opacity: 0;
             }
-
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -63,36 +62,42 @@
                 @error('password')
                     <span class="text-red-500 text-sm mt-1">This field is required!</span>
                 @enderror
-
             </div>
             <!-- Remember Me Checkbox -->
             <div class="flex items-center justify-between w-full mt-6">
                 <!-- Remember Me Checkbox -->
-                    <div class="flex items-center">
-                        <input
-                            id="remember_me"
-                            type="checkbox"
-                            wire:model.defer="remember"
-                            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                        />
-                        <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
-                            {{ __('Remember me') }}
-                        </label>
-                    </div>
-
-                    <!-- Forgot Password Link -->
-                    @if (Route::has('password.request'))
-                        <a class="text-sm underline hover:no-underline text-gray-900 dark:text-gray-300" href="{{ route('password.request') }}">
-                            {{ __('Forgot Password?') }}
-                        </a>
-                    @endif
+                <div class="flex items-center">
+                    <input
+                        id="remember_me"
+                        type="checkbox"
+                        wire:model.defer="remember"
+                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
+                        {{ __('Remember me') }}
+                    </label>
                 </div>
+
+                <!-- Forgot Password Link -->
+                @if (Route::has('password.request'))
+                    <a class="text-sm underline hover:no-underline text-gray-900 dark:text-gray-300" href="{{ route('password.request') }}">
+                        {{ __('Forgot Password?') }}
+                    </a>
+                @endif
             </div>
-            <div class="flex items-center justify-between mt-6">
-                <x-button>
-                    {{ __('Sign in') }}
-                </x-button>
-            </div>
+        </div>
+
+        <!-- Buttons Row -->
+        <div class="flex items-center space-x-4 mt-6">
+            <x-button type="submit">
+                {{ __('Sign in') }}
+            </x-button>
+            <x-button>
+            <a href="{{ route('register') }}">
+                {{ __('Register') }}
+            </a>
+            </x-button>
+        </div>
     </form>
 
     <x-validation-errors class="mt-4" />
