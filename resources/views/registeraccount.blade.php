@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="/images/mgar-logo.png" type="image/x-icon">
 
-    <title>NYC - HRIS</title>
+    <title>MGB - CP Portal</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
