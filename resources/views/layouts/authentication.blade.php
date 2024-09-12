@@ -16,11 +16,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <!-- Scripts -->
-    <script defer src="build/assets/app-BXAyOSJJ.js"></script>
+    <script defer src="build/assets/app-D9BebNPI.js"></script>
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Styles -->
-    <link rel="stylesheet" href="build/assets/app-DYRvWKQV.css">
+    <link rel="stylesheet" href="build/assets/app-D8Db1cyg.css">
 
     @livewireStyles
     <style>
