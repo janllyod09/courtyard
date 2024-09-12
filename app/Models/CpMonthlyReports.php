@@ -22,7 +22,8 @@ class CpMonthlyReports extends Model
         'non_lost_time_accident',
         'non_fatal_lost_time_accident',
         'fatal_lost_time_accident',
-        'days_lost',
+        'nflt_days_lost',
+        'flt_days_lost',
         'minutes',
     ];
 

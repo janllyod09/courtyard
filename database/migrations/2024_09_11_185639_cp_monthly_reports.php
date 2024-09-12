@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('non_lost_time_accident')->default(0);
             $table->integer('non_fatal_lost_time_accident')->default(0);
             $table->integer('fatal_lost_time_accident')->default(0);
-            $table->integer('days_lost')->default(0);
+            $table->integer('nflt_days_lost')->default(0);
+            $table->integer('flt_days_lost')->default(0);
             $table->string('minutes')->default(0);
             $table->timestamps();
         });

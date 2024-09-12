@@ -1,5 +1,9 @@
-<div class="w-full">
-
+<div class="w-full"
+x-data="{ 
+    selectedSubTab: 'nlta',
+}" 
+x-cloak
+>
 
     <style>
         .scrollbar-thin1::-webkit-scrollbar {
@@ -291,32 +295,85 @@
                                 </div>
 
                                 <div class="{{ $currentStep === 2 ? '' : 'hidden' }}">
-                                    <div class="flex gap-2 overflow-x-auto -mb-2">
-                                        <button @click="selectedTab = 'org'" 
-                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'org', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'org' }" 
-                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
-                                            Organization
-                                        </button>
-                                        <button @click="selectedTab = 'role'" 
-                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'role', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'role' }" 
-                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
-                                            Admin Role
-                                        </button>
-                                        <button @click="selectedTab = 'pos'" 
-                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'pos', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'pos' }" 
-                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
-                                            Employee Settings
-                                        </button>
-                                        <button @click="selectedTab = 'settings'" 
-                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'settings', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'settings' }" 
-                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
-                                            HR Settings
-                                        </button>
-                                        <button @click="selectedTab = 'sgstep'" 
-                                                :class="{ 'font-bold dark:text-gray-300 dark:bg-gray-700 bg-gray-200 rounded-t-lg': selectedTab === 'sgstep', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedTab !== 'sgstep' }" 
-                                                class="h-min px-4 pt-2 pb-4 text-sm text-nowrap">
-                                            SG/STEP 
-                                        </button>
+                                    <div class="flex gap-6 overflow-x-auto mb-4 pb-2">
+                                        <div @click="selectedSubTab = 'nlta'" 
+                                                :class="{ 'font-bold dark:text-gray-300': selectedSubTab === 'nlta', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedSubTab !== 'nlta' }" 
+                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
+                                            <label for="nlta" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Non-Lost Time Accident</label>
+                                            <input type="number" id="nlta" wire:model='nlta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
+                                        </div>
+                                        <div @click="selectedSubTab = 'nflta'" 
+                                                :class="{ 'font-bold dark:text-gray-300': selectedSubTab === 'nflta', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedSubTab !== 'nflta' }" 
+                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
+                                            <label for="nflta" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Non-Fatal Lost Time Accident</label>
+                                            <div class="flex gap-2">
+                                                <input type="number" id="nflta" wire:model='nflta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
+                                                <input type="number" id="nfltaDaysLost" wire:model='nfltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
+                                            </div>
+                                        </div>
+                                        <div @click="selectedSubTab = 'flta'" 
+                                                :class="{ 'font-bold dark:text-gray-300': selectedSubTab === 'flta', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedSubTab !== 'flta' }" 
+                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
+                                            <label for="flta" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Fatal Lost Time Accident</label>
+                                            <div class="flex gap-2">
+                                                <input type="number" id="flta" wire:model='flta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
+                                                <input type="number" id="fltaDaysLost" wire:model='fltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="-my-2 overflow-x-auto">
+                                        <div class="inline-block w-full py-2 align-middle">
+                                            <div>
+                                                <div class="overflow-hidden border dark:border-gray-700 bg-gray-50 dark:bg-slate-700 rounded-md">
+                                                    <div x-show="selectedSubTab === 'nlta'" class="p-4">
+                                                        <div class="w-full flex justify-center items-center mb-4">
+                                                            <h1 class="text-gray-800 dark:text-gray-100 uppercase">Non</h1>
+                                                        </div>
+
+                                                        <div class="grid grid-cols-3 gap-4">
+                                                            <div class="col-span-full sm:col-span-1">
+                                                                <label for="surname" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Surname</label>
+                                                                <input type="text" id="surname" wire:model='surname' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                                                @error('surname')
+                                                                    <span class="text-red-500 text-sm">The surname is required!</span>
+                                                                @enderror
+                                                            </div>
+                                        
+                                                            <div class="col-span-full sm:col-span-1">
+                                                                <label for="first_name" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Firstname</label>
+                                                                <input type="text" id="first_name" wire:model='first_name' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                                                                @error('first_name')
+                                                                    <span class="text-red-500 text-sm">The firstname is required!</span>
+                                                                @enderror
+                                                            </div>
+                                        
+                                                            <div class="col-span-full sm:col-span-1">
+                                                                <label for="middle_name" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Middlename</label>
+                                                                <input type="text" id="middle_name" wire:model='middle_name' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                                                                @error('middle_name')
+                                                                    <span class="text-red-500 text-sm">The middlename is required!</span>
+                                                                @enderror
+                                                            </div>
+                                        
+                                                            <div class="col-span-2 sm:col-span-1">
+                                                                <label for="name_extension" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Name Extension</label>
+                                                                <input type="text" id="name_extension" wire:model='name_extension' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                                                                @error('name_extension')
+                                                                    <span class="text-red-500 text-sm">The name extension is required!</span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                     </div>
+                                                    <div x-show="selectedSubTab === 'nflta'">
+                                                        <h1>nflta</h1>
+                                                     </div>
+                                                    <div x-show="selectedSubTab === 'flta'">
+                                                        <h1>flta</h1>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
 
