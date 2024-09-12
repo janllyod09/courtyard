@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Exports\SafetyHealthMonthlyReportExport;
 use App\Models\CpMonthlyReports;
 use App\Models\ExplosivesConsumptions;
 use App\Models\FatalLostTimeAccidents;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportTable extends Component
 {
@@ -319,8 +321,7 @@ class ReportTable extends Component
     }
 
 
-    public function submit()
-    {
+    public function submit(){
         try {
             $user = Auth::user();
             if (!$user) {
@@ -378,8 +379,7 @@ class ReportTable extends Component
         }
     }
 
-    private function createAccidentRecords($report)
-    {
+    private function createAccidentRecords($report){
         if ($this->nlta > 0) {
             $this->createAccidents($report, $this->nltaPersons, NonLostTimeAccidents::class);
         }
@@ -496,7 +496,17 @@ class ReportTable extends Component
 
     public function exportReport($id){
         try{
-
+            $report = CpMonthlyReports::findOrFail($id);
+            if($report){
+                $thisMonth = Carbon::parse($report->month);
+                $monthYear = $thisMonth->format('F') . " " . $thisMonth->format('Y');
+                $filters = [
+                    'monthYear' => $monthYear,
+                    'report' => $report,
+                ];
+                $filename = 'SafetyandHealthMonthlyReport.xlsx';
+                return Excel::download(new SafetyHealthMonthlyReportExport($filters), $filename);
+            }
         }catch(Exception $e){
             throw $e;
         }
