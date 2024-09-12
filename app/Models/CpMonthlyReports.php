@@ -25,6 +25,7 @@ class CpMonthlyReports extends Model
         'nflt_days_lost',
         'flt_days_lost',
         'minutes',
+        'status',
     ];
 
     public function user(){
@@ -41,5 +42,13 @@ class CpMonthlyReports extends Model
 
     public function fatalLostTimeAccidents(){
         return $this->hasMany(FatalLostTimeAccidents::class);
+    }
+
+    public function monthlyDeseases(){
+        return $this->hasMany(MonthlyDeseases::class);
+    }
+
+    public function explosivesConsumptions(){
+        return $this->hasOne(ExplosivesConsumptions::class);
     }
 }

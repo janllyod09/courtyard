@@ -14,16 +14,17 @@ return new class extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->date('month')->nullable();
             $table->date('date_encoded')->nullable();
-            $table->integer('man_hours')->default(0);
-            $table->integer('male_workers')->default(0);
-            $table->integer('female_workers')->default(0);
-            $table->integer('service_contractors')->default(0);
-            $table->integer('non_lost_time_accident')->default(0);
-            $table->integer('non_fatal_lost_time_accident')->default(0);
-            $table->integer('fatal_lost_time_accident')->default(0);
-            $table->integer('nflt_days_lost')->default(0);
-            $table->integer('flt_days_lost')->default(0);
-            $table->string('minutes')->default(0);
+            $table->integer('man_hours')->nullable();
+            $table->integer('male_workers')->nullable();
+            $table->integer('female_workers')->nullable();
+            $table->integer('service_contractors')->nullable();
+            $table->integer('non_lost_time_accident')->nullable();
+            $table->integer('non_fatal_lost_time_accident')->nullable();
+            $table->integer('fatal_lost_time_accident')->nullable();
+            $table->integer('nflt_days_lost')->nullable();
+            $table->integer('flt_days_lost')->nullable();
+            $table->string('minutes')->nullable();
+            $table->boolean('status')->nullable();
             $table->timestamps();
         });
     }

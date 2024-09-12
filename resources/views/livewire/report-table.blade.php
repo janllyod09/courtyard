@@ -126,7 +126,7 @@ x-cloak
                                             <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
                                                 Date Encoded
                                             </th>
-                                            <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
+                                            <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
                                                 Non-Lost Time Accident
                                             </th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
@@ -147,6 +147,9 @@ x-cloak
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
                                                 Minutes of CSHC Meetings
                                             </th>
+                                            <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
+                                                Status
+                                            </th>
                                             <th class="px-5 py-3 text-gray-100 font-medium text-center uppercase sticky right-0 z-10 bg-gray-600 dark:bg-gray-600">
                                                 Action
                                             </th>
@@ -156,12 +159,12 @@ x-cloak
                                         @foreach ($reports as $report)
                                             <tr class="text-neutral-800 dark:text-neutral-200">
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
-                                                    {{ \Carbon\Carbon::parse($report->month)->format('F') }}
+                                                    {{ \Carbon\Carbon::parse($report->month)->format('F') }}, {{ \Carbon\Carbon::parse($report->month)->format('Y') }}
                                                 </td>
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                     {{ $report->date_encoded }}
                                                 </td>
-                                                <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
                                                     {{ $report->non_lost_time_accident }}
                                                 </td>
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
@@ -180,20 +183,59 @@ x-cloak
                                                     {{ $report->male_workers + $report->female_workers }}
                                                 </td>
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
-                                                    {{ $report->minutes }}
+                                                    @if($report->minutes)
+                                                        @php
+                                                            $filePath = $report->minutes;
+                                                            $fileName = basename($filePath);
+                                                        @endphp
+                                                        
+                                                        <div class="flex items-center justify-center space-x-2">
+                                                            <span>{{ $fileName }}</span>
+                                                            <button wire:click="downloadFile('{{ $filePath }}')" 
+                                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" title="Download">
+                                                                    <i class="bi bi-download" style="padding-right: 2px" wire:loading.remove wire:target="downloadFile('{{ $filePath }}')"></i>
+                                                                    <div wire:loading wire:target="downloadFile('{{ $filePath }}')">
+                                                                        <div class="spinner-border small text-primary" role="status">
+                                                                        </div>
+                                                                    </div>
+                                                            </button>
+                                                        </div>
+                                                    @else
+                                                        No file uploaded
+                                                    @endif
+                                                </td>
+                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                    @if($report->status)
+                                                        <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4">Approved</span>
+                                                    @else
+                                                        <span class="text-xs text-white bg-orange-500 rounded-lg py-1.5 px-4">Pending</span>
+                                                    @endif
                                                 </td>
                                                 <td class="px-5 py-4 font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                     <div class="relative">
-                                                        <button wire:click="toggleEditReport({{ $report->id }})" 
-                                                            class="peer inline-flex items-center justify-center px-4 py-2 -m-5 
-                                                            -mr-2 font-medium tracking-wide text-blue-500 hover:text-blue-600 
-                                                            focus:outline-none" title="Edit">
-                                                            <i class="fas fa-pencil-alt"></i>
-                                                        </button>
-                                                        <button wire:click="toggleDelete({{ $report->id }})" 
-                                                            class=" text-red-600 hover:text-red-900 dark:text-red-600 
-                                                            dark:hover:text-red-900" title="Delete">
-                                                            <i class="fas fa-trash"></i>
+                                                        @if(!$report->status)
+                                                            <button wire:click="toggleEditReport({{ $report->id }})" 
+                                                                class="peer inline-flex items-center justify-center px-4 py-2 -m-5 
+                                                                -mr-2 font-medium tracking-wide text-blue-500 hover:text-blue-600 
+                                                                focus:outline-none" title="Edit">
+                                                                <i class="fas fa-pencil-alt"></i>
+                                                            </button>
+                                                            <button wire:click="toggleDelete({{ $report->id }})" 
+                                                                class=" text-red-600 hover:text-red-900 dark:text-red-600 
+                                                                dark:hover:text-red-900" title="Delete">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        @endif
+                                                        <button wire:click="exportReport({{ $report->id }})" 
+                                                            class="peer inline-flex items-center justify-center px-4 py-2 -m-5 -mr-2 
+                                                            text-sm font-medium tracking-wide text-green-500 hover:text-green-600 focus:outline-none"
+                                                            title="Export Report">
+                                                            <img class="flex dark:hidden ml-3 mt-4" src="/images/icons8-xls-export-dark.png" width="18" alt="" wire:target="exportReport({{ $report->id }})"  wire:loading.remove>
+                                                            <img class="hidden dark:block ml-3 mt-4" src="/images/icons8-xls-export-light.png" width="18" alt="" wire:target="exportReport({{ $report->id }})" wire:loading.remove>
+                                                            <div wire:loading wire:target="exportReport({{ $report->id }})">
+                                                                <div class="mt-4 ml-3 spinner-border small text-primary" role="status">
+                                                                </div>
+                                                            </div>
                                                         </button>
                                                     </div>
                                                 </td>
@@ -226,27 +268,18 @@ x-cloak
                                 <div class="{{ $currentStep === 1 ? '' : 'hidden' }}">
                                     <p class="text-sm">Step {{ $currentStep }} of 4</p>
 
-                                     <!-- Select Date -->
-                                    <div class="mr-0 sm:mr-4 relative mt-4">
-                                        <label for="month" class="block text-sm font-medium text-gray-700 dark:text-slate-100">Report for the Month of:</label>
-                                        <input type="month" id="month" wire:model.live='month'
-                                        class="mb-0 mt-1 px-2 py-1.5 block shadow-sm sm:text-sm border border-gray-300 hover:bg-gray-300 rounded-md 
-                                            dark:hover:bg-slate-600
-                                            dark:text-gray-300 dark:bg-gray-800 mb-4 sm:mb-0">
-                                    </div>
-
                                     <div class="grid grid-cols-3 gap-4 mt-6">
                                         <div class="col-span-full sm:col-span-1">
-                                            <label for="surname" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Encoder</label>
-                                            <input type="text" id="surname" wire:model='surname' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
+                                            <label for="encoder" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Encoder</label>
+                                            <input type="text" id="encoder" wire:model='encoder' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
                                         </div>
                                         <div class="col-span-full sm:col-span-1">
-                                            <label for="surname" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Company</label>
-                                            <input type="text" id="surname" wire:model='surname' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
+                                            <label for="company" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Company</label>
+                                            <input type="text" id="company" wire:model='company' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
                                         </div>
                                         <div class="col-span-full sm:col-span-1">
-                                            <label for="surname" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number</label>
-                                            <input type="text" id="surname" wire:model='surname' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
+                                            <label for="permitNumber" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number</label>
+                                            <input type="text" id="permitNumber" wire:model='permitNumber' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
                                         </div>
                                     </div>
 
@@ -267,10 +300,16 @@ x-cloak
                                         <div class="col-span-2 sm:col-span-1">
                                             <label for="month" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Safety and Health Reports para sa buwan ng (month of) <span class="text-red-500">*</span></label>
                                             <input type="month" id="month" wire:model='month' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                            @error('month')
+                                                <span class="text-red-500 text-sm">The month is required!</span>
+                                            @enderror
                                         </div>
                                         <div class="col-span-2 sm:col-span-1">
                                             <label for="manHours" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Bilang ng oras paggawa (Manhours Worked) <span class="text-red-500">*</span></label>
                                             <input type="number" step="0.01" id="manHours" wire:model='manHours' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                            @error('manHours')
+                                                <span class="text-red-500 text-sm">The manhours is required!</span>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -280,17 +319,26 @@ x-cloak
                                                 <label for="maleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Bilang ng Empleyado (Manpower)</label>
                                                 <label for="maleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Lalake (Male) <span class="text-red-500">*</span></label>
                                                 <input type="number" id="maleWorkers" wire:model='maleWorkers' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                                @error('maleWorkers')
+                                                    <span class="text-red-500 text-sm">The count of male manpower is required!</span>
+                                                @enderror
                                             </div>
                                             <div class="col-span-2 sm:col-span-1">
                                                 <div class="customdiv"></div>
                                                 <label for="femaleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Babae (Female) <span class="text-red-500">*</span></label>
                                                 <input type="number" id="femaleWorkers" wire:model='femaleWorkers' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                                @error('femaleWorkers')
+                                                    <span class="text-red-500 text-sm">The count of female manpower is required!</span>
+                                                @enderror
                                             </div>
                                         </div>
                                         <div class="col-span-2 sm:col-span-1">
                                             <div class="customdiv"></div>
                                             <label for="serviceContractors" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Bilang ng Service Contractors <span class="text-red-500">*</span></label>
                                             <input type="number" step="0.01" id="serviceContractors" wire:model='serviceContractors' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                            @error('serviceContractors')
+                                                <span class="text-red-500 text-sm">The count of service contractor is required!</span>
+                                            @enderror
                                         </div>
                                     </div>
 
@@ -432,7 +480,7 @@ x-cloak
                                                                             @enderror
                                                                         </div>
                                                                         <input type="text" id="company" wire:model='nltaPersons.{{ $index }}.company' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" 
-                                                                            {{ $serviceContractor ? '' : 'readonly' }} placeholder="Kumpanya (Company)">
+                                                                            {{ $nltaPersons[$index]['serviceContractor'] ? '' : 'readonly' }} placeholder="Kumpanya (Company)">
                                                                         @error('nltaPersons.' . $index . '.company')
                                                                             <span class="text-red-500 text-sm">The company is required!</span>
                                                                         @enderror
@@ -476,9 +524,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeActDescription" 
                                                                             wire:model="nltaPersons.{{ $index }}.unsafeActDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500  {{ $nltaPersons[$index]['unsafeAct'] ? '' : 'hidden' }}
+                                                                            focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeAct ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('nltaPersons.' . $index . '.unsafeActDescription')
@@ -497,9 +545,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeConditionsDescription" 
                                                                             wire:model="nltaPersons.{{ $index }}.unsafeConditionsDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $nltaPersons[$index]['unsafeConditions'] ? '' : 'hidden' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeConditions ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('nltaPersons.' . $index . '.unsafeConditionsDescription')
@@ -546,7 +594,7 @@ x-cloak
                                                                                         <label for="caught-collapsing" class="ml-2 text-gray-900 dark:text-gray-300">Naipit sa mga gumuguhong bagay (Caught in or crushed in collapsing materials)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), contact" class="h-4 w-4">
                                                                                         <label for="caught-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -557,7 +605,7 @@ x-cloak
                                                                                         <label for="fall-lower-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkahulog sa mas mababang lebel (Fall of a person to lower level)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-same-level" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
+                                                                                        <input id="fall-same-level" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
                                                                                         <label for="fall-same-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkadulas (Fall of a person on the same level)</label>
                                                                                     </li>
                                                                                     
@@ -566,7 +614,7 @@ x-cloak
                                                                                         <label for="fall-material" class="ml-2 text-gray-900 dark:text-gray-300">Tinamaan ng nahuhulog na bagay (Fall of material or structures)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), falls" class="h-4 w-4">
                                                                                         <label for="fall-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -589,7 +637,7 @@ x-cloak
                                                                                         <label for="wrong-movements" class="ml-2 text-gray-900 dark:text-gray-300">Maling galaw (Wrong movements)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), exertion" class="h-4 w-4">
                                                                                         <label for="over-exertion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -624,7 +672,7 @@ x-cloak
                                                                                         <label for="chemical-contact" class="ml-2 text-gray-900 dark:text-gray-300">Nadikit sa kemikal (Contact with chemicals)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), exposure" class="h-4 w-4">
                                                                                         <label for="exposure-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -639,7 +687,7 @@ x-cloak
                                                                                         <label for="explosion-hazard" class="ml-2 text-gray-900 dark:text-gray-300">Pagsabog (Explosions)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="nltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified), fire" class="h-4 w-4">
                                                                                         <label for="fire-explosion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi Matukoy (Unspecified)</label>
                                                                                     </li>                                                                            
                                                                                 </ul>
@@ -1069,7 +1117,6 @@ x-cloak
                                                                             <div x-show="open"
                                                                                 class="absolute bottom-12 z-20 w-full p-3 border border-gray-400 bg-white rounded-lg 
                                                                                 shadow-2xl dark:bg-gray-800 max-h-80 overflow-y-auto scrollbar-thin1">
-                                                                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Columns</h6>
                                                                                 <ul class="space-y-2 text-sm">
                                                                                     <li class="flex items-center">
                                                                                         <input id="rest" type="checkbox" wire:model="nltaPersons.{{ $index }}.treatment" value="Pahinga (Rest)"
@@ -1115,7 +1162,7 @@ x-cloak
 
                                                                     <div class="col-span-full mt-4">
                                                                         <div class="flex items-center gap-2">
-                                                                            <input type="checkbox" id="unsafeConditions" wire:model='nltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
+                                                                            <input type="checkbox" id="performingWork" wire:model.live='nltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
                                                                             <label for="performingWork" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Trabaho ba niya ang ginagawa niya noong naaksidente siya (was the personnel performing routine work?)</label>
                                                                             @error('nltaPersons.' . $index . '.performingWork')
                                                                                 <span class="text-red-500 text-sm">The performing routine work act is required!</span>
@@ -1124,9 +1171,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="performingWorkDescription" 
                                                                             wire:model="nltaPersons.{{ $index }}.performingWorkDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $nltaPersons[$index]['performingWork'] ? 'hidden' : '' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $performingWork ? '' : 'disabled' }}
                                                                             placeholder="Kung hindi, ano ang ginagawa niya, at bakit? (If no, what was the personnel doing? And why?)"
                                                                         ></textarea>
                                                                         @error('nltaPersons.' . $index . '.performingWorkDescription')
@@ -1142,7 +1189,7 @@ x-cloak
                                                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"></textarea>
                                                                         @error('nltaPersons.' . $index . '.incidentDescription')
-                                                                            <span class="text-red-500 text-sm">The performing routine work description is required!</span>
+                                                                            <span class="text-red-500 text-sm">The incident description is required!</span>
                                                                         @enderror
                                                                     </div>
                                                                 </div>
@@ -1231,7 +1278,7 @@ x-cloak
                                                                             @enderror
                                                                         </div>
                                                                         <input type="text" id="company" wire:model='nfltaPersons.{{ $index }}.company' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" 
-                                                                            {{ $serviceContractor ? '' : 'readonly' }} placeholder="Kumpanya (Company)">
+                                                                            {{ $nfltaPersons[$index]['serviceContractor']? '' : 'readonly' }} placeholder="Kumpanya (Company)">
                                                                         @error('nfltaPersons.' . $index . '.company')
                                                                             <span class="text-red-500 text-sm">The company is required!</span>
                                                                         @enderror
@@ -1275,9 +1322,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeActDescription" 
                                                                             wire:model="nfltaPersons.{{ $index }}.unsafeActDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $nfltaPersons[$index]['unsafeAct']  ? '' : 'hidden' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeAct ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('nfltaPersons.' . $index . '.unsafeActDescription')
@@ -1296,9 +1343,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeConditionsDescription" 
                                                                             wire:model="nfltaPersons.{{ $index }}.unsafeConditionsDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $nfltaPersons[$index]['unsafeConditions'] ? '' : 'hidden' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeConditions ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('nfltaPersons.' . $index . '.unsafeConditionsDescription')
@@ -1345,7 +1392,7 @@ x-cloak
                                                                                         <label for="caught-collapsing" class="ml-2 text-gray-900 dark:text-gray-300">Naipit sa mga gumuguhong bagay (Caught in or crushed in collapsing materials)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), contact" class="h-4 w-4">
                                                                                         <label for="caught-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -1356,7 +1403,7 @@ x-cloak
                                                                                         <label for="fall-lower-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkahulog sa mas mababang lebel (Fall of a person to lower level)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-same-level" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
+                                                                                        <input id="fall-same-level" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
                                                                                         <label for="fall-same-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkadulas (Fall of a person on the same level)</label>
                                                                                     </li>
                                                                                     
@@ -1365,7 +1412,7 @@ x-cloak
                                                                                         <label for="fall-material" class="ml-2 text-gray-900 dark:text-gray-300">Tinamaan ng nahuhulog na bagay (Fall of material or structures)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), falls" class="h-4 w-4">
                                                                                         <label for="fall-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -1388,7 +1435,7 @@ x-cloak
                                                                                         <label for="wrong-movements" class="ml-2 text-gray-900 dark:text-gray-300">Maling galaw (Wrong movements)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), exertion" class="h-4 w-4">
                                                                                         <label for="over-exertion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -1423,7 +1470,7 @@ x-cloak
                                                                                         <label for="chemical-contact" class="ml-2 text-gray-900 dark:text-gray-300">Nadikit sa kemikal (Contact with chemicals)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), exposure" class="h-4 w-4">
                                                                                         <label for="exposure-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -1438,7 +1485,7 @@ x-cloak
                                                                                         <label for="explosion-hazard" class="ml-2 text-gray-900 dark:text-gray-300">Pagsabog (Explosions)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="nfltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified), fire" class="h-4 w-4">
                                                                                         <label for="fire-explosion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi Matukoy (Unspecified)</label>
                                                                                     </li>                                                                            
                                                                                 </ul>
@@ -1868,7 +1915,6 @@ x-cloak
                                                                             <div x-show="open"
                                                                                 class="absolute bottom-12 z-20 w-full p-3 border border-gray-400 bg-white rounded-lg 
                                                                                 shadow-2xl dark:bg-gray-800 max-h-80 overflow-y-auto scrollbar-thin1">
-                                                                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Columns</h6>
                                                                                 <ul class="space-y-2 text-sm">
                                                                                     <li class="flex items-center">
                                                                                         <input id="rest" type="checkbox" wire:model="nfltaPersons.{{ $index }}.treatment" value="Pahinga (Rest)"
@@ -1914,7 +1960,7 @@ x-cloak
 
                                                                     <div class="col-span-full mt-4">
                                                                         <div class="flex items-center gap-2">
-                                                                            <input type="checkbox" id="unsafeConditions" wire:model='nfltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
+                                                                            <input type="checkbox" id="performingWork" wire:model.live='nfltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
                                                                             <label for="performingWork" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Trabaho ba niya ang ginagawa niya noong naaksidente siya (was the personnel performing routine work?)</label>
                                                                             @error('nfltaPersons.' . $index . '.performingWork')
                                                                                 <span class="text-red-500 text-sm">The performing routine work act is required!</span>
@@ -1923,9 +1969,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="performingWorkDescription" 
                                                                             wire:model="nfltaPersons.{{ $index }}.performingWorkDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $nfltaPersons[$index]['performingWork'] ? 'hidden' : '' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $performingWork ? '' : 'disabled' }}
                                                                             placeholder="Kung hindi, ano ang ginagawa niya, at bakit? (If no, what was the personnel doing? And why?)"
                                                                         ></textarea>
                                                                         @error('nfltaPersons.' . $index . '.performingWorkDescription')
@@ -1941,7 +1987,7 @@ x-cloak
                                                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"></textarea>
                                                                         @error('nfltaPersons.' . $index . '.incidentDescription')
-                                                                            <span class="text-red-500 text-sm">The performing routine work description is required!</span>
+                                                                            <span class="text-red-500 text-sm">The incident description is required!</span>
                                                                         @enderror
                                                                     </div>
                                                                 </div>
@@ -2029,7 +2075,7 @@ x-cloak
                                                                             @enderror
                                                                         </div>
                                                                         <input type="text" id="company" wire:model='fltaPersons.{{ $index }}.company' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" 
-                                                                            {{ $serviceContractor ? '' : 'readonly' }} placeholder="Kumpanya (Company)">
+                                                                            {{ $fltaPersons[$index]['serviceContractor'] ? '' : 'readonly' }} placeholder="Kumpanya (Company)">
                                                                         @error('fltaPersons.' . $index . '.company')
                                                                             <span class="text-red-500 text-sm">The company is required!</span>
                                                                         @enderror
@@ -2039,14 +2085,18 @@ x-cloak
                                                                         <div class="customdiv"></div>
                                                                         <div class="customdiv"></div>
                                                                         <div class="flex items-center gap-2">
-                                                                            <input type="checkbox" id="physicalInjury" wire:model='fltaPersons.{{ $index }}.physicalInjury' class=" cursor-pointer">
+                                                                            <input type="checkbox" id="physicalInjury" 
+                                                                            true-value="1" false-value="0"
+                                                                            wire:model='fltaPersons.{{ $index }}.physicalInjury' class=" cursor-pointer">
                                                                             <label for="physicalInjury" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Pinsala sa katawan (Physical Injuries)</label>
                                                                             @error('fltaPersons.' . $index . '.physicalInjury')
                                                                                 <span class="text-red-500 text-sm">The physical injuries is required!</span>
                                                                             @enderror
                                                                         </div>
                                                                         <div class="flex items-center gap-2">
-                                                                            <input type="checkbox" id="propertyDamage" wire:model='fltaPersons.{{ $index }}.propertyDamage' class="cursor-pointer">
+                                                                            <input type="checkbox" id="propertyDamage" 
+                                                                            true-value="1" false-value="0"
+                                                                            wire:model='fltaPersons.{{ $index }}.propertyDamage' class="cursor-pointer">
                                                                             <label for="propertyDamage" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Pinsala sa kagamitan (Property Damage)</label>
                                                                             @error('fltaPersons.' . $index . '.propertyDamage')
                                                                                 <span class="text-red-500 text-sm">The property damage is required!</span>
@@ -2073,9 +2123,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeActDescription" 
                                                                             wire:model="fltaPersons.{{ $index }}.unsafeActDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $fltaPersons[$index]['unsafeAct']  ? '' : 'hidden' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeAct ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('fltaPersons.' . $index . '.unsafeActDescription')
@@ -2094,9 +2144,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="unsafeConditionsDescription" 
                                                                             wire:model="fltaPersons.{{ $index }}.unsafeConditionsDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $fltaPersons[$index]['unsafeConditions'] ? '' : 'hidden' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $unsafeConditions ? '' : 'disabled' }}
                                                                             placeholder="Ilarawan (Description)"
                                                                         ></textarea>
                                                                         @error('fltaPersons.' . $index . '.unsafeConditionsDescription')
@@ -2143,7 +2193,7 @@ x-cloak
                                                                                         <label for="caught-collapsing" class="ml-2 text-gray-900 dark:text-gray-300">Naipit sa mga gumuguhong bagay (Caught in or crushed in collapsing materials)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="caught-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), contact" class="h-4 w-4">
                                                                                         <label for="caught-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -2154,7 +2204,7 @@ x-cloak
                                                                                         <label for="fall-lower-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkahulog sa mas mababang lebel (Fall of a person to lower level)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-same-level" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
+                                                                                        <input id="fall-same-level" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Pagkadulas (Fall of a person on the same level)" class="h-4 w-4">
                                                                                         <label for="fall-same-level" class="ml-2 text-gray-900 dark:text-gray-300">Pagkadulas (Fall of a person on the same level)</label>
                                                                                     </li>
                                                                                     
@@ -2163,7 +2213,7 @@ x-cloak
                                                                                         <label for="fall-material" class="ml-2 text-gray-900 dark:text-gray-300">Tinamaan ng nahuhulog na bagay (Fall of material or structures)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fall-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), falls" class="h-4 w-4">
                                                                                         <label for="fall-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -2186,7 +2236,7 @@ x-cloak
                                                                                         <label for="wrong-movements" class="ml-2 text-gray-900 dark:text-gray-300">Maling galaw (Wrong movements)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="over-exertion-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified), exertion " class="h-4 w-4">
                                                                                         <label for="over-exertion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -2221,7 +2271,7 @@ x-cloak
                                                                                         <label for="chemical-contact" class="ml-2 text-gray-900 dark:text-gray-300">Nadikit sa kemikal (Contact with chemicals)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="exposure-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value=" Hindi matukoy (Unspecified), exposure" class="h-4 w-4">
                                                                                         <label for="exposure-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi matukoy (Unspecified)</label>
                                                                                     </li>
                                                                                     <li>
@@ -2236,7 +2286,7 @@ x-cloak
                                                                                         <label for="explosion-hazard" class="ml-2 text-gray-900 dark:text-gray-300">Pagsabog (Explosions)</label>
                                                                                     </li>
                                                                                     <li class="flex items-center">
-                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified)" class="h-4 w-4">
+                                                                                        <input id="fire-explosion-unspecified" type="checkbox" wire:model="fltaPersons.{{ $index }}.kindOfAccident" value="Hindi Matukoy (Unspecified), fires" class="h-4 w-4">
                                                                                         <label for="fire-explosion-unspecified" class="ml-2 text-gray-900 dark:text-gray-300">Hindi Matukoy (Unspecified)</label>
                                                                                     </li>                                                                            
                                                                                 </ul>
@@ -2666,7 +2716,6 @@ x-cloak
                                                                             <div x-show="open"
                                                                                 class="absolute bottom-12 z-20 w-full p-3 border border-gray-400 bg-white rounded-lg 
                                                                                 shadow-2xl dark:bg-gray-800 max-h-80 overflow-y-auto scrollbar-thin1">
-                                                                                <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Columns</h6>
                                                                                 <ul class="space-y-2 text-sm">
                                                                                     <li class="flex items-center">
                                                                                         <input id="rest" type="checkbox" wire:model="fltaPersons.{{ $index }}.treatment" value="Pahinga (Rest)"
@@ -2712,7 +2761,7 @@ x-cloak
 
                                                                     <div class="col-span-full mt-4">
                                                                         <div class="flex items-center gap-2">
-                                                                            <input type="checkbox" id="unsafeConditions" wire:model='fltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
+                                                                            <input type="checkbox" id="performingWork" wire:model.live='fltaPersons.{{ $index }}.performingWork' class="cursor-pointer">
                                                                             <label for="performingWork" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Trabaho ba niya ang ginagawa niya noong naaksidente siya (was the personnel performing routine work?)</label>
                                                                             @error('fltaPersons.' . $index . '.performingWork')
                                                                                 <span class="text-red-500 text-sm">The performing routine work act is required!</span>
@@ -2721,9 +2770,9 @@ x-cloak
                                                                         <textarea 
                                                                             id="performingWorkDescription" 
                                                                             wire:model="fltaPersons.{{ $index }}.performingWorkDescription" 
-                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
+                                                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm {{ $fltaPersons[$index]['performingWork'] ? 'hidden' : '' }}
+                                                                            focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"
-                                                                            {{ $performingWork ? '' : 'disabled' }}
                                                                             placeholder="Kung hindi, ano ang ginagawa niya, at bakit? (If no, what was the personnel doing? And why?)"
                                                                         ></textarea>
                                                                         @error('fltaPersons.' . $index . '.performingWorkDescription')
@@ -2739,7 +2788,7 @@ x-cloak
                                                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:text-gray-300 dark:bg-gray-700"
                                                                             rows="3"></textarea>
                                                                         @error('fltaPersons.' . $index . '.incidentDescription')
-                                                                            <span class="text-red-500 text-sm">The performing routine work description is required!</span>
+                                                                            <span class="text-red-500 text-sm">The incident description is required!</span>
                                                                         @enderror
                                                                     </div>
                                                                 </div>
@@ -2872,7 +2921,7 @@ x-cloak
                                                 <tr class="whitespace-nowrap">
                                                     <th scope="col" class="px-5 py-3 text-xs font-medium text-left uppercase">
                                                         Blasting Contractor <br>
-                                                        <input type="number" step="0.01" id="blastingContractor" wire:model="blastingContractor" class="mt-1 p-2 block float-center shadow-sm sm:text-xs border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700 w-full">
+                                                        <input type="text" step="0.01" id="blastingContractor" wire:model="blastingContractor" class="mt-1 p-2 block float-center shadow-sm sm:text-xs border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700 w-full">
                                                     </th>
                                                     <th scope="col" class="px-5 py-3 text-xs font-medium text-center uppercase">
                                                     </th>
@@ -3026,11 +3075,15 @@ x-cloak
                                             text-white">
                                             << Prev
                                         </button>
-                                        <button wire:click='saveReport' 
+                                        <button wire:click='submit' 
                                             class="mt-4 sm:mt-1 px-6 py-1.5 bg-green-500 rounded-md text-sm
                                             hover:bg-green-600 focus:outline-none
-                                            text-white">
-                                            Submit
+                                            text-white" wire:loading.attr='disabled' wire:target="saveChildren">
+                                            <span wire:loading.remove wire:target="saveChildren">Submit</span>
+                                            <div wire:loading wire:target="saveChildren" style="margin-bottom: 5px;">
+                                                <div class="spinner-border small text-primary" role="status">
+                                                </div>
+                                            </div>
                                         </button>
                                     </div>
                                 </div>
