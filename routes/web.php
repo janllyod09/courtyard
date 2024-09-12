@@ -18,5 +18,7 @@ Route::middleware(['auth', 'checkrole:admin'])->group(function () {
 Route::middleware(['auth', 'checkrole:client'])->group(function () {
     Route::get('/home', function () {
         return view('livewire.report'); })->name('home');
+    Route::get('/admin-reports', function () {
+        return view('livewire.admin-reports-index'); })->name('admin-reports');
 });
 

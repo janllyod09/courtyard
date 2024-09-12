@@ -48,7 +48,7 @@
                             </div>
                             <div>
                                 <label class="text-sm text-gray-700 font-bold" for="contact_num">
-                                    Contact Number:
+                                    Permit/Contract Number:
                                     <span class="text-red-600">*</span>
                                 </label>
                                 <input type="text" id="contact_num" wire:model.live="contactNum"

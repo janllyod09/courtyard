@@ -89,14 +89,19 @@
 
         <!-- Buttons Row -->
         <div class="flex items-center space-x-4 mt-6">
+            
             <x-button type="submit">
                 {{ __('Sign in') }}
             </x-button>
+            
+           
+            <div class="ml-4">
             <x-button>
             <a href="{{ route('register') }}">
                 {{ __('Register') }}
             </a>
             </x-button>
+            </div>
         </div>
     </form>
 
