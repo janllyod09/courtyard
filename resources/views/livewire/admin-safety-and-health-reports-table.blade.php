@@ -48,13 +48,13 @@
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['NLTA'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['LTA-NF'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['LTA-F'] }}</td>
-                                <td class="px-4 py-2 text-center"></td> <!-- Leave blank for now -->
+                                <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Days Lost'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Manhours Worked'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Male Employees'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Female Employees'] }}</td>
-                                <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Male Employees'] + $data[$quarterName]['Female Employees'] }}</td>
-                                <td class="px-4 py-2 text-center"></td> <!-- Leave blank for now -->
-                                <td class="px-4 py-2 text-center"></td> <!-- Leave blank for now -->
+                                <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Total Employees'] }}</td>
+                                <td class="px-4 py-2 text-center">{{ $data[$quarterName]['Recorded Diseases'] }}</td>
+                                <td class="px-4 py-2 text-center">{{ $data[$quarterName]['No. of Cases'] }}</td>
                             </tr>
                         @endforeach
                     @endforeach

@@ -26,6 +26,8 @@ Route::middleware(['auth', 'checkrole:client'])->group(function () {
         return view('livewire.quarterly-report'); })->name('quarterly-report');
     Route::get('/admin-reports', function () {
         return view('livewire.admin-reports-index'); })->name('admin-reports');
+    Route::get('/accident-reports', function () {
+        return view('livewire.accident'); })->name('accident-reports');
 });
 
 Route::get('/profile-photo/{filename}', function ($filename) {

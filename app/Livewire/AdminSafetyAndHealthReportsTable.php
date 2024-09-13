@@ -4,7 +4,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\CpMonthlyReports;
 use App\Models\User;
+use App\Models\MonthlyDeseases;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AdminSafetyAndHealthReportsTable extends Component
 {
@@ -48,30 +50,33 @@ class AdminSafetyAndHealthReportsTable extends Component
 
     public function loadReportData()
     {
-        // Retrieve all users who are mine operators
-        $users = User::whereNotNull('company_name')
-            ->where('company_name', 'like', '%' . $this->search . '%')
-            ->get();
-        $userIds = $users->pluck('id')->toArray();
-
-        // Retrieve all reports and their associated users for the selected year
-        $reports = CpMonthlyReports::whereIn('user_id', $userIds)
-            ->whereYear('month', $this->selectedYear)
+        $reports = CpMonthlyReports::select(
+                'cp_monthly_reports.user_id',
+                DB::raw('YEAR(cp_monthly_reports.month) as year'),
+                DB::raw('QUARTER(cp_monthly_reports.month) as quarter'),
+                DB::raw('SUM(cp_monthly_reports.non_lost_time_accident) as total_nlta'),
+                DB::raw('SUM(cp_monthly_reports.non_fatal_lost_time_accident) as total_lta_nf'),
+                DB::raw('SUM(cp_monthly_reports.fatal_lost_time_accident) as total_lta_f'),
+                DB::raw('SUM(cp_monthly_reports.nflt_days_lost + cp_monthly_reports.flt_days_lost) as total_days_lost'),
+                DB::raw('SUM(cp_monthly_reports.man_hours) as total_manhours'),
+                DB::raw('SUM(cp_monthly_reports.male_workers) as total_male'),
+                DB::raw('SUM(cp_monthly_reports.female_workers) as total_female'),
+                DB::raw('GROUP_CONCAT(DISTINCT monthly_deseases.desease SEPARATOR ", ") as diseases'),
+                DB::raw('SUM(monthly_deseases.no_of_cases) as total_cases')
+            )
+            ->leftJoin('monthly_deseases', 'cp_monthly_reports.id', '=', 'monthly_deseases.report_id')
+            ->whereYear('cp_monthly_reports.month', $this->selectedYear)
+            ->groupBy('cp_monthly_reports.user_id', 'year', 'quarter')
             ->with('user')
             ->get();
 
-        // Initialize the data structure for storing the results
         $result = [];
 
-        // Aggregate the data
         foreach ($reports as $report) {
             $mineOperator = $report->user->company_name ?? 'N/A';
             $tenement = $report->user->contact_num ?? 'N/A';
-            $month = Carbon::parse($report->month)->month;
-            $quarter = ceil($month / 3);
-            $quarterName = $this->getQuarterName($quarter);
+            $quarterName = $this->getQuarterName($report->quarter);
 
-            // Initialize array for mine operator if not already set
             if (!isset($result[$mineOperator])) {
                 $result[$mineOperator] = [
                     'Tenement' => $tenement,
@@ -82,28 +87,25 @@ class AdminSafetyAndHealthReportsTable extends Component
                 ];
             }
 
-            if (isset($result[$mineOperator][$quarterName])) {
-                $result[$mineOperator][$quarterName]['NLTA'] += $report->nonLostTimeAccidents()->count();
-                $result[$mineOperator][$quarterName]['LTA-NF'] += $report->nonFatalLostTimeAccidents()->count();
-                $result[$mineOperator][$quarterName]['LTA-F'] += $report->fatalLostTimeAccidents()->count();
-                $result[$mineOperator][$quarterName]['Manhours Worked'] += $report->man_hours;
-                $result[$mineOperator][$quarterName]['Male Employees'] += $report->male_workers;
-                $result[$mineOperator][$quarterName]['Female Employees'] += $report->female_workers;
-            }
+            $result[$mineOperator][$quarterName] = [
+                'NLTA' => $report->total_nlta,
+                'LTA-NF' => $report->total_lta_nf,
+                'LTA-F' => $report->total_lta_f,
+                'Days Lost' => $report->total_days_lost,
+                'Manhours Worked' => $report->total_manhours,
+                'Male Employees' => $report->total_male,
+                'Female Employees' => $report->total_female,
+                'Total Employees' => $report->total_male + $report->total_female,
+                'Recorded Diseases' => $report->diseases ?: 'None',
+                'No. of Cases' => $report->total_cases ?: 0,
+            ];
         }
 
-        // Initialize default data for users without reports
-        foreach ($users as $user) {
-            $mineOperator = $user->company_name;
-            if (!isset($result[$mineOperator])) {
-                $result[$mineOperator] = [
-                    'Tenement' => $user->contact_num,
-                    'First Quarter' => $this->getDefaultQuarterData(),
-                    'Second Quarter' => $this->getDefaultQuarterData(),
-                    'Third Quarter' => $this->getDefaultQuarterData(),
-                    'Fourth Quarter' => $this->getDefaultQuarterData(),
-                ];
-            }
+        // Filter results based on search
+        if (!empty($this->search)) {
+            $result = array_filter($result, function($key) {
+                return stripos($key, $this->search) !== false;
+            }, ARRAY_FILTER_USE_KEY);
         }
 
         $this->reports = $result;
@@ -126,9 +128,13 @@ class AdminSafetyAndHealthReportsTable extends Component
             'NLTA' => 0,
             'LTA-NF' => 0,
             'LTA-F' => 0,
+            'Days Lost' => 0,
             'Manhours Worked' => 0,
             'Male Employees' => 0,
             'Female Employees' => 0,
+            'Total Employees' => 0,
+            'Recorded Diseases' => 'None',
+            'No. of Cases' => 0,
         ];
     }
 

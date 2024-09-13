@@ -47,6 +47,7 @@ class CpMonthlyReports extends Model
     public function monthlyDeseases(){
         return $this->hasMany(MonthlyDeseases::class, 'report_id');
     }
+    
 
     public function explosivesConsumptions(){
         return $this->hasOne(ExplosivesConsumptions::class, 'report_id');
