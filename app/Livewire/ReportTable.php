@@ -25,8 +25,8 @@ class ReportTable extends Component
     use WithPagination, WithFileUploads;
 
     public $date;
-    public $create;
-    public $currentStep = 1;
+    public $create = true;
+    public $currentStep = 5;
     public $encoder;
     public $company;
     public $permitNumber;

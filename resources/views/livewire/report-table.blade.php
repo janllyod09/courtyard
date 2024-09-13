@@ -261,7 +261,7 @@ x-cloak
                             </div>
                          </div>
                         <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? '' : 'hidden' }}">
-                            <div x-data="{ currentStep: @entangle('currentStep'), totalSteps: 4 }">
+                            <div x-data="{ currentStep: @entangle('currentStep'), totalSteps: 6 }">
                                 <div class="w-full bg-gray-200 h-2.5 dark:bg-gray-700">
                                     <div 
                                         class="bg-blue-600 h-2.5 transition-all duration-300 ease-in-out" 
@@ -2887,27 +2887,17 @@ x-cloak
                                     <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
                                     {{-- Deseases --}}
-                                    <fieldset class="p-4 border border-gray-500 rounded-md mb-6 relative mt-4" style="padding-top: 60px" x-data="{selectedSubTab1: '1',}" x-cloak>
-                                        <h1 class="text-gray-700 dark:text-gray-100 font-bold">Mga naitalang sakit ngayong buwan (Kinds of  diseases recorded this month)</h1>
+                                    <fieldset class="p-4 border border-gray-500 rounded-md mb-6 relative mt-4" style="padding-top: 60px">
+                                        <h1 class="text-gray-700 dark:text-gray-100 font-bold mb-4">Mga naitalang sakit ngayong buwan (Kinds of  diseases recorded this month)</h1>
                                         <button type="button" wire:click="addDesease" 
                                             class="bg-green-500 hover:bg-green-700 text-white absolute top-4 right-4
                                             font-bold px-2 py-1 rounded mb-4" title="Add">
                                             <i class="bi bi-plus-lg"></i>
                                         </button>
 
-                                        <div class="flex overflow-x-auto pb-2 relative z-10">
-                                            @foreach($deseases as $index => $desease)
-                                                <div @click="selectedSubTab1 = '{{ $index + 1 }}'" 
-                                                        :class="{ 'font-bold dark:text-gray-300 border-b-2 border-blue-500': selectedSubTab1 === '{{ $index + 1 }}', 'text-slate-500 dark:hover:text-white hover:text-black': selectedSubTab1 !== '{{ $index + 1 }}' }" 
-                                                        class="h-min pt-2 pb-2 px-4 text-sm text-nowrap -mb-2">
-                                                        {{ $index + 1 }}
-                                                </div>
-                                            @endforeach
-                                        </div>
-
                                         @foreach ($deseases as $index => $desease)
-                                            <fieldset class="p-4 border border-gray-500 mb-6 relative"  x-show="selectedSubTab1 === '{{ $index + 1 }}'">
-                                                <i class="fas fa-times flex cursor-pointer text-red-500 hover:text-red-700 absolute top-4 right-4 {{ $index + 1 === 1 ? 'hidden' : '' }}" title="Remove" wire:click="removeDesease({{ $index }})"></i>
+                                            <fieldset class="p-4 border border-gray-500 mb-6 relative">
+                                                <i class="fas fa-times flex cursor-pointer text-red-500 hover:text-red-700 absolute top-4 right-4" title="Remove" wire:click="removeDesease({{ $index }})"></i>
                                                 <div class="grid grid-cols-3 gap-4">
                                                     <div class="col-span-full sm:col-span-1">
                                                         <label for="desease" class="block text-sm font-medium text-gray-700 dark:text-slate-400"><span class="font-bold text-gray-700 dark:text-gray-100">{{ $index + 1 }}.</span> Naitalang sakit (Recorded desease)</label>
