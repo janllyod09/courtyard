@@ -129,7 +129,7 @@ x-cloak
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">4th Quarter</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-xs">
+                                    <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-sm">
                                         @forelse ($years as $yearItem)
                                             <tr class="text-neutral-800 dark:text-neutral-200">
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">

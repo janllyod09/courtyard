@@ -155,7 +155,7 @@ x-cloak
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-xs">
+                                    <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-sm">
                                         @foreach ($reports as $report)
                                             <tr class="text-neutral-800 dark:text-neutral-200">
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
