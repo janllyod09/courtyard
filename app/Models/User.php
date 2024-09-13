@@ -58,6 +58,11 @@ class User extends Authenticatable
         return $this->hasMany(CpMonthlyReports::class);
     }
 
+    public function quarterlyEmergencyDrillReports()
+    {
+        return $this->hasMany(QuarterlyEmergencyDrillReports::class);
+    }
+
     /**
      * The attributes that should be cast.
      *
