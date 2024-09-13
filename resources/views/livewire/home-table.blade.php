@@ -25,7 +25,7 @@ x-data="{
                     width="100" height="100"
                     class="w-20 h-20 rounded-full">
         @else
-            <img class="w-20 h-20 rounded-full" src="{{ Auth::user()->profile_photo_url }}" width="100" height="100" alt="Tae" />
+            <img class="w-20 h-20 rounded-full" src="{{ Auth::user()->profile_photo_url }}" width="100" height="100" alt="" />
         @endif
         <div>
             <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-100">{{ $client->company_name }} <span class="text-xs cursor-pointer hover:text-blue-500" wire:click='toggleEditProfile'><i class="bi bi-pencil" title="Edit Profile"></i></span></h1>

@@ -14,6 +14,9 @@ Route::get('/register', function () {
 /* Admin account role */
 Route::middleware(['auth', 'checkrole:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    Route::get('/clients', function () {
+        return view('livewire.clients'); })->name('clients');
 });
 
 /* Client account role */
