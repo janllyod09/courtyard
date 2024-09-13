@@ -86,15 +86,15 @@ x-cloak
                 </button>
             </div>
 
-            <div class="mb-6 flex flex-col sm:flex-row items-end justify-between">
+            <div class="mb-6 flex flex-col sm:flex-row items-end justify-between px-4 sm:px-0">
 
                  <!-- Select Date -->
-                 <div class="mr-0 sm:mr-4 relative {{ $create ? 'hidden' : '' }}">
+                 <div class="w-full mr-0 sm:mr-4 relative {{ $create ? 'hidden' : '' }}">
                     <label for="date" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Select Month</label>
                     <input type="month" id="date" wire:model.live='date'
-                    class="mb-0 mt-1 px-2 py-1.5 block w-full shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
-                        dark:hover:bg-slate-600 dark:border-slate-600
-                        dark:text-gray-300 dark:bg-gray-800 mb-4 sm:mb-0">
+                    class="mb-0 mt-1 px-2 py-1.5 block w-36 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
+                                dark:hover:bg-slate-600 dark:border-slate-600
+                                dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
                 </div>
 
                 <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4 {{ $create ? 'hidden' : '' }}">

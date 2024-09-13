@@ -82,31 +82,24 @@ x-cloak
     <div class="flex justify-center w-full">
         <div class="w-full bg-white rounded-2xl p3 sm:p-8 shadow dark:bg-gray-800 overflow-x-visible relative">
             <div class="pb-4 mb-3">
-                <h1 class="text-lg font-bold text-center text-slate-800 dark:text-white {{ $create ? 'hidden' : '' }}">
+                <h1 class="text-lg font-bold text-center text-slate-800 dark:text-white mt-6 sm:mt-0">
                     Quarterly Emergency Drill Reports
                 </h1>
-                <h1 class="text-lg font-bold text-center text-slate-800 dark:text-white {{ $create ? '' : 'hidden' }}">
-                    Create Quarterly Emergency Drill Report
-                </h1>
-                <button wire:click='toggleCreateReport' 
-                    class="absolute top-2 right-2 text-black dark:text-white whitespace-nowrap mx-2 {{ $create ? '' : 'hidden' }}">
-                    <i class="bi bi-x-circle" title="Cancel"></i>
-                </button>
             </div>
 
-            <div class="mb-6 flex flex-col sm:flex-row items-end justify-between">
+            <div class="mb-6 flex flex-col sm:flex-row items-end justify-start items-left sm:justify-between px-4 sm:px-0">
 
                  <!-- Select Year -->
-                <div class="mr-0 sm:mr-4 relative {{ $create ? 'hidden' : '' }}">
+                <div class="w-full mr-0 sm:mr-4 relative">
                     <label for="year" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Search Year</label>
                     <input type="number" id="year" wire:model.live='date'
                         min="1900" max="{{ date('Y') }}" step="1"
-                        class="mb-0 mt-1 px-2 py-1.5 block w-full shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
+                        class="mb-0 mt-1 px-2 py-1.5 block w-36 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
                                 dark:hover:bg-slate-600 dark:border-slate-600
-                                dark:text-gray-300 dark:bg-gray-800 mb-4 sm:mb-0">
+                                dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
                 </div>
 
-                <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4 {{ $create ? 'hidden' : '' }}">
+                <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4">
                     <div class="w-full sm:w-auto">
                         <button wire:click='toggleCreateReport' 
                             class="mt-4 sm:mt-1 px-2 py-1.5 bg-green-500 text-white rounded-md text-sm
