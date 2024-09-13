@@ -24,18 +24,18 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->string('cause_of_accident_illness')->nullable();
             $table->boolean('is_unsafe_acts')->nullable();
-            $table->string('is_unsafe_acts_description')->nullable();
+            $table->text('is_unsafe_acts_description')->nullable();
             $table->boolean('is_unsafe_conditions')->nullable();
-            $table->string('is_unsafe_conditions_description')->nullable();
-            $table->string('kind_of_accident')->nullable();
-            $table->string('type_of_injury')->nullable();
-            $table->string('part_of_body_injured')->nullable();
-            $table->string('treatment')->nullable();
+            $table->text('is_unsafe_conditions_description')->nullable();
+            $table->text('kind_of_accident')->nullable();
+            $table->text('type_of_injury')->nullable();
+            $table->text('part_of_body_injured')->nullable();
+            $table->text('treatment')->nullable();
             $table->double('cost_of_mitigation')->nullable();
             $table->double('cost_of_property_damage')->nullable();
             $table->boolean('is_performing_routine_work')->nullable();
-            $table->string('is_not_performing_routine_work_description')->nullable();
-            $table->string('description_of_incident')->nullable();
+            $table->text('is_not_performing_routine_work_description')->nullable();
+            $table->text('description_of_incident')->nullable();
             $table->timestamps();
         });
     }

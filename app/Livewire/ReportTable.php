@@ -9,6 +9,7 @@ use App\Models\FatalLostTimeAccidents;
 use App\Models\MonthlyDeseases;
 use App\Models\NonFatalLostTimeAccidents;
 use App\Models\NonLostTimeAccidents;
+use App\Models\QuarterlyEmergencyDrillReports;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -61,7 +62,6 @@ class ReportTable extends Component
     public $emulsion;
     public $others;
     public $deleteId;
-    
     public $editReportId;
 
     public function mount(){
@@ -334,9 +334,6 @@ class ReportTable extends Component
                 $this->currentStep += 1;
                 break;
             case 2:
-                $rules = [];
-                $rules2 = [];
-                $rules3 = [];
                 if ($this->nlta > 0) {
                     $rules = [
                         'nltaPersons' => ['required', 'array', "size:{$this->nlta}"],
@@ -344,56 +341,53 @@ class ReportTable extends Component
                         'nltaPersons.*.gender' => ['required', 'in:Male,Female'],
                         'nltaPersons.*.position' => ['required', 'string', 'max:255'],
                         'nltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
-                        'nltaPersons.*.time' => ['required', 'date_format:H:i'],
+                        'nltaPersons.*.time' => ['required'],
                         'nltaPersons.*.location' => ['required', 'string', 'max:255'],
                         'nltaPersons.*.cause' => ['required', 'string', 'max:255'],
-                        'nltaPersons.*.cost_of_mitigation' => ['required', 'numeric', 'min:0'],
-                        'nltaPersons.*.cost_of_property_damage' => ['required', 'numeric', 'min:0'],
-                        'nltaPersons.*.performingWork' => ['required', 'boolean'],
                         'nltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
             
                     $this->validate($rules);
                 }
+                $this->currentStep += 1;
+                break;
+            case 3:
                 if ($this->nflta > 0) {
-                    $rules2 = [
+                    $rules = [
                         'nfltaPersons' => ['required', 'array', "size:{$this->nflta}"],
                         'nfltaPersons.*.name' => ['required', 'string', 'max:255'],
                         'nfltaPersons.*.gender' => ['required', 'in:Male,Female'],
                         'nfltaPersons.*.position' => ['required', 'string', 'max:255'],
                         'nfltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
-                        'nfltaPersons.*.time' => ['required', 'date_format:H:i'],
+                        'nfltaPersons.*.time' => ['required'],
                         'nfltaPersons.*.location' => ['required', 'string', 'max:255'],
                         'nfltaPersons.*.cause' => ['required', 'string', 'max:255'],
-                        'nfltaPersons.*.cost_of_mitigation' => ['required', 'numeric', 'min:0'],
-                        'nfltaPersons.*.cost_of_property_damage' => ['required', 'numeric', 'min:0'],
-                        'nfltaPersons.*.performingWork' => ['required', 'boolean'],
                         'nfltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
             
                     $this->validate($rules);
                 }
+                $this->currentStep += 1;
+                break;
+            case 4:
                 if ($this->flta > 0) {
-                    $rules3 = [
+                    $rules = [
                         'fltaPersons' => ['required', 'array', "size:{$this->flta}"],
                         'fltaPersons.*.name' => ['required', 'string', 'max:255'],
                         'fltaPersons.*.gender' => ['required', 'in:Male,Female'],
                         'fltaPersons.*.position' => ['required', 'string', 'max:255'],
                         'fltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
-                        'fltaPersons.*.time' => ['required', 'date_format:H:i'],
+                        'fltaPersons.*.time' => ['required'],
                         'fltaPersons.*.location' => ['required', 'string', 'max:255'],
                         'fltaPersons.*.cause' => ['required', 'string', 'max:255'],
-                        'fltaPersons.*.cost_of_mitigation' => ['required', 'numeric', 'min:0'],
-                        'fltaPersons.*.cost_of_property_damage' => ['required', 'numeric', 'min:0'],
-                        'fltaPersons.*.performingWork' => ['required', 'boolean'],
                         'fltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
-            
-                    $this->validate([$rules, $rules2, $rules3]);
+
+                    $this->validate($rules);
                 }
                 $this->currentStep += 1;
                 break;
-            case 3:
+            case 5:
                 $this->validate([
                     'minutes' => 'required',
                 ]);
@@ -500,7 +494,6 @@ class ReportTable extends Component
                 $person['unsafeConditionsDescription'] = null;
             }
             if($person['performingWork']){
-                $person['performingWork'] = 1;
                 $person['performingWorkDescription'] = null;
             }
 
@@ -513,36 +506,35 @@ class ReportTable extends Component
 
             $modelClass::create([
                 'report_id' => $report->id,
-                'name' => $person['name'],
-                'gender' => $person['gender'],
-                'position' => $person['position'],
-                'date_of_accident_illness' => $person['dateOfAccidentIllness'],
-                'time' => $person['time'],
-                'location' => $person['location'],
-                'has_physical_injury' => $person['physicalInjury'],
-                'has_property_damage' => $person['propertyDamage'],
-                'is_service_contractor' => $person['serviceContractor'],
-                'company' => $person['company'],
-                'cause_of_accident_illness' => $person['cause'],
-                'is_unsafe_acts' => $person['unsafeAct'],
-                'is_unsafe_acts_description' => $person['unsafeActDescription'],
-                'is_unsafe_conditions' => $person['unsafeConditions'],
-                'is_unsafe_conditions_description' => $person['unsafeConditionsDescription'],
-                'kind_of_accident' => json_encode($person['kindOfAccident']),
-                'type_of_injury' => json_encode($person['typeOfInjury']),
-                'part_of_body_injured' => json_encode($person['partOfBodyInjured']),
-                'treatment' => json_encode($person['treatment']),
-                'cost_of_mitigation' => $person['cost_of_mitigation'],
-                'cost_of_property_damage' => $person['cost_of_property_damage'],
-                'is_performing_routine_work' => $person['performingWork'],
-                'is_not_performing_routine_work_description' => $person['performingWorkDescription'],
-                'description_of_incident' => $person['incidentDescription'],
+                'name' => $person['name'] ?: null,
+                'gender' => $person['gender'] ?: null,
+                'position' => $person['position'] ?: null,
+                'date_of_accident_illness' => $person['dateOfAccidentIllness'] ?: null,
+                'time' => $person['time'] ?: null,
+                'location' => $person['location'] ?: null,
+                'has_physical_injury' => $person['physicalInjury'] ?: null,
+                'has_property_damage' => $person['propertyDamage'] ?: null,
+                'is_service_contractor' => $person['serviceContractor'] ?: null,
+                'company' => $person['company'] ?: null,
+                'cause_of_accident_illness' => $person['cause'] ?: null,
+                'is_unsafe_acts' => $person['unsafeAct'] ?: null,
+                'is_unsafe_acts_description' => $person['unsafeActDescription'] ?: null,
+                'is_unsafe_conditions' => $person['unsafeConditions'] ?: null,
+                'is_unsafe_conditions_description' => $person['unsafeConditionsDescription'] ?: null,
+                'kind_of_accident' => json_encode($person['kindOfAccident']) ?: null,
+                'type_of_injury' => json_encode($person['typeOfInjury']) ?: null,
+                'part_of_body_injured' => json_encode($person['partOfBodyInjured']) ?: null,
+                'treatment' => json_encode($person['treatment']) ?: null,
+                'cost_of_mitigation' => $person['cost_of_mitigation'] ?: null,
+                'cost_of_property_damage' => $person['cost_of_property_damage'] ?: null,
+                'is_performing_routine_work' => $person['performingWork'] ?: null,
+                'is_not_performing_routine_work_description' => $person['performingWorkDescription'] ?: null,
+                'description_of_incident' => $person['incidentDescription'] ?: null,
             ]);
         }
     }
 
-    private function createDiseaseRecords($report)
-    {
+    private function createDiseaseRecords($report){
         if(!empty($this->deseases)){
             foreach ($this->deseases as $disease) {
                 MonthlyDeseases::create([
@@ -555,22 +547,21 @@ class ReportTable extends Component
         }
     }
 
-    private function createExplosivesConsumption($report)
-    {
+    private function createExplosivesConsumption($report){
         ExplosivesConsumptions::create([
             'report_id' => $report->id,
-            'blasting_contractor' => $this->blastingContractor,
-            'dynamite' => $this->dynamite,
-            'detonating_cord' => $this->detonatingCord,
-            'non_elec_blasting_caps' => $this->nonElecBlastingCaps,
-            'elec_blasting_caps' => $this->elecBlastingCaps,
-            'fuse_lighter' => $this->fuseLighter,
-            'connectors' => $this->connectors,
-            'ammonium_nitrate' => $this->ammoniumNitrate,
-            'shotshell_primer' => $this->shotshellPrimer,
-            'primer' => $this->primer,
-            'emulsion' => $this->emulsion,
-            'others' => $this->others,
+            'blasting_contractor' => $this->blastingContractor ?: null,
+            'dynamite' => $this->dynamite ?: null,
+            'detonating_cord' => $this->detonatingCord ?: null,
+            'non_elec_blasting_caps' => $this->nonElecBlastingCaps ?: null,
+            'elec_blasting_caps' => $this->elecBlastingCaps ?: null,
+            'fuse_lighter' => $this->fuseLighter ?: null,
+            'connectors' => $this->connectors ?: null,
+            'ammonium_nitrate' => $this->ammoniumNitrate ?: null,
+            'shotshell_primer' => $this->shotshellPrimer ?: null,
+            'primer' => $this->primer ?: null,
+            'emulsion' => $this->emulsion ?: null,
+            'others' => $this->others ?: null,
         ]);
     }
 
@@ -595,6 +586,7 @@ class ReportTable extends Component
                 $thisMonth = Carbon::parse($report->month);
                 $monthYear = $thisMonth->format('F') . " " . $thisMonth->format('Y');
                 $month = $thisMonth->format('F');
+                $user = Auth::user();
 
                 $injuredPersonnel = collect([
                     'nonLostTimeAccidents' => $report->nonLostTimeAccidents,
@@ -603,11 +595,15 @@ class ReportTable extends Component
                     'monthlyDeseases' => $report->monthlyDeseases,
                 ]);
 
+                $quarterlyEmergencyReports = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
+                                        ->where('year', $thisMonth->format('Y'))
+                                        ->get();
                 $filters = [
                     'monthYear' => $monthYear,
                     'month' => $month,
                     'report' => $report,
                     'injuredPersonnel' => $injuredPersonnel,
+                    'quarterlyEmergencyReports' => $quarterlyEmergencyReports,
                 ];
                 $filename = 'SafetyandHealthMonthlyReport.xlsx';
                 return Excel::download(new SafetyHealthMonthlyReportExport($filters), $filename);

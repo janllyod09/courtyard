@@ -153,7 +153,7 @@ x-cloak
                                                             </span>
                                                             <div>
                                                                 <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
-                                                                <i class="bi bi-file-earmark-arrow-down-fill text-sm text-green-500 cursor-pointer" title="Export"></i>
+                                                                {{-- <i class="bi bi-file-earmark-arrow-down-fill text-sm text-green-500 cursor-pointer" title="Export"></i> --}}
                                                             </div>
                                                         @else
                                                             <span class="text-gray-400 dark:text-gray-500">No Report</span> 
@@ -189,13 +189,13 @@ x-cloak
         <div class="p-4">
             <div class="bg-slate-800 rounded-t-lg mb-4 dark:bg-gray-200 p-4 text-gray-50 dark:text-slate-900 font-bold">
                 Emergency Drill Report for {{ $year }} 
-                @if($quarter == 1)
+                @if($yearQuarter == 1)
                     1st Quarter
-                @elseif($quarter == 2)
+                @elseif($yearQuarter == 2)
                     2nd Quarter
-                @elseif($quarter == 3)
+                @elseif($yearQuarter == 3)
                     3rd Quarter
-                @elseif($quarter == 4)
+                @elseif($yearQuarter == 4)
                     4th Quarter
                 @endif
                 <button @click="show = false" class="float-right focus:outline-none" wire:click='resetVariables'>
@@ -203,14 +203,14 @@ x-cloak
                 </button>
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
 
-                <div class="col-span-2">
-                    <label for="drill" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Uri (Type of Emergency Drill Conducted)</label>
-                    <p class="mt-1 p-2 block w-full shadow-sm sm:text-sm dark:text-gray-300">{{ $drill }}</p>
+                <div class="col-span-1">
+                    <label for="drill" class="text-sm block text-sm font-medium text-gray-700 dark:text-slate-400">Uri (Type of Emergency Drill Conducted)</label>
+                    <p class="mt-1 block w-full dark:text-gray-100">{{ $drill }}</p>
                 </div>
 
-                <div class="col-span-2 sm:col-span-1">
+                <div class="col-span-1">
                     <label for="reportFile" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Report (PDF)</label>
                     @if($reportFile)
                         @php
@@ -219,7 +219,7 @@ x-cloak
                         @endphp
                         
                         <div class="flex items-center justify-center space-x-2">
-                            <span>{{ $fileName }}</span>
+                            <span class="mt-1 block w-full dark:text-gray-100">{{ $fileName }}</span>
                             <button wire:click="downloadFile('{{ $filePath }}')" 
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" title="Download">
                                     <i class="bi bi-download" style="padding-right: 2px" wire:loading.remove wire:target="downloadFile('{{ $filePath }}')"></i>
@@ -234,20 +234,26 @@ x-cloak
                     @endif
                 </div>
 
-                <div class="col-span-2 sm:col-span-1">
+                <div class="col-span-1">
                     <label for="dateUploaded" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Petsa (Date Uploaded)</label>
-                    <p class="mt-1 p-2 block w-full shadow-sm sm:text-sm dark:text-gray-300">{{ $dateUploaded }}</p>
+                    <p class="mt-1 block w-full dark:text-gray-100">{{ $dateUploaded }}</p>
                 </div>
 
                 {{-- Save and Cancel buttons --}}
-                <div class="mt-4 flex justify-end col-span-2 sm:col-span-2 text-sm">
-                    <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" wire:click='exportReport'>
+                <div class="mt-4 flex justify-end col-span-1 text-sm">
+                    <button class="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleEditReport({{ $reportId }})'>
+                        <span>Edit</span>
+                    </button>
+                    <button class="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleDelete({{ $reportId }})'>
+                        <span>Delete</span>
+                    </button>
+                    {{-- <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" wire:click='exportReport'>
                         <div wire:loading wire:target="exportReport" style="margin-bottom: 5px;">
                             <div class="spinner-border small text-primary" role="status">
                             </div>
                         </div>
                         <span wire:loading.remove wire:target="exportReport">Export</span>
-                    </button>
+                    </button> --}}
                     <p @click="show = false" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer" wire:click='resetVariables'>
                         Close
                     </p>
@@ -282,15 +288,15 @@ x-cloak
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                        <label for="quarter" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Reporting for Quarter <span class="text-red-500">*</span></label>
-                        <select name="quarter" id="quarter" wire:model='quarter' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                        <label for="yearQuarter" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Reporting for Quarter <span class="text-red-500">*</span></label>
+                        <select name="yearQuarter" id="yearQuarter" wire:model='yearQuarter' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
                             <option value="">Select Quarter</option>
                             <option value="1">1st Quarter</option>
                             <option value="2">2nd Quarter</option>
                             <option value="3">3rd Quarter</option>
                             <option value="4">4th Quarter</option>
                         </select>
-                        @error('quarter')
+                        @error('yearQuarter')
                             <span class="text-red-500 text-sm">The quarter is required!</span>
                         @enderror
                     </div>

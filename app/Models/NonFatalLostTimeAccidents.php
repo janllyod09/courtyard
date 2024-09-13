@@ -32,6 +32,11 @@ class NonFatalLostTimeAccidents extends Model
         'type_of_injury',
         'part_of_body_injured',
         'treatment',
+        'cost_of_mitigation',
+        'cost_of_property_damage',
+        'is_performing_routine_work',
+        'is_not_performing_routine_work_description',
+        'description_of_incident',
     ];
 
     public function cpMonthlyReports(){

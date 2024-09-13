@@ -702,7 +702,12 @@ class SafetyHealthMonthlyReportExport implements WithEvents
     }
 
     private function quarterEmergencyDrill($sheet){
+        $formatDate = function($value) {
+            $date = Carbon::parse($value)->format('m/d/Y');
+            return $date;
+        };
         $row = $this->currentRow += 2;
+        $drillReports = $this->filters['quarterlyEmergencyReports'];
 
         $sheet->mergeCells("A{$row}:B{$row}");
         $sheet->setCellValue("A{$row}", "Quarter");
@@ -731,38 +736,56 @@ class SafetyHealthMonthlyReportExport implements WithEvents
 
         $row++;
         $start = $row;
-        $sheet->mergeCells("A{$row}:B{$row}");
-        $sheet->setCellValue("A{$row}", "1st");
-        $sheet->mergeCells("C{$row}:F{$row}");
-        $sheet->setCellValue("C{$row}", "");
-        $sheet->mergeCells("G{$row}:H{$row}");
-        $sheet->setCellValue("H{$row}", "");
-
+        $data = $row;
+            $sheet->mergeCells("A{$row}:B{$row}");
+            $sheet->setCellValue("A{$row}", "1st");
+            $sheet->mergeCells("C{$row}:F{$row}");
+            $sheet->mergeCells("G{$row}:H{$row}");
         $row++;
-        $sheet->mergeCells("A{$row}:B{$row}");
-        $sheet->setCellValue("A{$row}", "2nd");
-        $sheet->mergeCells("C{$row}:F{$row}");
-        $sheet->setCellValue("C{$row}", "");
-        $sheet->mergeCells("G{$row}:H{$row}");
-        $sheet->setCellValue("H{$row}", "");
-
+            $sheet->mergeCells("A{$row}:B{$row}");
+            $sheet->setCellValue("A{$row}", "2nd");
+            $sheet->mergeCells("C{$row}:F{$row}");
+            $sheet->mergeCells("G{$row}:H{$row}");
         $row++;
-        $sheet->mergeCells("A{$row}:B{$row}");
-        $sheet->setCellValue("A{$row}", "3rd");
-        $sheet->mergeCells("C{$row}:F{$row}");
-        $sheet->setCellValue("C{$row}", "");
-        $sheet->mergeCells("G{$row}:H{$row}");
-        $sheet->setCellValue("H{$row}", "");
-
+            $sheet->mergeCells("A{$row}:B{$row}");
+            $sheet->setCellValue("A{$row}", "3rd");
+            $sheet->mergeCells("C{$row}:F{$row}");
+            $sheet->mergeCells("G{$row}:H{$row}");
         $row++;
-        $sheet->mergeCells("A{$row}:B{$row}");
-        $sheet->setCellValue("A{$row}", "4th");
-        $sheet->mergeCells("C{$row}:F{$row}");
-        $sheet->setCellValue("C{$row}", "");
-        $sheet->mergeCells("G{$row}:H{$row}");
-        $sheet->setCellValue("H{$row}", "");
+            $sheet->mergeCells("A{$row}:B{$row}");
+            $sheet->setCellValue("A{$row}", "4th");
+            $sheet->mergeCells("C{$row}:F{$row}");
+            $sheet->mergeCells("G{$row}:H{$row}");
 
-        $end = $row;
+        if($drillReports){
+            foreach($drillReports as $report){
+                switch($report->quarter){
+                    case 1:
+                        $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
+                        $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        break;
+                    case 2:
+                        $data++;
+                        $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
+                        $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        break;
+                    case 3:
+                        $data+=2;
+                        $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
+                        $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        break;
+                    case 4:
+                        $data+=3;
+                        $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
+                        $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        $end = $start + 3;
         $sheet->getStyle("C{$start}:C{$end}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $sheet->getStyle("G{$start}:G{$end}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle("A{$start}:H{$end}")->applyFromArray([

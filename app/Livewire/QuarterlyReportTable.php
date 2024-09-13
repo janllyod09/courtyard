@@ -23,10 +23,12 @@ class QuarterlyReportTable extends Component
     public $dateUploaded;
     public $reportFile;
     public $drill;
-    public $quarter;
+    public $yearQuarter;
     public $year;
     public $viewThisReport;
     public $reportId;
+    public $deleteId;
+    public $editReportId;
 
     public function render()
     {
@@ -61,7 +63,7 @@ class QuarterlyReportTable extends Component
         try{
             $this->validate([
                 'year' => 'required',
-                'quarter' => 'required',
+                'yearQuarter' => 'required',
                 'dateUploaded' => 'required',
                 'drill' => 'required',
                 'reportFile' => 'required',
@@ -76,7 +78,7 @@ class QuarterlyReportTable extends Component
             $report = QuarterlyEmergencyDrillReports::create([
                 'user_id' => $user->id,
                 'year' => $year,
-                'quarter' => $this->quarter,
+                'quarter' => $this->yearQuarter,
                 'date_uploaded' => now(),
                 'type_of_emergency_drill' => $this->drill,
                 'report' => $reportFilePath,
@@ -101,10 +103,9 @@ class QuarterlyReportTable extends Component
                 $this->dateUploaded = $report->date_uploaded;
                 $this->reportFile = $report->report;
                 $this->drill = $report->type_of_emergency_drill;
-                $this->quarter = $report->quarter;
+                $this->yearQuarter = $report->quarter;
                 $this->year = $report->year;
             }
-            dd($this->quarter);
         }catch(Exception $e){
             throw $e;
         }
@@ -123,15 +124,40 @@ class QuarterlyReportTable extends Component
         }
     }
 
+    public function toggleEditReport($id){
+        $report = QuarterlyEmergencyDrillReports::findOrFail($id);
+        $this->editReport = true;
+        $this->year = $report->year;
+        $this->yearQuarter =  $report->quarter;
+        $this->drill = $report->type_of_emergency_drill;
+        $this->reportFile = $report->report;
+    }
+    
+    public function toggleDelete($userId){
+        $this->deleteId = $userId;
+    }
+
+    public function deleteData(){
+        $report = QuarterlyEmergencyDrillReports::findOrFail($this->deleteId);
+        $report->delete();
+        $this->deleteId = null;
+        $this->dispatch('swal', [
+            'title' => 'Tagumpay na nabura (Deleted successfully)',
+            'icon' => 'success'
+        ]);
+    }
+
     public function resetVariables(){
         $this->editReport = null;
         $this->addReport = null;
         $this->dateUploaded = null;
         $this->reportFile = null;
         $this->drill = null;
-        $this->quarter = null;
+        $this->yearQuarter = null;
         $this->year = null;
         $this->viewThisReport = null;
         $this->reportId = null;
+        $this->deleteId = null;
+        $this->editReportId = null;
     }
 }

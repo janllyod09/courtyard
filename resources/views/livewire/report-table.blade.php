@@ -272,7 +272,7 @@ x-cloak
                             <div class="overflow-x-auto p-4">
 
                                 <div class="{{ $currentStep === 1 ? '' : 'hidden' }}">
-                                    <p class="text-sm">Step {{ $currentStep }} of 4</p>
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
                                     <div class="grid grid-cols-3 gap-4 mt-6">
                                         <div class="col-span-full sm:col-span-1">
@@ -359,36 +359,14 @@ x-cloak
                                 </div>
 
                                 <div class="{{ $currentStep === 2 ? '' : 'hidden' }}">
-                                    <p class="text-sm">Step {{ $currentStep }} of 4</p>
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
                                     <div class="flex gap-6 overflow-x-auto mb-4 pb-2">
-                                        <div @click="selectedSubTab = 'nlta'" 
-                                                :class="{ 'font-bold dark:text-gray-300 text-gray-800': selectedSubTab === 'nlta', 'text-slate-700 font-medium dark:text-slate-300 dark:hover:text-white hover:text-black': selectedSubTab !== 'nlta' }" 
-                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
+                                        <div class="font-bold dark:text-gray-300 text-gray-800 h-min py-2 text-sm text-nowrap sm:mr-4">
                                             <label for="nlta" 
                                             :class="{ 'text-gray-800 dark:text-gray-100': selectedSubTab === 'nlta', 'text-gray-400 dark:text-slate-400': selectedSubTab !== 'nlta' }"
                                                 class="block text-sm font-medium">Non-Lost Time Accident</label>
                                             <input type="number" id="nlta" wire:model.live='nlta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
-                                        </div>
-                                        <div @click="selectedSubTab = 'nflta'" 
-                                                :class="{ 'text-gray-800 dark:text-gray-100': selectedSubTab === 'nflta', 'text-gray-400 dark:text-slate-400': selectedSubTab !== 'nflta' }" 
-                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
-                                            <label for="nflta" 
-                                                class="block text-sm font-medium">Non-Fatal Lost Time Accident</label>
-                                            <div class="flex gap-2">
-                                                <input type="number" id="nflta" wire:model.live='nflta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
-                                                <input type="number" id="nfltaDaysLost" wire:model='nfltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
-                                            </div>
-                                        </div>
-                                        <div @click="selectedSubTab = 'flta'" 
-                                                :class="{ 'text-gray-800 dark:text-gray-100': selectedSubTab === 'flta', 'text-gray-400 dark:text-slate-400': selectedSubTab !== 'flta' }" 
-                                                class="h-min py-2 text-sm text-nowrap sm:mr-4">
-                                            <label for="flta" 
-                                                class="block text-sm font-medium">Fatal Lost Time Accident</label>
-                                            <div class="flex gap-2">
-                                                <input type="number" id="flta" wire:model.live='flta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
-                                                <input type="number" id="fltaDaysLost" wire:model='fltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
-                                            </div>
                                         </div>
                                     </div>
 
@@ -397,12 +375,6 @@ x-cloak
                                             <div class="overflow-visible">
                                                 <div class="w-full flex justify-center items-center mb-4" x-show="selectedSubTab === 'nlta'">
                                                     <h1 class="text-gray-800 dark:text-gray-100 uppercase">Non-Lost Time Accident</h1>
-                                                 </div>
-                                                <div class="w-full flex justify-center items-center mb-4" x-show="selectedSubTab === 'nflta'">
-                                                    <h1 class="text-gray-800 dark:text-gray-100 uppercase">Non-Fatal Lost Time Accident</h1>
-                                                 </div>
-                                                <div class="w-full flex justify-center items-center mb-4" x-show="selectedSubTab === 'flta'">
-                                                    <h1 class="text-gray-800 dark:text-gray-100 uppercase">Fatal Lost Time Accident</h1>
                                                  </div>
 
                                                 <div class="overflow-visible">
@@ -1203,8 +1175,51 @@ x-cloak
                                                         @endforeach
 
                                                      </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                                    <div x-show="selectedSubTab === 'nflta'" x-data="{selectedSubTab1: '1',}" x-cloak>
+                                    {{-- Next and Previous --}}
+                                    <div class="w-full flex justify-between items-center mt-6">
+                                        <button wire:click='previousStep' 
+                                            class="mt-4 sm:mt-1 px-2 py-1.5 bg-blue-500 rounded-md text-sm
+                                            hover:bg-blue-600 focus:outline-none
+                                            text-white">
+                                            << Prev
+                                        </button>
+                                        <button wire:click='nextStep' 
+                                            class="mt-4 sm:mt-1 px-2 py-1.5 bg-blue-500 rounded-md text-sm
+                                            hover:bg-blue-600 focus:outline-none
+                                            text-white">
+                                            Next >>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="{{ $currentStep === 3 ? '' : 'hidden' }}">
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
+
+                                    <div class="flex gap-6 overflow-x-auto mb-4 pb-2">
+                                        <div class="text-gray-800 dark:text-gray-100 h-min py-2 text-sm text-nowrap sm:mr-4">
+                                            <label for="nflta" 
+                                                class="block text-sm font-medium">Non-Fatal Lost Time Accident</label>
+                                            <div class="flex gap-2">
+                                                <input type="number" id="nflta" wire:model.live='nflta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
+                                                <input type="number" id="nfltaDaysLost" wire:model='nfltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="-my-2 overflow-x-auto">
+                                        <div class="inline-block w-full py-2 align-middle">
+                                            <div class="overflow-visible">
+                                                <div class="w-full flex justify-center items-center mb-4">
+                                                    <h1 class="text-gray-800 dark:text-gray-100 uppercase">Non-Fatal Lost Time Accident</h1>
+                                                 </div>
+
+                                                <div class="overflow-visible">
+                                                    <div x-data="{selectedSubTab1: '1',}" x-cloak>
                                                         <div class="flex overflow-x-auto pb-2">
                                                             @foreach($nfltaPersons as $index => $person)
                                                                 <div @click="selectedSubTab1 = '{{ $index + 1 }}'" 
@@ -2001,7 +2016,51 @@ x-cloak
                                                         @endforeach
 
                                                      </div>
-                                                    <div x-show="selectedSubTab === 'flta'" x-data="{selectedSubTab1: '1',}" x-cloak>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {{-- Next and Previous --}}
+                                    <div class="w-full flex justify-between items-center mt-6">
+                                        <button wire:click='previousStep' 
+                                            class="mt-4 sm:mt-1 px-2 py-1.5 bg-blue-500 rounded-md text-sm
+                                            hover:bg-blue-600 focus:outline-none
+                                            text-white">
+                                            << Prev
+                                        </button>
+                                        <button wire:click='nextStep' 
+                                            class="mt-4 sm:mt-1 px-2 py-1.5 bg-blue-500 rounded-md text-sm
+                                            hover:bg-blue-600 focus:outline-none
+                                            text-white">
+                                            Next >>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="{{ $currentStep === 4 ? '' : 'hidden' }}">
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
+
+                                    <div class="flex gap-6 overflow-x-auto mb-4 pb-2">
+                                        <div class="text-gray-800 dark:text-gray-100 h-min py-2 text-sm text-nowrap sm:mr-4">
+                                            <label for="flta" 
+                                                class="block text-sm font-medium">Fatal Lost Time Accident</label>
+                                            <div class="flex gap-2">
+                                                <input type="number" id="flta" wire:model.live='flta' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px">
+                                                <input type="number" id="fltaDaysLost" wire:model='fltaDaysLost' class="mt-1 p-2 block shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" style="width: 100px" placeholder="Days Lost">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="-my-2 overflow-x-auto">
+                                        <div class="inline-block w-full py-2 align-middle">
+                                            <div class="overflow-visible">
+                                                <div class="w-full flex justify-center items-center mb-4">
+                                                    <h1 class="text-gray-800 dark:text-gray-100 uppercase">Fatal Lost Time Accident</h1>
+                                                 </div>
+
+                                                <div class="overflow-visible">
+                                                    <div x-data="{selectedSubTab1: '1',}" x-cloak>
                                                         <div class="flex overflow-x-auto pb-2">
                                                             @foreach($fltaPersons as $index => $person)
                                                                 <div @click="selectedSubTab1 = '{{ $index + 1 }}'" 
@@ -2824,8 +2883,8 @@ x-cloak
                                     </div>
                                 </div>
 
-                                <div class="{{ $currentStep === 3 ? '' : 'hidden' }}">
-                                    <p class="text-sm">Step {{ $currentStep }} of 4</p>
+                                <div class="{{ $currentStep === 5 ? '' : 'hidden' }}">
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
                                     {{-- Deseases --}}
                                     <fieldset class="p-4 border border-gray-500 rounded-md mb-6 relative mt-4" style="padding-top: 60px" x-data="{selectedSubTab1: '1',}" x-cloak>
@@ -2905,8 +2964,8 @@ x-cloak
                                     </div>
                                 </div>
 
-                                <div class="{{ $currentStep === 4 ? '' : 'hidden' }}">
-                                    <p class="text-sm">Step {{ $currentStep }} of 4</p>
+                                <div class="{{ $currentStep === 6 ? '' : 'hidden' }}">
+                                    <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
                                     <div class="overflow-x-auto mb-6 mt-4">
                                         <table class="w-full min-w-full border border-neutral-200 dark:border-gray-400 rounded-md">
