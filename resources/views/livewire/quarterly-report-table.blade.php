@@ -1,6 +1,12 @@
 <div class="w-full"
 x-data="{ 
     selectedTab: '',
+    init() { 
+        Livewire.on('formSubmitted', () => {
+            // Reload the page
+            window.location.reload();
+        });
+    } 
 }" 
 x-cloak
 >

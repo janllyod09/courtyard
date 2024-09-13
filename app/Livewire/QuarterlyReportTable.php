@@ -89,6 +89,7 @@ class QuarterlyReportTable extends Component
                 'title' => 'Tagumpay na naisumite (Submitted successfully)',
                 'icon' => 'success'
             ]);
+            $this->dispatch('formSubmitted');
         }catch(Exception $e){
             throw $e;
         }

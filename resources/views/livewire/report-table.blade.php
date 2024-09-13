@@ -1,6 +1,12 @@
 <div class="w-full"
 x-data="{ 
     selectedSubTab: 'nlta',
+    init() { 
+        Livewire.on('formSubmitted', () => {
+            // Reload the page
+            window.location.reload();
+        });
+    } 
 }" 
 x-cloak
 >
@@ -277,7 +283,7 @@ x-cloak
                                     <div class="grid grid-cols-3 gap-4 mt-6">
                                         <div class="col-span-full sm:col-span-1">
                                             <label for="encoder" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Encoder</label>
-                                            <input type="text" id="encoder" wire:model='encoder' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
+                                            <input type="text" id="encoder" wire:model='encoder' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
                                         </div>
                                         <div class="col-span-full sm:col-span-1">
                                             <label for="company" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Company</label>

@@ -457,6 +457,7 @@ class ReportTable extends Component
                 'title' => 'Tagumpay na naisumite (Submitted successfully)',
                 'icon' => 'success'
             ]);
+            $this->dispatch('formSubmitted');
             $this->resetVariables();
         } catch (Exception $e) {
             DB::rollBack();
