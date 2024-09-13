@@ -36,6 +36,9 @@ class QuarterlyReportTable extends Component
         $years = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
             ->select('year')
             ->distinct()
+            ->when($this->year, function ($query) {
+                return $query->where('year', $this->year);
+            })
             ->orderBy('year', 'desc')
             ->paginate(10);
 

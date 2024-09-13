@@ -98,7 +98,7 @@ x-cloak
                  <!-- Select Year -->
                 <div class="w-full mr-0 sm:mr-4 relative">
                     <label for="year" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Search Year</label>
-                    <input type="number" id="year" wire:model.live='date'
+                    <input type="number" id="year" wire:model.live='year'
                         min="1900" max="{{ date('Y') }}" step="1"
                         class="mb-0 mt-1 px-2 py-1.5 block w-36 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
                                 dark:hover:bg-slate-600 dark:border-slate-600
