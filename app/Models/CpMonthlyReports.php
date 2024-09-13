@@ -33,22 +33,22 @@ class CpMonthlyReports extends Model
     }
 
     public function nonLostTimeAccidents(){
-        return $this->hasMany(NonLostTimeAccidents::class);
+        return $this->hasMany(NonLostTimeAccidents::class, 'report_id');
     }
 
     public function nonFatalLostTimeAccidents(){
-        return $this->hasMany(NonFatalLostTimeAccidents::class);
+        return $this->hasMany(NonFatalLostTimeAccidents::class, 'report_id');
     }
 
     public function fatalLostTimeAccidents(){
-        return $this->hasMany(FatalLostTimeAccidents::class);
+        return $this->hasMany(FatalLostTimeAccidents::class, 'report_id');
     }
 
     public function monthlyDeseases(){
-        return $this->hasMany(MonthlyDeseases::class);
+        return $this->hasMany(MonthlyDeseases::class, 'report_id');
     }
 
     public function explosivesConsumptions(){
-        return $this->hasOne(ExplosivesConsumptions::class);
+        return $this->hasOne(ExplosivesConsumptions::class, 'report_id');
     }
 }

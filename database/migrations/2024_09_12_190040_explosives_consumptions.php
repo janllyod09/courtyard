@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id('id');
             $table->unsignedBigInteger('report_id');
             $table->foreign('report_id')->references('id')->on('cp_monthly_reports')->onDelete('cascade');
+            $table->string('blasting_contractor')->nullable();
             $table->double('dynamite')->nullable();
             $table->double('detonating_cord')->nullable();
             $table->integer('non_elec_blasting_caps')->nullable();

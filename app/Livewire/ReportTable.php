@@ -60,7 +60,9 @@ class ReportTable extends Component
     public $primer;
     public $emulsion;
     public $others;
+    public $deleteId;
     
+    public $editReportId;
 
     public function mount(){
         $this->updateNltaCount();
@@ -84,6 +86,7 @@ class ReportTable extends Component
                 $query->whereMonth('month', Carbon::parse($this->date)->month)
                     ->whereYear('month', Carbon::parse($this->date)->year);
             })
+            ->orderBy('month', 'DESC')
             ->paginate(10);
 
         $this->updateNltaCount();
@@ -232,7 +235,90 @@ class ReportTable extends Component
     }
 
     public function toggleCreateReport(){
-        $this->create = !$this->create;
+        if($this->create){
+            $this->create = null;
+            $this->resetVariables();
+            $this->resetValidation();
+        }else{
+            $this->create = true;
+        }
+    }
+
+    public function toggleEditReport($id){
+        $this->editReportId = $id;
+        $report = CpMonthlyReports::with(['nonLostTimeAccidents', 'nonFatalLostTimeAccidents', 'fatalLostTimeAccidents', 'monthlyDeseases'])->findOrFail($id);
+        if($report){
+            $this->create = true;
+            $this->month = Carbon::parse($report->month)->format('Y-m');
+            $this->manHours = $report->man_hours;
+            $this->maleWorkers = $report->male_workers;
+            $this->femaleWorkers = $report->female_workers;
+            $this->serviceContractors = $report->service_contractors;
+            $this->nlta = $report->non_lost_time_accident;
+            $this->nflta = $report->non_fatal_lost_time_accident;
+            $this->flta = $report->fatal_lost_time_accident;
+            $this->nfltaDaysLost = $report->nflt_days_lost;
+            $this->fltaDaysLost = $report->flt_days_lost;
+            $this->minutes = $report->minutes;
+            $this->nltaPersons = $this->formatAccidentData($report->nonLostTimeAccidents);
+            $this->nfltaPersons = $this->formatAccidentData($report->nonFatalLostTimeAccidents);
+            $this->fltaPersons = $this->formatAccidentData($report->fatalLostTimeAccidents);
+            $this->deseases = $report->monthlyDeseases->map(function ($disease) {
+                return [
+                    'desease' => $disease->desease,
+                    'count' => $disease->no_of_cases,
+                    'response' => $disease->response,
+                ];
+            })->toArray();
+
+            // Populate explosives consumption
+            if ($report->explosivesConsumptions) {
+                $explosives = $report->explosivesConsumptions;
+                $this->blastingContractor = $explosives->blasting_contractor;
+                $this->dynamite = $explosives->dynamite;
+                $this->detonatingCord = $explosives->detonating_cord;
+                $this->nonElecBlastingCaps = $explosives->non_elec_blasting_caps;
+                $this->elecBlastingCaps = $explosives->elec_blasting_caps;
+                $this->fuseLighter = $explosives->fuse_lighter;
+                $this->connectors = $explosives->connectors;
+                $this->ammoniumNitrate = $explosives->ammonium_nitrate;
+                $this->shotshellPrimer = $explosives->shotshell_primer;
+                $this->primer = $explosives->primer;
+                $this->emulsion = $explosives->emulsion;
+                $this->others = $explosives->others;
+            }
+        }
+    }
+
+    private function formatAccidentData($accidents){
+        return $accidents->map(function ($accident) {
+            return [
+                'name' => $accident->name,
+                'gender' => $accident->gender,
+                'position' => $accident->position,
+                'dateOfAccidentIllness' => $accident->date_of_accident_illness,
+                'time' => $accident->time,
+                'location' => $accident->location,
+                'physicalInjury' => $accident->has_physical_injury ? true : false,
+                'propertyDamage' => $accident->has_property_damage ? true : false,
+                'serviceContractor' => $accident->is_service_contractor ? true : false,
+                'company' => $accident->company,
+                'cause' => $accident->cause_of_accident_illness,
+                'unsafeAct' => $accident->is_unsafe_acts ? true : false,
+                'unsafeActDescription' => $accident->is_unsafe_acts_description,
+                'unsafeConditions' => $accident->is_unsafe_conditions ? true : false,
+                'unsafeConditionsDescription' => $accident->is_unsafe_conditions_description,
+                'kindOfAccident' => json_decode($accident->kind_of_accident, true),
+                'typeOfInjury' => json_decode($accident->type_of_injury, true),
+                'partOfBodyInjured' => json_decode($accident->part_of_body_injured, true),
+                'treatment' => json_decode($accident->treatment, true),
+                'cost_of_mitigation' => $accident->cost_of_mitigation,
+                'cost_of_property_damage' => $accident->cost_of_property_damage,
+                'performingWork' => $accident->is_performing_routine_work ? true : false,
+                'performingWorkDescription' => $accident->is_not_performing_routine_work_description,
+                'incidentDescription' => $accident->description_of_incident,
+            ];
+        })->toArray();
     }
 
     public function nextStep(){
@@ -320,7 +406,6 @@ class ReportTable extends Component
         $this->currentStep -= 1;
     }
 
-
     public function submit(){
         try {
             $user = Auth::user();
@@ -333,7 +418,7 @@ class ReportTable extends Component
                 ->whereYear('month', $thisMonth->year)
                 ->first();
 
-            if ($hasMonthReport) {
+            if ($hasMonthReport && !$this->editReportId) {
                 $this->dispatch('swal', [
                     'title' => 'Merun ka ng report para sa buwan na inilagay (You already have a report for the inputted month)',
                     'icon' => 'error'
@@ -342,6 +427,11 @@ class ReportTable extends Component
             }
 
             DB::beginTransaction();
+
+            if ($this->editReportId) {
+                $oldReport = CpMonthlyReports::findOrFail($this->editReportId);
+                $oldReport->delete();
+            }
 
             $fileName = $this->minutes->getClientOriginalName();
             $minutesPath = $this->minutes->storeAs('public/upload/minutes', $fileName); 
@@ -353,7 +443,7 @@ class ReportTable extends Component
                 'man_hours' => $this->manHours,
                 'male_workers' => $this->maleWorkers,
                 'female_workers' => $this->femaleWorkers,
-                'service_contractors' => $this->serviceContractor,
+                'service_contractors' => $this->serviceContractors,
                 'non_lost_time_accident' => $this->nlta,
                 'non_fatal_lost_time_accident' => $this->nflta,
                 'fatal_lost_time_accident' => $this->flta,
@@ -373,6 +463,7 @@ class ReportTable extends Component
                 'title' => 'Tagumpay na naisumite (Submitted successfully)',
                 'icon' => 'success'
             ]);
+            $this->resetVariables();
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
@@ -409,7 +500,7 @@ class ReportTable extends Component
                 $person['unsafeConditionsDescription'] = null;
             }
             if($person['performingWork']){
-                $person['performingWork'] = 0;
+                $person['performingWork'] = 1;
                 $person['performingWorkDescription'] = null;
             }
 
@@ -452,13 +543,15 @@ class ReportTable extends Component
 
     private function createDiseaseRecords($report)
     {
-        foreach ($this->deseases as $disease) {
-            MonthlyDeseases::create([
-                'report_id' => $report->id,
-                'desease' => $disease['desease'],
-                'no_of_cases' => $disease['count'],
-                'response' => $disease['response'],
-            ]);
+        if(!empty($this->deseases)){
+            foreach ($this->deseases as $disease) {
+                MonthlyDeseases::create([
+                    'report_id' => $report->id,
+                    'desease' => $disease['desease'] ?: null,
+                    'no_of_cases' => $disease['count'] ?: null,
+                    'response' => $disease['response'] ?: null,
+                ]);
+            }
         }
     }
 
@@ -466,6 +559,7 @@ class ReportTable extends Component
     {
         ExplosivesConsumptions::create([
             'report_id' => $report->id,
+            'blasting_contractor' => $this->blastingContractor,
             'dynamite' => $this->dynamite,
             'detonating_cord' => $this->detonatingCord,
             'non_elec_blasting_caps' => $this->nonElecBlastingCaps,
@@ -496,13 +590,24 @@ class ReportTable extends Component
 
     public function exportReport($id){
         try{
-            $report = CpMonthlyReports::findOrFail($id);
+            $report = CpMonthlyReports::with(['nonLostTimeAccidents', 'nonFatalLostTimeAccidents', 'fatalLostTimeAccidents', 'monthlyDeseases'])->findOrFail($id);
             if($report){
                 $thisMonth = Carbon::parse($report->month);
                 $monthYear = $thisMonth->format('F') . " " . $thisMonth->format('Y');
+                $month = $thisMonth->format('F');
+
+                $injuredPersonnel = collect([
+                    'nonLostTimeAccidents' => $report->nonLostTimeAccidents,
+                    'nonFatalLostTimeAccidents' => $report->nonFatalLostTimeAccidents,
+                    'fatalLostTimeAccidents' => $report->fatalLostTimeAccidents,
+                    'monthlyDeseases' => $report->monthlyDeseases,
+                ]);
+
                 $filters = [
                     'monthYear' => $monthYear,
+                    'month' => $month,
                     'report' => $report,
+                    'injuredPersonnel' => $injuredPersonnel,
                 ];
                 $filename = 'SafetyandHealthMonthlyReport.xlsx';
                 return Excel::download(new SafetyHealthMonthlyReportExport($filters), $filename);
@@ -510,5 +615,57 @@ class ReportTable extends Component
         }catch(Exception $e){
             throw $e;
         }
+    }
+
+    public function toggleDelete($userId){
+        $this->deleteId = $userId;
+    }
+
+    public function deleteData(){
+        $report = CpMonthlyReports::findOrFail($this->deleteId);
+        $report->delete();
+        $this->deleteId = null;
+        $this->dispatch('swal', [
+            'title' => 'Tagumpay na nabura (Deleted successfully)',
+            'icon' => 'success'
+        ]);
+    }
+
+    public function resetVariables(){
+        $this->create = null;
+        $this->serviceContractor = null;
+        $this->unsafeAct = null;
+        $this->manHours = null;
+        $this->maleWorkers = null;
+        $this->femaleWorkers = null;
+        $this->serviceContractors = null;
+        $this->unsafeConditions = null;
+        $this->performingWork = null;
+        $this->minutes = null;
+        $this->month = null;
+        $this->nlta = 0;
+        $this->nflta = 0;
+        $this->flta = 0;
+        $this->nfltaDaysLost = null;
+        $this->fltaDaysLost = null;
+        $this->nltaPersons = [];
+        $this->nfltaPersons = [];
+        $this->fltaPersons = [];
+        $this->deseases = [];
+        $this->blastingContractor = null;
+        $this->dynamite = null;
+        $this->detonatingCord = null;
+        $this->nonElecBlastingCaps = null;
+        $this->elecBlastingCaps = null;
+        $this->fuseLighter = null;
+        $this->connectors = null;
+        $this->ammoniumNitrate = null;
+        $this->shotshellPrimer = null;
+        $this->primer = null;
+        $this->emulsion = null;
+        $this->others = null;
+        $this->deleteId = null;
+        $this->currentStep = 1;
+        $this->editReportId = null;
     }
 }

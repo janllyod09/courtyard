@@ -17,7 +17,11 @@ Route::middleware(['auth', 'checkrole:admin'])->group(function () {
 /* Client account role */
 Route::middleware(['auth', 'checkrole:client'])->group(function () {
     Route::get('/home', function () {
-        return view('livewire.report'); })->name('home');
+        return view('livewire.home'); })->name('home');
+    Route::get('/monthly-report', function () {
+        return view('livewire.report'); })->name('monthly-report');
+    Route::get('/quarterly-report', function () {
+        return view('livewire.quarterly-report'); })->name('quarterly-report');
     Route::get('/admin-reports', function () {
         return view('livewire.admin-reports-index'); })->name('admin-reports');
 });

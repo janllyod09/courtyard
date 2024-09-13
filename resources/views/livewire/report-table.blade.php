@@ -214,29 +214,35 @@ x-cloak
                                                 <td class="px-5 py-4 font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                     <div class="relative">
                                                         @if(!$report->status)
-                                                            <button wire:click="toggleEditReport({{ $report->id }})" 
-                                                                class="peer inline-flex items-center justify-center px-4 py-2 -m-5 
-                                                                -mr-2 font-medium tracking-wide text-blue-500 hover:text-blue-600 
-                                                                focus:outline-none" title="Edit">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                            </button>
-                                                            <button wire:click="toggleDelete({{ $report->id }})" 
-                                                                class=" text-red-600 hover:text-red-900 dark:text-red-600 
-                                                                dark:hover:text-red-900" title="Delete">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        @endif
-                                                        <button wire:click="exportReport({{ $report->id }})" 
-                                                            class="peer inline-flex items-center justify-center px-4 py-2 -m-5 -mr-2 
-                                                            text-sm font-medium tracking-wide text-green-500 hover:text-green-600 focus:outline-none"
-                                                            title="Export Report">
-                                                            <img class="flex dark:hidden ml-3 mt-4" src="/images/icons8-xls-export-dark.png" width="18" alt="" wire:target="exportReport({{ $report->id }})"  wire:loading.remove>
-                                                            <img class="hidden dark:block ml-3 mt-4" src="/images/icons8-xls-export-light.png" width="18" alt="" wire:target="exportReport({{ $report->id }})" wire:loading.remove>
-                                                            <div wire:loading wire:target="exportReport({{ $report->id }})">
-                                                                <div class="mt-4 ml-3 spinner-border small text-primary" role="status">
-                                                                </div>
+                                                            <div class="relative z-10">
+                                                                <button wire:click="toggleEditReport({{ $report->id }})" 
+                                                                    class="peer inline-flex items-center justify-center px-4 py-2 
+                                                                    font-medium tracking-wide text-blue-500 hover:text-blue-600 
+                                                                    focus:outline-none" title="Edit">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                </button>
                                                             </div>
-                                                        </button>
+                                                            <div class="relative z-10">
+                                                                <button wire:click="toggleDelete({{ $report->id }})" 
+                                                                    class=" text-red-600 hover:text-red-900 dark:text-red-600 
+                                                                    dark:hover:text-red-900" title="Delete">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        @endif
+                                                        <div class="relative">
+                                                            <button wire:click="exportReport({{ $report->id }})" 
+                                                                class="peer inline-flex items-center justify-center px-4 py-2 -m-5 -mr-2 
+                                                                text-sm font-medium tracking-wide text-green-500 hover:text-green-600 focus:outline-none"
+                                                                title="Export Report">
+                                                                <img class="flex dark:hidden ml-4 mt-4" src="/images/icons8-xls-export-dark.png" width="18" alt="" wire:target="exportReport({{ $report->id }})"  wire:loading.remove>
+                                                                <img class="hidden dark:block ml-4 mt-4" src="/images/icons8-xls-export-light.png" width="18" alt="" wire:target="exportReport({{ $report->id }})" wire:loading.remove>
+                                                                <div wire:loading wire:target="exportReport({{ $report->id }})">
+                                                                    <div class="mt-4 ml-3 spinner-border small text-primary" role="status">
+                                                                    </div>
+                                                                </div>
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -299,7 +305,7 @@ x-cloak
                                     <div class="grid grid-cols-2 gap-4 mt-8">
                                         <div class="col-span-2 sm:col-span-1">
                                             <label for="month" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Safety and Health Reports para sa buwan ng (month of) <span class="text-red-500">*</span></label>
-                                            <input type="month" id="month" wire:model='month' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                            <input type="month" id="month" wire:model='month' value="{{ $month }}" class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
                                             @error('month')
                                                 <span class="text-red-500 text-sm">The month is required!</span>
                                             @enderror
@@ -337,7 +343,7 @@ x-cloak
                                             <label for="serviceContractors" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Bilang ng Service Contractors <span class="text-red-500">*</span></label>
                                             <input type="number" step="0.01" id="serviceContractors" wire:model='serviceContractors' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
                                             @error('serviceContractors')
-                                                <span class="text-red-500 text-sm">The count of service contractor is required!</span>
+                                                <span class="text-red-500 text-sm">The count of service contractors is required!</span>
                                             @enderror
                                         </div>
                                     </div>
@@ -785,73 +791,73 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ulo/Mukha/Sentido (Back/Face/Temple)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), l" class="h-4 w-4">
+                                                                                                <input id="head_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), r" class="h-4 w-4">
+                                                                                                <input id="head_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), l" class="h-4 w-4">
+                                                                                                <input id="eye_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), r" class="h-4 w-4">
+                                                                                                <input id="eye_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tenga/Pisngi (Ear/Cheek)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), l" class="h-4 w-4">
+                                                                                                <input id="ear_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), r" class="h-4 w-4">
+                                                                                                <input id="ear_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ilong (Nose)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), l" class="h-4 w-4">
+                                                                                                <input id="nose_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), r" class="h-4 w-4">
+                                                                                                <input id="nose_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Bumbunan/Anit (Skull/Scalp)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), l" class="h-4 w-4">
+                                                                                                <input id="scalp_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), r" class="h-4 w-4">
+                                                                                                <input id="scalp_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panga (Jaw)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), l" class="h-4 w-4">
+                                                                                                <input id="jaw_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), r" class="h-4 w-4">
+                                                                                                <input id="jaw_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Labi/Ngipin (Lip/Teeth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), l" class="h-4 w-4">
+                                                                                                <input id="lip_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), r" class="h-4 w-4">
+                                                                                                <input id="lip_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Leeg/Batok (Neck/Nape)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), l" class="h-4 w-4">
+                                                                                                <input id="neck_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), r" class="h-4 w-4">
+                                                                                                <input id="neck_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Trunk -->
@@ -863,46 +869,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Likod/Gulugod (Back/Vertebra)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), l" class="h-4 w-4">
+                                                                                                <input id="back_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), r" class="h-4 w-4">
+                                                                                                <input id="back_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), l" class="h-4 w-4">
+                                                                                                <input id="chest_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), r" class="h-4 w-4">
+                                                                                                <input id="chest_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tadyang (Rib)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), l" class="h-4 w-4">
+                                                                                                <input id="rib_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), r" class="h-4 w-4">
+                                                                                                <input id="rib_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), l" class="h-4 w-4">
+                                                                                                <input id="buttock_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), r" class="h-4 w-4">
+                                                                                                <input id="buttock_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Collar Bone</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, l" class="h-4 w-4">
+                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, r" class="h-4 w-4">
+                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Extremities -->
@@ -914,28 +920,28 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Balikat/Braso (Upper Shoulder/Arm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), l" class="h-4 w-4">
+                                                                                                <input id="shoulder_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), r" class="h-4 w-4">
+                                                                                                <input id="shoulder_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Siko/Bisig (Elbow/Forearm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), l" class="h-4 w-4">
+                                                                                                <input id="elbow_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), r" class="h-4 w-4">
+                                                                                                <input id="elbow_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pulso/Kamay (Wrist/Hand)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), l" class="h-4 w-4">
+                                                                                                <input id="wrist_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), r" class="h-4 w-4">
+                                                                                                <input id="wrist_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Fingers -->
@@ -947,46 +953,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Thumb)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), l" class="h-4 w-4">
+                                                                                                <input id="thumb_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), r" class="h-4 w-4">
+                                                                                                <input id="thumb_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hintuturo (Index)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), l" class="h-4 w-4">
+                                                                                                <input id="index_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), r" class="h-4 w-4">
+                                                                                                <input id="index_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middle_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middle_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Palasingsingan (Ring)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), l" class="h-4 w-4">
+                                                                                                <input id="ring_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), r" class="h-4 w-4">
+                                                                                                <input id="ring_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinliliit (Little)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), l" class="h-4 w-4">
+                                                                                                <input id="little_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), r" class="h-4 w-4">
+                                                                                                <input id="little_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Lower Extremities -->
@@ -998,46 +1004,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hita (Thigh)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), l" class="h-4 w-4">
+                                                                                                <input id="thigh_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), r" class="h-4 w-4">
+                                                                                                <input id="thigh_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tuhod (Knee)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), l" class="h-4 w-4">
+                                                                                                <input id="knee_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), r" class="h-4 w-4">
+                                                                                                <input id="knee_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Binti (Leg)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), l" class="h-4 w-4">
+                                                                                                <input id="shin_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), r" class="h-4 w-4">
+                                                                                                <input id="shin_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Sakong (Ankle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), l" class="h-4 w-4">
+                                                                                                <input id="ankle_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), r" class="h-4 w-4">
+                                                                                                <input id="ankle_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Paa (Foot)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), l" class="h-4 w-4">
+                                                                                                <input id="foot_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), r" class="h-4 w-4">
+                                                                                                <input id="foot_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Toes -->
@@ -1049,46 +1055,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Big Toe)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), l" class="h-4 w-4">
+                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), r" class="h-4 w-4">
+                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangalawa (Second)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), l" class="h-4 w-4">
+                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), r" class="h-4 w-4">
+                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middletoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middletoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangapat (Fourth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), l" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), r" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panglima (Fifth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), l" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), r" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="nltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                     </tbody>
@@ -1583,73 +1589,73 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ulo/Mukha/Sentido (Back/Face/Temple)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), l" class="h-4 w-4">
+                                                                                                <input id="head_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), r" class="h-4 w-4">
+                                                                                                <input id="head_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), l" class="h-4 w-4">
+                                                                                                <input id="eye_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), r" class="h-4 w-4">
+                                                                                                <input id="eye_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tenga/Pisngi (Ear/Cheek)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), l" class="h-4 w-4">
+                                                                                                <input id="ear_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), r" class="h-4 w-4">
+                                                                                                <input id="ear_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ilong (Nose)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), l" class="h-4 w-4">
+                                                                                                <input id="nose_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), r" class="h-4 w-4">
+                                                                                                <input id="nose_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Bumbunan/Anit (Skull/Scalp)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), l" class="h-4 w-4">
+                                                                                                <input id="scalp_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), r" class="h-4 w-4">
+                                                                                                <input id="scalp_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panga (Jaw)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), l" class="h-4 w-4">
+                                                                                                <input id="jaw_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), r" class="h-4 w-4">
+                                                                                                <input id="jaw_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Labi/Ngipin (Lip/Teeth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), l" class="h-4 w-4">
+                                                                                                <input id="lip_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), r" class="h-4 w-4">
+                                                                                                <input id="lip_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Leeg/Batok (Neck/Nape)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), l" class="h-4 w-4">
+                                                                                                <input id="neck_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), r" class="h-4 w-4">
+                                                                                                <input id="neck_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Trunk -->
@@ -1661,46 +1667,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Likod/Gulugod (Back/Vertebra)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), l" class="h-4 w-4">
+                                                                                                <input id="back_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), r" class="h-4 w-4">
+                                                                                                <input id="back_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), l" class="h-4 w-4">
+                                                                                                <input id="chest_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), r" class="h-4 w-4">
+                                                                                                <input id="chest_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tadyang (Rib)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), l" class="h-4 w-4">
+                                                                                                <input id="rib_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), r" class="h-4 w-4">
+                                                                                                <input id="rib_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), l" class="h-4 w-4">
+                                                                                                <input id="buttock_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), r" class="h-4 w-4">
+                                                                                                <input id="buttock_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Collar Bone</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, l" class="h-4 w-4">
+                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, r" class="h-4 w-4">
+                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Extremities -->
@@ -1712,28 +1718,28 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Balikat/Braso (Upper Shoulder/Arm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), l" class="h-4 w-4">
+                                                                                                <input id="shoulder_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), r" class="h-4 w-4">
+                                                                                                <input id="shoulder_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Siko/Bisig (Elbow/Forearm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), l" class="h-4 w-4">
+                                                                                                <input id="elbow_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), r" class="h-4 w-4">
+                                                                                                <input id="elbow_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pulso/Kamay (Wrist/Hand)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), l" class="h-4 w-4">
+                                                                                                <input id="wrist_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), r" class="h-4 w-4">
+                                                                                                <input id="wrist_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Fingers -->
@@ -1745,46 +1751,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Thumb)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), l" class="h-4 w-4">
+                                                                                                <input id="thumb_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), r" class="h-4 w-4">
+                                                                                                <input id="thumb_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hintuturo (Index)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), l" class="h-4 w-4">
+                                                                                                <input id="index_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), r" class="h-4 w-4">
+                                                                                                <input id="index_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middle_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middle_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Palasingsingan (Ring)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), l" class="h-4 w-4">
+                                                                                                <input id="ring_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), r" class="h-4 w-4">
+                                                                                                <input id="ring_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinliliit (Little)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), l" class="h-4 w-4">
+                                                                                                <input id="little_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), r" class="h-4 w-4">
+                                                                                                <input id="little_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Lower Extremities -->
@@ -1796,46 +1802,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hita (Thigh)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), l" class="h-4 w-4">
+                                                                                                <input id="thigh_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), r" class="h-4 w-4">
+                                                                                                <input id="thigh_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tuhod (Knee)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), l" class="h-4 w-4">
+                                                                                                <input id="knee_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), r" class="h-4 w-4">
+                                                                                                <input id="knee_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Binti (Leg)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), l" class="h-4 w-4">
+                                                                                                <input id="shin_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), r" class="h-4 w-4">
+                                                                                                <input id="shin_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Sakong (Ankle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), l" class="h-4 w-4">
+                                                                                                <input id="ankle_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), r" class="h-4 w-4">
+                                                                                                <input id="ankle_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Paa (Foot)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), l" class="h-4 w-4">
+                                                                                                <input id="foot_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), r" class="h-4 w-4">
+                                                                                                <input id="foot_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Toes -->
@@ -1847,46 +1853,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Big Toe)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), l" class="h-4 w-4">
+                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), r" class="h-4 w-4">
+                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangalawa (Second)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), l" class="h-4 w-4">
+                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), r" class="h-4 w-4">
+                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middletoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middletoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangapat (Fourth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), l" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), r" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panglima (Fifth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), l" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), r" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="nfltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                     </tbody>
@@ -2384,73 +2390,73 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ulo/Mukha/Sentido (Back/Face/Temple)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), l" class="h-4 w-4">
+                                                                                                <input id="head_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="head_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), r" class="h-4 w-4">
+                                                                                                <input id="head_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ulo/Mukha/Sentido (Back/Face/Temple), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), l" class="h-4 w-4">
+                                                                                                <input id="eye_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="eye_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), r" class="h-4 w-4">
+                                                                                                <input id="eye_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Mata/Talukap ng Mata/Noo (Eye/Lid/Forehead), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tenga/Pisngi (Ear/Cheek)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), l" class="h-4 w-4">
+                                                                                                <input id="ear_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ear_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), r" class="h-4 w-4">
+                                                                                                <input id="ear_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tenga/Pisngi (Ear/Cheek), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Ilong (Nose)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), l" class="h-4 w-4">
+                                                                                                <input id="nose_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="nose_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), r" class="h-4 w-4">
+                                                                                                <input id="nose_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Ilong (Nose), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Bumbunan/Anit (Skull/Scalp)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), l" class="h-4 w-4">
+                                                                                                <input id="scalp_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="scalp_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), r" class="h-4 w-4">
+                                                                                                <input id="scalp_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Bumbunan/Anit (Skull/Scalp), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panga (Jaw)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), l" class="h-4 w-4">
+                                                                                                <input id="jaw_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="jaw_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), r" class="h-4 w-4">
+                                                                                                <input id="jaw_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panga (Jaw), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Labi/Ngipin (Lip/Teeth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), l" class="h-4 w-4">
+                                                                                                <input id="lip_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="lip_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), r" class="h-4 w-4">
+                                                                                                <input id="lip_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Labi/Ngipin (Lip/Teeth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Leeg/Batok (Neck/Nape)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), l" class="h-4 w-4">
+                                                                                                <input id="neck_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="neck_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), r" class="h-4 w-4">
+                                                                                                <input id="neck_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Leeg/Batok (Neck/Nape), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Trunk -->
@@ -2462,46 +2468,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Likod/Gulugod (Back/Vertebra)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), l" class="h-4 w-4">
+                                                                                                <input id="back_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="back_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), r" class="h-4 w-4">
+                                                                                                <input id="back_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Likod/Gulugod (Back/Vertebra), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), l" class="h-4 w-4">
+                                                                                                <input id="chest_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="chest_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), r" class="h-4 w-4">
+                                                                                                <input id="chest_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Dibdib/Tagiliran/Tiyan (Chest/Side/Abdomen), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tadyang (Rib)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), l" class="h-4 w-4">
+                                                                                                <input id="rib_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="rib_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), r" class="h-4 w-4">
+                                                                                                <input id="rib_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tadyang (Rib), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), l" class="h-4 w-4">
+                                                                                                <input id="buttock_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="buttock_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), r" class="h-4 w-4">
+                                                                                                <input id="buttock_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Puwitan/Baywang/Balakang (Buttock/Hip/Pelvis), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Collar Bone</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, l" class="h-4 w-4">
+                                                                                                <input id="collar_bone_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, r" class="h-4 w-4">
+                                                                                                <input id="collar_bone_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Collar Bone, Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Extremities -->
@@ -2513,28 +2519,28 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Balikat/Braso (Upper Shoulder/Arm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), l" class="h-4 w-4">
+                                                                                                <input id="shoulder_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shoulder_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), r" class="h-4 w-4">
+                                                                                                <input id="shoulder_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Balikat/Braso (Upper Shoulder/Arm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Siko/Bisig (Elbow/Forearm)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), l" class="h-4 w-4">
+                                                                                                <input id="elbow_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="elbow_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), r" class="h-4 w-4">
+                                                                                                <input id="elbow_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Siko/Bisig (Elbow/Forearm), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pulso/Kamay (Wrist/Hand)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), l" class="h-4 w-4">
+                                                                                                <input id="wrist_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="wrist_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), r" class="h-4 w-4">
+                                                                                                <input id="wrist_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pulso/Kamay (Wrist/Hand), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Fingers -->
@@ -2546,46 +2552,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Thumb)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), l" class="h-4 w-4">
+                                                                                                <input id="thumb_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thumb_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), r" class="h-4 w-4">
+                                                                                                <input id="thumb_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Thumb), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hintuturo (Index)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), l" class="h-4 w-4">
+                                                                                                <input id="index_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="index_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), r" class="h-4 w-4">
+                                                                                                <input id="index_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hintuturo (Index), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middle_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middle_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middle_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Palasingsingan (Ring)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), l" class="h-4 w-4">
+                                                                                                <input id="ring_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ring_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), r" class="h-4 w-4">
+                                                                                                <input id="ring_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Palasingsingan (Ring), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinliliit (Little)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), l" class="h-4 w-4">
+                                                                                                <input id="little_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="little_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), r" class="h-4 w-4">
+                                                                                                <input id="little_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinliliit (Little), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Lower Extremities -->
@@ -2597,46 +2603,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hita (Thigh)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), l" class="h-4 w-4">
+                                                                                                <input id="thigh_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="thigh_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), r" class="h-4 w-4">
+                                                                                                <input id="thigh_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hita (Thigh), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Tuhod (Knee)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), l" class="h-4 w-4">
+                                                                                                <input id="knee_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="knee_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), r" class="h-4 w-4">
+                                                                                                <input id="knee_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Tuhod (Knee), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Binti (Leg)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), l" class="h-4 w-4">
+                                                                                                <input id="shin_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="shin_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), r" class="h-4 w-4">
+                                                                                                <input id="shin_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Binti (Leg), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Sakong (Ankle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), l" class="h-4 w-4">
+                                                                                                <input id="ankle_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="ankle_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), r" class="h-4 w-4">
+                                                                                                <input id="ankle_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Sakong (Ankle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Paa (Foot)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), l" class="h-4 w-4">
+                                                                                                <input id="foot_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="foot_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), r" class="h-4 w-4">
+                                                                                                <input id="foot_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Paa (Foot), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <!-- Toes -->
@@ -2648,46 +2654,46 @@ x-cloak
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Hinlalaki (Big Toe)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), l" class="h-4 w-4">
+                                                                                                <input id="bigtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), r" class="h-4 w-4">
+                                                                                                <input id="bigtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Hinlalaki (Big Toe), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangalawa (Second)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), l" class="h-4 w-4">
+                                                                                                <input id="secondtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), r" class="h-4 w-4">
+                                                                                                <input id="secondtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangalawa (Second), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Gitna (Middle)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), l" class="h-4 w-4">
+                                                                                                <input id="middletoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="middletoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), r" class="h-4 w-4">
+                                                                                                <input id="middletoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Gitna (Middle), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Pangapat (Fourth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), l" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), r" class="h-4 w-4">
+                                                                                                <input id="fourthtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Pangapat (Fourth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                         <tr class="border-y border-gray-300 dark:border-gray-500">
                                                                                             <td class="px-4 py-2">Panglima (Fifth)</td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), l" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_left" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kaliwa (Left)" class="h-4 w-4">
                                                                                             </td>
                                                                                             <td class="px-4 py-2 text-center">
-                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), r" class="h-4 w-4">
+                                                                                                <input id="fifthtoe_right" type="checkbox" wire:model="fltaPersons.{{ $index }}.partOfBodyInjured" value="Panglima (Fifth), Kanan (Right)" class="h-4 w-4">
                                                                                             </td>
                                                                                         </tr>
                                                                                     </tbody>
@@ -2874,12 +2880,10 @@ x-cloak
 
                                     {{-- Minutes Upload --}}
                                     <div class="col-span-2 sm:col-span-1 mb-6">
-                                        <label for="new_childs_name_{{ $index }}" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Minutes of Monthly CSHC Meetings <span class="text-red-500">*</span>
-                                            <i class="fas fa-times flex sm:hidden cursor-pointer text-red-500 hover:text-red-700 float-right mr-1" wire:click="removeNewChild({{ $index }})"></i>
+                                        <label for="n" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Minutes of Monthly CSHC Meetings <span class="text-red-500">*</span>
                                         </label>
                                         <input type="file" id="minutes" wire:model="minutes" class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700" accept="application/pdf">
 
-    
                                         @error('minutes')
                                             <span class="text-red-500 text-sm">The minutes is required!</span>
                                         @enderror
@@ -3095,5 +3099,36 @@ x-cloak
 
         </div>
     </div>
+
+    {{-- Delete Modal --}}
+    <x-modal id="deleteModal" maxWidth="md" wire:model="deleteId" centered>
+        <div class="p-4">
+            <div class="mb-4 text-slate-900 dark:text-gray-100 font-bold">
+                Confirm Deletion
+                <button @click="show = false" class="float-right focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <label class="block text-sm font-medium text-gray-700 dark:text-slate-300">
+                Are you sure you want to delete this report?
+            </label>
+            <form wire:submit.prevent='deleteData'>
+                <div class="mt-4 flex justify-end col-span-1 sm:col-span-1">
+                    <button class="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <div wire:loading wire:target="deleteData" style="margin-bottom: 5px;">
+                            <div class="spinner-border small text-primary" role="status">
+                            </div>
+                        </div>
+                        Delete
+                    </button>
+                    <p @click="show = false" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                        Cancel
+                    </p>
+                </div>
+            </form>
+
+        </div>
+    </x-modal>
 
 </div>

@@ -13,6 +13,7 @@ class ExplosivesConsumptions extends Model
 
     protected $fillable = [
         'report_id',
+        'blasting_contractor',
         'dynamite',
         'detonating_cord',
         'non_elec_blasting_caps',
