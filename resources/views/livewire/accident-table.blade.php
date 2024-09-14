@@ -24,7 +24,7 @@
 
         <!-- Accident Table -->
         <div class="overflow-x-auto">
-            <table class="min-w-full bg-white dark:bg-gray-800 overflow-hidden rounded-lg">
+            <table class="min-w-full bg-white dark:bg-gray-800 overflow-hidden">
                 <thead class="bg-gray-200 dark:bg-gray-700">
                     <tr class="whitespace-nowrap">
                         <th class="px-4 py-2 text-center">Accident Type</th>
