@@ -237,60 +237,46 @@
     <x-modal id="clientModal" maxWidth="md" wire:model="clientId" centered>
         <div class="p-4">
          
-            {{-- <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
-                @if (Auth::user()->profile_photo_path)
-                    <img src="{{ route('profile-photo.file', ['filename' => basename(Auth::user()->profile_photo_path)]) }}" 
-                            alt="{{ Auth::user()->name }}" 
+            <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+                @if ($selectedClient->profile_photo_path)
+                    <img src="{{ route('profile-photo.file', ['filename' => basename($selectedClient->profile_photo_path)]) }}" 
+                            alt="{{ $selectedClient->name }}" 
                             width="100" height="100"
                             class="w-20 h-20 rounded-full">
                 @else
-                    <img class="w-20 h-20 rounded-full" src="{{ Auth::user()->profile_photo_url }}" width="100" height="100" alt="" />
+                    <img class="w-20 h-20 rounded-full" src="{{ $selectedClient->profile_photo_url }}" width="100" height="100" alt="" />
                 @endif
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-100">{{ $client->company_name }} <span class="text-xs cursor-pointer hover:text-blue-500" wire:click='toggleEditProfile'><i class="bi bi-pencil" title="Edit Profile"></i></span></h1>
-                    <p>{{ $client->email }}</p>
+                    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-100">{{ $selectedClient->company_name }}</h1>
+                    <p>{{ $selectedClient->email }}</p>
                 </div>
             </div>
+
             <div class="text-sm">
-                @php
-                    function safeJsonDecode($value) {
-                        if (is_string($value)) {
-                            return json_decode($value, true) ?: [$value];
-                        }
-                        return is_array($value) ? $value : [$value];
-                    }
-                    function formatMiningType($type) {
-                        if ($type === 'surface_quarry') {
-                            return 'Surface o Quarry';
-                        }
-                        return ucwords(str_replace('_', ' ', $type));
-                    }
-                @endphp
-        
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $client->contact_num }}</span></p>
+                    <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $selectedClient->contact_num }}</span></p>
                 </div>
                 
                 <div>
                     <p class="ml-0 sm:ml-4">Mining Type: 
                         <span class="font-bold">
-                            {{ implode(', ', array_map('formatMiningType', safeJsonDecode($client->mining_type))) }}
+                            {{ implode(', ', array_map('formatMiningType', safeJsonDecode($selectedClient->mining_type))) }}
                         </span>
                     </p>
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->product)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($selectedClient->product)) }}</span></p> 
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ implode(', ', safeJsonDecode($client->permit_type)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ implode(', ', safeJsonDecode($selectedClient->permit_type)) }}</span></p> 
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->permit_location)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ implode(', ', safeJsonDecode($selectedClient->permit_location)) }}</span></p> 
                 </div>
-            </div> --}}
+            </div>
 
         </div>
     </x-modal>
