@@ -11,7 +11,7 @@
                 type="text" 
                 wire:model.live="search" 
                 placeholder="Search Mine Operator or Tenement" 
-                class="w-1/3 p-2 rounded border dark:bg-gray-700 dark:text-white" 
+                class="w-1/3 px-4 py-2 border rounded-lg text-gray-700 dark:bg-gray-700 dark:text-gray-300" 
             />
 
             <!-- Year Dropdown -->
