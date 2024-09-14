@@ -10,6 +10,7 @@ use App\Models\MonthlyDeseases;
 use App\Models\NonFatalLostTimeAccidents;
 use App\Models\NonLostTimeAccidents;
 use App\Models\QuarterlyEmergencyDrillReports;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ class ReportTable extends Component
 {
     use WithPagination, WithFileUploads;
 
+    public $search;
     public $date;
     public $create;
     public $currentStep = 1;
@@ -63,6 +65,10 @@ class ReportTable extends Component
     public $others;
     public $deleteId;
     public $editReportId;
+    public $reportStatus;
+    public $reportStatusId;
+    public $tableView = 0;
+    public $thisYear;
 
     public function mount(){
         $this->updateNltaCount();
@@ -73,6 +79,12 @@ class ReportTable extends Component
             'count' => '',
             'response' => '',
         ];
+
+        $user = Auth::user();
+        if($user->user_role === 'admin'){
+            $this->date = now()->format('Y-m');
+        }
+        $this->thisYear = 2024;
     }
 
     public function render(){
@@ -81,13 +93,37 @@ class ReportTable extends Component
         $this->company = $user->company_name;
         $this->permitNumber = $user->contact_num;
 
-        $reports = CpMonthlyReports::where('user_id', $user->id)
-            ->when($this->date, function ($query) {
-                $query->whereMonth('month', Carbon::parse($this->date)->month)
-                    ->whereYear('month', Carbon::parse($this->date)->year);
+        $reports = CpMonthlyReports::query()
+                    ->when($this->date, function ($query) {
+                        $date = Carbon::parse($this->date);
+                        return $query->whereMonth('cp_monthly_reports.month', $date->month)
+                            ->whereYear('cp_monthly_reports.month', $date->year);
+                    })
+                    ->when($this->search, function ($query) {
+                        return $query->search(trim($this->search));
+                    })
+                    ->join('users', 'users.id', 'cp_monthly_reports.user_id')
+                    ->when($user->user_role === 'client', function ($query) use ($user) {
+                        return $query->where('cp_monthly_reports.user_id', $user->id);
+                    })
+                    ->select('cp_monthly_reports.*', 'users.company_name')
+                    ->orderBy('cp_monthly_reports.month', 'DESC')
+                    ->paginate(10);
+
+        $reports2 = CpMonthlyReports::query()
+            ->when($this->thisYear, function ($query) {
+                return $query->whereYear('cp_monthly_reports.month', $this->thisYear);
             })
-            ->orderBy('month', 'DESC')
-            ->paginate(10);
+            ->when($this->search, function ($query) {
+                return $query->search(trim($this->search));
+            })
+            ->join('users', 'users.id', 'cp_monthly_reports.user_id')
+            ->when($user->user_role === 'client', function ($query) use ($user) {
+                return $query->where('cp_monthly_reports.user_id', $user->id);
+            })
+            ->select('cp_monthly_reports.*', 'users.company_name')
+            ->orderBy('cp_monthly_reports.month', 'DESC')
+            ->get();
 
         $this->updateNltaCount();
         $this->updateNfltaCount();
@@ -95,6 +131,7 @@ class ReportTable extends Component
 
         return view('livewire.report-table',[
             'reports' => $reports,
+            'reports2' => $reports2,
         ]);
     }
 
@@ -589,6 +626,15 @@ class ReportTable extends Component
                 $month = $thisMonth->format('F');
                 $user = Auth::user();
 
+                $client = null;
+                $userId = null;
+                if($user->user_role == 'admin'){
+                    $client = User::where('id', $report->user_id)->first();
+                    $userId = $report->user_id;
+                }else{
+                    $userId = $user->id;
+                }
+
                 $injuredPersonnel = collect([
                     'nonLostTimeAccidents' => $report->nonLostTimeAccidents,
                     'nonFatalLostTimeAccidents' => $report->nonFatalLostTimeAccidents,
@@ -596,7 +642,7 @@ class ReportTable extends Component
                     'monthlyDeseases' => $report->monthlyDeseases,
                 ]);
 
-                $quarterlyEmergencyReports = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
+                $quarterlyEmergencyReports = QuarterlyEmergencyDrillReports::where('user_id', $userId)
                                         ->where('year', $thisMonth->format('Y'))
                                         ->get();
                 $filters = [
@@ -605,6 +651,7 @@ class ReportTable extends Component
                     'report' => $report,
                     'injuredPersonnel' => $injuredPersonnel,
                     'quarterlyEmergencyReports' => $quarterlyEmergencyReports,
+                    'client' => $client,
                 ];
                 $filename = 'SafetyandHealthMonthlyReport.xlsx';
                 return Excel::download(new SafetyHealthMonthlyReportExport($filters), $filename);
@@ -616,6 +663,33 @@ class ReportTable extends Component
 
     public function toggleDelete($userId){
         $this->deleteId = $userId;
+    }
+
+    public function toggleEditReportStatus($id){
+        $user = Auth::user();
+        if($user->user_role == 'admin'){
+            $this->reportStatusId = $id;
+            $report = CpMonthlyReports::findOrFail($this->reportStatusId);
+            $this->reportStatus = $report->status;
+        }
+    }
+
+    public function saveReportStatus(){
+        try{
+            $report = CpMonthlyReports::findOrFail($this->reportStatusId);
+            if($report){
+                $report->update([
+                    'status' => $this->reportStatus,
+                ]);
+                $this->reportStatusId = null;
+                $this->dispatch('swal', [
+                    'title' => 'Tagumpay na nabago ang status (Status updated successfully)',
+                    'icon' => 'success'
+                ]);
+            }
+        }catch(Exception $e){
+            throw $e;
+        }
     }
 
     public function deleteData(){

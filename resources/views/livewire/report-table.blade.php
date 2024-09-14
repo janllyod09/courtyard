@@ -93,17 +93,42 @@ x-cloak
             </div>
 
             <div class="mb-6 flex flex-col sm:flex-row items-end justify-between px-4 sm:px-0">
+                <div class="w-full sm:w-1/3 sm:mr-4 {{ Auth::user()->user_role === 'admin' ? '' : 'hidden' }}">
+                    <label for="search" class="block text-sm font-medium text-gray-700 dark:text-slate-400 mb-1">Search</label>
+                    <input type="text" id="search" wire:model.live="search"
+                        class="px-2 py-1.5 block w-full shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md
+                            dark:hover:bg-slate-600 dark:border-slate-600
+                            dark:text-gray-300 dark:bg-gray-800"
+                        placeholder="Enter company/registered name">
+                </div>
 
                  <!-- Select Date -->
-                 <div class="w-full mr-0 sm:mr-4 relative {{ $create ? 'hidden' : '' }}">
-                    <label for="date" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Select Month</label>
+                 <div class="w-full mr-0 sm:mr-4 mt-6 sm:mt-0 relative {{ $create ? 'hidden' : '' }} {{ $tableView ? 'hidden' : '' }}">
+                    <label for="date" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Month</label>
                     <input type="month" id="date" wire:model.live='date'
-                    class="mb-0 mt-1 px-2 py-1.5 block w-36 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
+                    class="mb-0 mt-1 px-2 py-1.5 block w-42 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
                                 dark:hover:bg-slate-600 dark:border-slate-600
                                 dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
                 </div>
 
-                <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4 {{ $create ? 'hidden' : '' }}">
+                 <!-- Select Year -->
+                 <div class="w-full mr-0 sm:mr-4 mt-6 sm:mt-0 relative {{ $tableView ? '' : 'hidden' }}">
+                    <label for="date" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Year</label>
+                    <input type="number" id="date" wire:model.live='thisYear'
+                    class="mb-0 mt-1 px-2 py-1.5 block w-42 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
+                                dark:hover:bg-slate-600 dark:border-slate-600
+                                dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
+                </div>
+
+                 {{-- <div class="w-full mr-0 sm:mr-4 mt-6 sm:mt-0 relative {{ $create ? 'hidden' : '' }} {{ $tableView ? '' : 'hidden' }}">
+                    <label for="date" class="absolute bottom-10 block text-sm font-medium text-gray-700 dark:text-slate-400">Month</label>
+                    <input type="month" id="date" wire:model.live='thisYear'
+                    class="mb-0 mt-1 px-2 py-1.5 block w-42 shadow-sm sm:text-sm border border-gray-400 hover:bg-gray-300 rounded-md 
+                                dark:hover:bg-slate-600 dark:border-slate-600
+                                dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
+                </div> --}}
+
+                <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4 {{ $create ? 'hidden' : '' }} {{ Auth::user()->user_role === 'admin' ? 'hidden' : '' }}">
                     <div class="w-full sm:w-auto">
                         <button wire:click='toggleCreateReport' 
                             class="mt-4 sm:mt-1 px-2 py-1.5 bg-green-500 text-white rounded-md text-sm
@@ -118,16 +143,26 @@ x-cloak
 
             <!-- Table -->
             <div class="flex flex-col p-3">
+                <div class="h-10 flex gap-4 items-center {{ $create ? 'hidden' : '' }}">
+                    <div class="flex items-center">
+                        <input class="" type="radio" name="status" id="status" value="0" wire:model.live='tableView'>
+                        <label class="ml-2" for="status">Monthly View</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input class="" type="radio" name="status" id="status" value="1" wire:model.live="tableView">
+                        <label class="ml-2" for="status">Yearly View</label>
+                    </div>
+                </div>
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block w-full py-2 align-middle">
-                        <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? 'hidden' : '' }}">
+                        <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? 'hidden' : '' }} {{ $tableView ? 'hidden' : '' }}">
                             <div class="overflow-x-auto">
 
                                 <table class="w-full min-w-full">
                                     <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl text-xs">
                                         <tr class="whitespace-nowrap">
                                             <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
-                                                Month
+                                                {{ Auth::user()->user_role === 'admin' ? 'Company Name' : 'Month' }}
                                             </th>
                                             <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
                                                 Date Encoded
@@ -153,7 +188,7 @@ x-cloak
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
                                                 Minutes of CSHC Meetings
                                             </th>
-                                            <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
+                                            <th scope="col" class="px-5 py-3 font-medium text-center uppercase text-gray-100 sm:sticky sm:right-20 sm:z-10 bg-gray-600 dark:bg-gray-600">
                                                 Status
                                             </th>
                                             <th class="px-5 py-3 text-gray-100 font-medium text-center uppercase sticky right-0 z-10 bg-gray-600 dark:bg-gray-600">
@@ -165,7 +200,11 @@ x-cloak
                                         @foreach ($reports as $report)
                                             <tr class="text-neutral-800 dark:text-neutral-200">
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
-                                                    {{ \Carbon\Carbon::parse($report->month)->format('F') }}, {{ \Carbon\Carbon::parse($report->month)->format('Y') }}
+                                                    @if(Auth::user()->user_role === 'admin')
+                                                        {{ $report->company_name }}
+                                                    @else
+                                                        {{ \Carbon\Carbon::parse($report->month)->format('F') }}, {{ \Carbon\Carbon::parse($report->month)->format('Y') }}
+                                                    @endif
                                                 </td>
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                     {{ $report->date_encoded }}
@@ -210,16 +249,34 @@ x-cloak
                                                         No file uploaded
                                                     @endif
                                                 </td>
-                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
-                                                    @if($report->status)
-                                                        <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4">Approved</span>
-                                                    @else
-                                                        <span class="text-xs text-white bg-orange-500 rounded-lg py-1.5 px-4">Pending</span>
-                                                    @endif
+                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap sm:sticky sm:right-20 sm:z-10 bg-white dark:bg-gray-800">
+                                                    <div class="relative" @click.outside="$wire.set('reportStatusId', null)">
+                                                        @if($report->status)
+                                                            <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-green-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Approved</span>
+                                                        @else
+                                                            <span class="text-xs text-white bg-orange-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-orange-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Pending</span>
+                                                        @endif
+                                                        <div class="block absolute bottom-2 right-16 rounded-md border border-gray-400 bg-white dark:bg-gray-800 shadow-4xl px-4 py-2 {{ $reportStatusId ? '' : 'hidden' }}">
+                                                            <div class="flex items-center">
+                                                                <input class="" type="radio" name="status" id="status" value="1" wire:model='reportStatus'>
+                                                                <label class="ml-2" for="status">Approve</label>
+                                                                <p class="w-16 bg-green-500 hover:bg-green-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click='saveReportStatus'>
+                                                                    Save
+                                                                </p>
+                                                            </div>
+                                                            <div class="flex items-center mt-2">
+                                                                <input class="" type="radio" name="status" id="status" value="0" wire:model="reportStatus">
+                                                                <label class="ml-2" for="status">Pending</label>
+                                                                <p class="w-16 bg-gray-500 hover:bg-gray-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click="$set('reportStatusId', null)">
+                                                                    Cancel
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                                 <td class="px-5 py-4 font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                     <div class="relative">
-                                                        @if(!$report->status)
+                                                        @if(!$report->status && Auth::user()->user_role === 'client')
                                                             <div class="relative z-10">
                                                                 <button wire:click="toggleEditReport({{ $report->id }})" 
                                                                     class="peer inline-flex items-center justify-center px-4 py-2 
@@ -265,7 +322,7 @@ x-cloak
                             <div class="p-5 text-neutral-500 dark:text-neutral-200 bg-gray-200 dark:bg-gray-700">
                                 {{ $reports->links() }}
                             </div>
-                         </div>
+                        </div>
                         <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? '' : 'hidden' }}">
                             <div x-data="{ currentStep: @entangle('currentStep'), totalSteps: 6 }">
                                 <div class="w-full bg-gray-200 h-2.5 dark:bg-gray-700">
@@ -3146,6 +3203,123 @@ x-cloak
                                         </button>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $tableView ? '' : 'hidden' }}">
+                            <div class="overflow-x-auto">
+                                <table class="w-full min-w-full">
+                                    <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl text-xs">
+                                        <tr class="whitespace-nowrap">
+                                            <th class="px-5 py-3 text-gray-100 font-medium text-left uppercase sticky left-0 z-10 bg-gray-600 dark:bg-gray-600">
+                                                Tabulation
+                                            </th>
+                                            @foreach(['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $month)
+                                                <th class="px-5 py-3 font-medium text-center uppercase" style="width: 100px">
+                                                    {{ $month }}
+                                                </th>
+                                            @endforeach
+                                            <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
+                                                Cumulative
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-sm">
+                                        @foreach(['Date Encoded', 'Non-Lost Time Accident', 'Lost Time Accident (Non-Fatal)', 'Lost Time Accident (Fatal)', 'Days Lost', 'Manhours Worked', 'Number of Employees', 'Minutes of CSHC Meetings'] as $row)
+                                            <tr class="text-neutral-800 dark:text-neutral-200">
+                                                <td class="px-5 py-4 font-medium text-left whitespace-nowrap sticky left-0 z-10 bg-gray-200 dark:bg-gray-700">
+                                                    {{ $row }}
+                                                </td>
+                                                @foreach(range(1, 12) as $month)
+                                                    <td class="px-5 py-4 text-center font-medium whitespace-nowrap overflow-hidden">
+                                                        @php
+                                                            $currentYear = $thisYear;
+                                                            $thisMonth = Carbon\Carbon::create($currentYear, $month, 1);
+                                                            $report = $reports2->first(function($item) use ($thisMonth) {
+                                                                return Carbon\Carbon::parse($item->month)->format('Y-m') === $thisMonth->format('Y-m');
+                                                            });
+                                                            $value = '';
+                                                            $file = false;
+                                                            switch($row) {
+                                                                case 'Date Encoded':
+                                                                    $value = $report ? Carbon\Carbon::parse($report->date_encoded)->format('Y-m-d') : '';
+                                                                    break;
+                                                                case 'Non-Lost Time Accident':
+                                                                    $value = $report ? ($report->non_lost_time_accident ?: 0) : '';
+                                                                    break;
+                                                                case 'Lost Time Accident (Non-Fatal)':
+                                                                    $value = $report ? ($report->non_fatal_lost_time_accident ?: 0) : '';
+                                                                    break;
+                                                                case 'Lost Time Accident (Fatal)':
+                                                                    $value = $report ? ($report->fatal_lost_time_accident ?: 0) : '';
+                                                                    break;
+                                                                case 'Days Lost':
+                                                                    $value = $report ? ($report->nflt_days_lost ?: 0 ) + ($report->flt_days_lost ?: 0) : '';
+                                                                    break;
+                                                                case 'Manhours Worked':
+                                                                    $value = $report ? ($report->man_hours ?: 0) : '';
+                                                                    break;
+                                                                case 'Number of Employees':
+                                                                    $value = $report ? ($report->female_workers ?: 0) +  ($report->male_workers ?: 0) : '';
+                                                                    break;
+                                                                case 'Minutes of CSHC Meetings':
+                                                                    $value = $report ? $report->minutes : '';
+                                                                    $file = true;
+                                                                    break;
+                                                            }
+                                                        @endphp
+                                                        @if($file && $value != '')
+                                                            @php
+                                                                $filePath = $value;
+                                                                $fileName = basename($filePath);
+                                                            @endphp
+                                                            
+                                                            <div class="flex items-center justify-center space-x-2 overflow-hidden">
+                                                                <span class="truncate overflow-hidden whitespace-nowrap text-ellipsis" style="max-width: 10rem;">
+                                                                    {{ Str::limit($fileName, 10, '...') }}
+                                                                </span>
+                                                                <button wire:click="downloadFile('{{ $filePath }}')" 
+                                                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" title="Download">
+                                                                    <i class="bi bi-download" style="padding-right: 2px" wire:loading.remove wire:target="downloadFile('{{ $filePath }}')"></i>
+                                                                    <div wire:loading wire:target="downloadFile('{{ $filePath }}')">
+                                                                        <div class="spinner-border small text-primary" role="status"></div>
+                                                                    </div>
+                                                                </button>
+                                                            </div>
+                                                        @else
+                                                            {{ $value }}
+                                                        @endif
+                                                    </td>
+                                                @endforeach
+                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                    @php
+                                                        $cumulative = 0;
+                                                        foreach($reports2 as $report) {
+                                                            switch($row) {
+                                                                case 'Non-Lost Time Accident':
+                                                                    $cumulative += ($report->non_lost_time_accident ?: 0);
+                                                                    break;
+                                                                case 'Lost Time Accident (Non-Fatal)':
+                                                                    $cumulative += ($report->non_fatal_lost_time_accident ?: 0);
+                                                                    break;
+                                                                case 'Lost Time Accident (Fatal)':
+                                                                    $cumulative += ($report->fatal_lost_time_accident ?: 0);
+                                                                    break;
+                                                                case 'Days Lost':
+                                                                    $cumulative += (($report->nflt_days_lost ?: 0 ) + ($report->flt_days_lost ?: 0));
+                                                                    break;
+                                                                case 'Manhours Worked':
+                                                                    $cumulative += ($report->man_hours ?: 0);
+                                                                    break;
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    {{ $row === 'Date Encoded' || $row === 'Number of Employees' || $row === 'Minutes of CSHC Meetings'  ? '' : $cumulative }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

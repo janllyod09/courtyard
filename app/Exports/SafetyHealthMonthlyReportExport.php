@@ -91,6 +91,7 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         $sheet->mergeCells('A2:P2');
         $sheet->setCellValue('A2', "SAFETY AND HEALTH REPORT FOR THE MONTH OF " .  strtoupper($this->filters['monthYear']));
         $sheet->mergeCells('A3:P3');
+        $sheet->setCellValue('A3', $this->filters['client'] ? 'Company: ' . $this->filters['client']->company_name : '' );
 
         // Apply some basic styling
         $sheet->getStyle('A1:P3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -99,6 +100,7 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         $sheet->getStyle('A1:P3')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_NONE);
         $sheet->getStyle('A4:P4')->getFont()->setBold(true);
         $sheet->getStyle('2:2')->getFont()->setSize(16);
+        $sheet->getStyle('3:3')->getFont()->setSize(14);
 
         $sheet->getStyle('A4:P4')->applyFromArray([
             'borders' => [

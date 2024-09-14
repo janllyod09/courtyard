@@ -52,4 +52,11 @@ class CpMonthlyReports extends Model
     public function explosivesConsumptions(){
         return $this->hasOne(ExplosivesConsumptions::class, 'report_id');
     }
+
+    public function scopeSearch($query, $term){
+        $term = "%$term%";
+        $query->where(function ($query) use ($term) {
+            $query->where('users.company_name', 'like', $term);
+        });
+    }
 }
