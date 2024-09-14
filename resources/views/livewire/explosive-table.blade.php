@@ -3,6 +3,30 @@
         <h1 class="text-lg font-bold text-center text-black dark:text-white mb-6">
             Explosives Consumption Report
         </h1>
+
+        <!-- Search and Filter -->
+        <div class="flex justify-between mb-4">
+            <!-- Search Input -->
+            <input 
+                type="text" 
+                wire:model.live="search" 
+                placeholder="Search Mine Operator or Tenement" 
+                class="w-1/3 p-2 rounded border dark:bg-gray-700 dark:text-white" 
+            />
+
+            <!-- Year Dropdown -->
+            <select 
+                wire:model.live="year" 
+                class="w-1/3 p-2 rounded border dark:bg-gray-700 dark:text-white"
+            >
+                <option value="">All Years</option>
+                @foreach($availableYears as $year)
+                    <option value="{{ $year }}">{{ $year }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <!-- Table -->
         <div class="overflow-x-auto">
             <table class="min-w-full bg-white dark:bg-gray-800 overflow-hidden">
                 <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl">
