@@ -8,6 +8,9 @@ use App\Models\FatalLostTimeAccidents;
 
 class AccidentTable extends Component
 {
+    public $searchTerm = '';    // For search functionality
+    public $filterYear = '';    // For year filter functionality
+
     public function render()
     {
         return view('livewire.accident-table', [
@@ -17,11 +20,30 @@ class AccidentTable extends Component
 
     private function getProcessedAccidentData()
     {
+        // Fetch all accident data
         $nonLostTimeAccidents = $this->processAccidents(NonLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Non-Lost Time');
         $nonFatalLostTimeAccidents = $this->processAccidents(NonFatalLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Non-Fatal Lost Time');
         $fatalLostTimeAccidents = $this->processAccidents(FatalLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Fatal Lost Time');
 
-        return $nonLostTimeAccidents->concat($nonFatalLostTimeAccidents)->concat($fatalLostTimeAccidents);
+        // Merge the accidents into one collection
+        $accidents = $nonLostTimeAccidents->concat($nonFatalLostTimeAccidents)->concat($fatalLostTimeAccidents);
+
+        // Filter by search term if provided
+        if (!empty($this->searchTerm)) {
+            $accidents = $accidents->filter(function ($accident) {
+                return str_contains(strtolower($accident['mine_operator']), strtolower($this->searchTerm)) ||
+                    str_contains(strtolower($accident['name']), strtolower($this->searchTerm));
+            });
+        }
+
+        // Filter by year if provided
+        if (!empty($this->filterYear)) {
+            $accidents = $accidents->filter(function ($accident) {
+                return date('Y', strtotime($accident['date_of_accident'])) == $this->filterYear;
+            });
+        }
+
+        return $accidents;
     }
 
     private function processAccidents($accidents, $accidentType)
