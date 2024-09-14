@@ -143,7 +143,7 @@ x-cloak
 
             <!-- Table -->
             <div class="flex flex-col p-3">
-                <div class="h-10 flex gap-4 items-center {{ $create ? 'hidden' : '' }} {{ Auth::user()->user_role === 'admin' ? 'hidden' : '' }}">
+                <div class="h-10 flex gap-4 text-sm items-center {{ $create ? 'hidden' : '' }} {{ Auth::user()->user_role === 'admin' ? 'hidden' : '' }}">
                     <div class="flex items-center">
                         <input class="" type="radio" name="status" id="status" value="0" wire:model.live='tableView'>
                         <label class="ml-2" for="status">Monthly View</label>
