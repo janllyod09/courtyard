@@ -29,6 +29,7 @@ class QuarterlyReportTable extends Component
     public $reportId;
     public $deleteId;
     public $editReportId;
+    public $yearReport;
 
     public function render()
     {
@@ -65,21 +66,23 @@ class QuarterlyReportTable extends Component
     public function saveReport(){
         try{
             $this->validate([
-                'year' => 'required',
+                'yearReport' => 'required',
                 'yearQuarter' => 'required',
                 'dateUploaded' => 'required',
                 'drill' => 'required',
             ]);
 
             $user = Auth::user();
-            $thisYear = Carbon::parse($this->year);
-            $year = $thisYear->format('Y');
 
-            $fileName = $this->reportFile->getClientOriginalName();
-            $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
+            $reportFilePath = null;
+            if($this->reportFile){
+                $fileName = $this->reportFile->getClientOriginalName();
+                $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
+            }
+
             $report = QuarterlyEmergencyDrillReports::create([
                 'user_id' => $user->id,
-                'year' => $year,
+                'year' => $this->yearReport,
                 'quarter' => $this->yearQuarter,
                 'date_uploaded' => now(),
                 'type_of_emergency_drill' => $this->drill,
@@ -162,5 +165,6 @@ class QuarterlyReportTable extends Component
         $this->reportId = null;
         $this->deleteId = null;
         $this->editReportId = null;
+        $this->yearReport = null;
     }
 }

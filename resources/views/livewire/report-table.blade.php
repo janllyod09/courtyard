@@ -263,21 +263,21 @@ x-cloak
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap sm:sticky sm:right-20 sm:z-10 bg-white dark:bg-gray-800">
                                                     <div class="relative" @click.outside="$wire.set('reportStatusId', null)">
                                                         @if($report->status)
-                                                            <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-green-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Approved</span>
+                                                            <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-green-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Recieved</span>
                                                         @else
                                                             <span class="text-xs text-white bg-orange-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-orange-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Pending</span>
                                                         @endif
                                                         <div class="block absolute bottom-2 right-16 rounded-md border border-gray-400 bg-white dark:bg-gray-800 shadow-4xl px-4 py-2 {{ $reportStatusId ? '' : 'hidden' }}">
                                                             <div class="flex items-center">
                                                                 <input class="" type="radio" name="status" id="status" value="1" wire:model='reportStatus'>
-                                                                <label class="ml-2" for="status">Approve</label>
+                                                                <label class="ml-2" for="status">Recieved</label>
                                                                 <p class="w-16 bg-green-500 hover:bg-green-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click='saveReportStatus'>
                                                                     Save
                                                                 </p>
                                                             </div>
                                                             <div class="flex items-center mt-2">
                                                                 <input class="" type="radio" name="status" id="status" value="0" wire:model="reportStatus">
-                                                                <label class="ml-2" for="status">Pending</label>
+                                                                <label class="ml-2" for="status">Pending&nbsp;&nbsp;</label>
                                                                 <p class="w-16 bg-gray-500 hover:bg-gray-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click="$set('reportStatusId', null)">
                                                                     Cancel
                                                                 </p>

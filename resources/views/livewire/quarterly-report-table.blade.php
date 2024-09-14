@@ -277,11 +277,11 @@ x-cloak
                 <div class="grid grid-cols-2 gap-4">
 
                     <div class="col-span-2 sm:col-span-1">
-                        <label for="year" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Year <span class="text-red-500">*</span></label>
-                        <input type="number" id="year" wire:model='year' 
+                        <label for="yearReport" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Year <span class="text-red-500">*</span></label>
+                        <input type="number" id="yearReport" wire:model='yearReport' 
                         min="1900" max="{{ date('Y') }}" step="1"
                         class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                        @error('year')
+                        @error('yearReport')
                             <span class="text-red-500 text-sm">The year is required!</span>
                         @enderror
                     </div>

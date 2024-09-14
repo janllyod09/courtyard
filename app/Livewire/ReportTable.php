@@ -459,8 +459,11 @@ class ReportTable extends Component
                 $oldReport->delete();
             }
 
-            $fileName = $this->minutes->getClientOriginalName();
-            $minutesPath = $this->minutes->storeAs('public/upload/minutes', $fileName); 
+            $minutesPath = null;
+            if($this->minutes){
+                $fileName = $this->minutes->getClientOriginalName();
+                $minutesPath = $this->minutes->storeAs('public/upload/minutes', $fileName); 
+            }
 
             $report = CpMonthlyReports::create([
                 'user_id' => $user->id,
