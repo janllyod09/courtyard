@@ -13,6 +13,7 @@ class ClientsTable extends Component
 {
     use WithPagination;
     public $search;
+    public $clientId;
 
     public function render(){
         $clients = User::where('user_role', 'client')
@@ -41,5 +42,13 @@ class ClientsTable extends Component
         }catch(Exception $e){
             throw $e;
         }
+    }
+
+    public function toggleViewClient($id){
+        $this->clientId = $id;
+    }
+
+    public function resetVariables(){
+        $this->clientId = null;
     }
 }

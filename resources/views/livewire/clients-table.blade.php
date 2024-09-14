@@ -158,13 +158,13 @@
                                                     @foreach ($clients as $client)
                                                         <tr class="text-neutral-800 dark:text-neutral-200">
                                                             <td class="px-2 py-2 flex justify-center items-center">
-                                                                <div class="flex justify-center items-center" style="width: 50px; height: 50px">
+                                                                <div class="flex justify-center items-center cursor-pointer" style="width: 50px; height: 50px" wire:click='toggleViewClient({{ $client->id }})'>
                                                                     @if ($client->profile_photo_path)
                                                                         <img src="{{ route('profile-photo.file', ['filename' => basename($client->profile_photo_path)]) }}" 
                                                                                 alt="{{ Auth::user()->name }}" 
-                                                                                class="w-full h-full rounded-full">
+                                                                                class="w-full h-full rounded-full hover:grayscale">
                                                                     @else
-                                                                        <img class="w-full h-full rounded-full" src="{{ asset('images/blank-profile.png') }}" alt="">
+                                                                        <img class="w-full h-full rounded-full hover:grayscale" src="{{ asset('images/blank-profile.png') }}" alt="">
                                                                     @endif
                                                                 </div>
                                                             </td>
@@ -231,5 +231,30 @@
             
         </div>
     </div>
+
+
+    {{-- View Client Modal --}}
+    <x-modal id="clientModal" maxWidth="md" wire:model="clientID" centered>
+        <div class="p-4">
+            <div class="mb-4 text-slate-900 dark:text-gray-100 font-bold">
+                Confirm Deletion
+                <button @click="show = false" class="float-right focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <label class="block text-sm font-medium text-gray-700 dark:text-slate-300">
+                Are you sure you want to delete this report?
+            </label>
+            <form wire:submit.prevent='deleteData'>
+                <div class="mt-4 flex justify-end col-span-1 sm:col-span-1">
+                    <p @click="show = false" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                        Close
+                    </p>
+                </div>
+            </form>
+
+        </div>
+    </x-modal>
 
 </div>
