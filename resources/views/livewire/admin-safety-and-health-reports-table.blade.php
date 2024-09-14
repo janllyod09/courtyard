@@ -4,15 +4,14 @@
             MGB CALABARZON CUMULATIVE SAFETY AND HEALTH REPORT {{ $selectedYear }}
         </h1>
         
-        <div class="mb-4 flex justify-between items-end">
+        <div class="mb-4 flex flex-col sm:flex-row justify-between items-end">
             <!-- Search Mine Operators -->
-            <div class="w-1/3">
+            <div class="w-full sm:w-1/2 mb-4 sm:mb-0 sm:mr-4">
                 <input wire:model.live="search" type="text" id="search" placeholder="Search mine operator name" class="w-full px-4 py-2 border rounded-lg text-gray-700 dark:bg-gray-700 dark:text-gray-300" />
             </div>
             
             <!-- Year Selection -->
-            <div class="w-1/3">
-                
+            <div class="w-full sm:w-1/3">
                 <select wire:model.live="selectedYear" id="year-select" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500">
                     @foreach($availableYears as $year)
                         <option value="{{ $year }}">{{ $year }}</option>
@@ -20,6 +19,9 @@
                 </select>
             </div>
         </div>
+        
+        
+        
 
         <!-- Table -->
         <div class="overflow-x-auto">

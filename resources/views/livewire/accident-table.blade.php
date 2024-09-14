@@ -5,22 +5,24 @@
         </h1>
         
         <!-- Search and Filter -->
-        <div class="mb-4 flex justify-between items-end">
+        <div class="mb-4 flex flex-col sm:flex-row justify-between items-end">
             <!-- Search Input -->
-            <div class="w-1/3">
+            <div class="w-full sm:w-1/2 mb-4 sm:mb-0 sm:mr-4">
                 <input type="text" class="w-full px-4 py-2 border rounded-lg text-gray-700 dark:bg-gray-700 dark:text-gray-300"
                     placeholder="Search by Mine Operator" wire:model.live="searchTerm">
             </div>
+        
             <!-- Filter by Year -->
-            <div class="w-1/3">
+            <div class="w-full sm:w-1/3">
                 <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500" wire:model.live="filterYear">
                     <option value="">All Years</option>
                     @foreach(range(date('Y'), date('Y') - 10) as $year) <!-- Show past 10 years -->
-                    <option value="{{ $year }}">{{ $year }}</option>
+                        <option value="{{ $year }}">{{ $year }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
+        
 
         <!-- Accident Table -->
         <div class="overflow-x-auto">

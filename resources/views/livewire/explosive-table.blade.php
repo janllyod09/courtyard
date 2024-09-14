@@ -5,26 +5,31 @@
         </h1>
 
         <!-- Search and Filter -->
-        <div class="flex justify-between mb-4">
+        <div class="mb-4 flex flex-col sm:flex-row justify-between items-end">
             <!-- Search Input -->
+            <div class="w-full sm:w-1/2 mb-4 sm:mb-0 sm:mr-4">
             <input 
                 type="text" 
                 wire:model.live="search" 
                 placeholder="Search Mine Operator or Tenement" 
-                class="w-1/3 px-4 py-2 border rounded-lg text-gray-700 dark:bg-gray-700 dark:text-gray-300" 
+                class="w-full px-4 py-2 border rounded-lg text-gray-700 dark:bg-gray-700 dark:text-gray-300" 
             />
-
+            </div>
+        
             <!-- Year Dropdown -->
+            <div class="w-full sm:w-1/3">
             <select 
                 wire:model.live="year" 
-                class="w-1/3 p-2 rounded border dark:bg-gray-700 dark:text-white"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
             >
                 <option value="">All Years</option>
                 @foreach($availableYears as $year)
                     <option value="{{ $year }}">{{ $year }}</option>
                 @endforeach
             </select>
+            </div>
         </div>
+        
 
         <!-- Table -->
         <div class="overflow-x-auto">
