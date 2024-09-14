@@ -3,6 +3,8 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\NonLostTimeAccidents;
+use App\Models\NonFatalLostTimeAccidents;
+use App\Models\FatalLostTimeAccidents;
 
 class AccidentTable extends Component
 {
@@ -15,15 +17,24 @@ class AccidentTable extends Component
 
     private function getProcessedAccidentData()
     {
-        $accidents = NonLostTimeAccidents::with('cpMonthlyReports.user')->get();
+        $nonLostTimeAccidents = $this->processAccidents(NonLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Non-Lost Time');
+        $nonFatalLostTimeAccidents = $this->processAccidents(NonFatalLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Non-Fatal Lost Time');
+        $fatalLostTimeAccidents = $this->processAccidents(FatalLostTimeAccidents::with('cpMonthlyReports.user')->get(), 'Fatal Lost Time');
 
-        return $accidents->map(function ($accident) {
+        return $nonLostTimeAccidents->concat($nonFatalLostTimeAccidents)->concat($fatalLostTimeAccidents);
+    }
+
+    private function processAccidents($accidents, $accidentType)
+    {
+        return $accidents->map(function ($accident) use ($accidentType) {
             $cpMonthlyReport = $accident->cpMonthlyReports;
             $user = $cpMonthlyReport ? $cpMonthlyReport->user : null;
-
+            
             return [
+                'accident_type' => $accidentType,
                 'mine_operator' => $user ? $user->company_name : 'N/A',
                 'permit_no' => $user ? $user->contact_num : 'N/A',
+                'days_lost' => $this->getDaysLost($accidentType, $cpMonthlyReport),
                 'name' => $accident->name,
                 'gender' => $accident->gender,
                 'age' => $accident->age ?? 'N/A',
@@ -42,6 +53,22 @@ class AccidentTable extends Component
         });
     }
 
+    private function getDaysLost($accidentType, $cpMonthlyReport)
+    {
+        if (!$cpMonthlyReport) {
+            return 'N/A';
+        }
+
+        switch ($accidentType) {
+            case 'Non-Fatal Lost Time':
+                return $cpMonthlyReport->nflt_days_lost ?? 'N/A';
+            case 'Fatal Lost Time':
+                return $cpMonthlyReport->flt_days_lost ?? 'N/A';
+            default:
+                return 'N/A';
+        }
+    }
+
     private function calculateTotalCost($accident)
     {
         return $accident->cost_of_mitigation + $accident->cost_of_property_damage;
@@ -52,15 +79,12 @@ class AccidentTable extends Component
         if (empty($field)) {
             return '';
         }
-        
         if (is_string($field)) {
             $field = json_decode($field, true);
         }
-        
         if (is_array($field)) {
             return implode(', ', $field);
         }
-        
         return $field;
     }
 }
