@@ -39,7 +39,8 @@ class FatalLostTimeAccidents extends Model
         'description_of_incident',
     ];
 
-    public function cpMonthlyReports(){
-        return $this->belongsTo(CpMonthlyReports::class);
+    public function cpMonthlyReports()
+    {
+        return $this->belongsTo(CpMonthlyReports::class, 'report_id');
     }
 }

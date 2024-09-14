@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -37,9 +36,11 @@ class NonFatalLostTimeAccidents extends Model
         'is_performing_routine_work',
         'is_not_performing_routine_work_description',
         'description_of_incident',
+        'days_lost', // Add this line
     ];
 
-    public function cpMonthlyReports(){
-        return $this->belongsTo(CpMonthlyReports::class);
+    public function cpMonthlyReports()
+    {
+        return $this->belongsTo(CpMonthlyReports::class, 'report_id');
     }
 }
