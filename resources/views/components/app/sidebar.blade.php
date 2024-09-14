@@ -63,6 +63,64 @@
                             </a>
                         </li>
 
+                        
+                        <!-- Admin Reports -->
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
+                            @if (in_array(Request::segment(1), ['admin-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['admin-reports']) ? 1 : 0 }} }">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition 
+                            @if (Route::is('admin-reports')) {{ '!text-blue-500' }} @endif"
+                                href="{{ route('admin-reports') }}" wire:navigate>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="bi bi-card-checklist text-slate-400 dark:text-slate-300 mr-3"></i>
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Admin Reports
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- Monthly Reports -->
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
+                            @if (in_array(Request::segment(1), ['accident-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['accident-reports']) ? 1 : 0 }} }">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition 
+                            @if (Route::is('accident-reports')) {{ '!text-blue-500' }} @endif"
+                                href="{{ route('accident-reports') }}" wire:navigate>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="bi bi-calendar-check text-slate-400 dark:text-slate-300 mr-3"></i>
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Accident Reports
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- Explosive Reports -->
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
+                            @if (in_array(Request::segment(1), ['explosive-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['explosive-reports']) ? 1 : 0 }} }">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition 
+                            @if (Route::is('explosive-reports')) {{ '!text-blue-500' }} @endif"
+                                href="{{ route('explosive-reports') }}" wire:navigate>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="bi bi-list-check text-slate-400 dark:text-slate-300 mr-3"></i>
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Explosive Reports
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+
                     @endif
 
                     <!-- Client Tabs ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>

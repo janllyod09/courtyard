@@ -17,6 +17,12 @@ Route::middleware(['auth', 'checkrole:admin'])->group(function () {
 
     Route::get('/clients', function () {
         return view('livewire.clients'); })->name('clients');
+    Route::get('/admin-reports', function () {
+        return view('livewire.admin-reports-index'); })->name('admin-reports');
+    Route::get('/accident-reports', function () {
+        return view('livewire.accident'); })->name('accident-reports');
+    Route::get('/explosive-reports', function () {
+        return view('livewire.explosive'); })->name('explosive-reports');
 });
 
 /* Client account role */
@@ -27,12 +33,6 @@ Route::middleware(['auth', 'checkrole:client'])->group(function () {
         return view('livewire.report'); })->name('monthly-report');
     Route::get('/quarterly-report', function () {
         return view('livewire.quarterly-report'); })->name('quarterly-report');
-    Route::get('/admin-reports', function () {
-        return view('livewire.admin-reports-index'); })->name('admin-reports');
-    Route::get('/accident-reports', function () {
-        return view('livewire.accident'); })->name('accident-reports');
-    Route::get('/explosive-reports', function () {
-        return view('livewire.explosive'); })->name('explosive-reports');
 });
 
 Route::get('/profile-photo/{filename}', function ($filename) {

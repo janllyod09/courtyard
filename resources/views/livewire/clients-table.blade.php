@@ -234,25 +234,63 @@
 
 
     {{-- View Client Modal --}}
-    <x-modal id="clientModal" maxWidth="md" wire:model="clientID" centered>
+    <x-modal id="clientModal" maxWidth="md" wire:model="clientId" centered>
         <div class="p-4">
-            <div class="mb-4 text-slate-900 dark:text-gray-100 font-bold">
-                Confirm Deletion
-                <button @click="show = false" class="float-right focus:outline-none">
-                    <i class="fas fa-times"></i>
-                </button>
+         
+            {{-- <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+                @if (Auth::user()->profile_photo_path)
+                    <img src="{{ route('profile-photo.file', ['filename' => basename(Auth::user()->profile_photo_path)]) }}" 
+                            alt="{{ Auth::user()->name }}" 
+                            width="100" height="100"
+                            class="w-20 h-20 rounded-full">
+                @else
+                    <img class="w-20 h-20 rounded-full" src="{{ Auth::user()->profile_photo_url }}" width="100" height="100" alt="" />
+                @endif
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-700 dark:text-gray-100">{{ $client->company_name }} <span class="text-xs cursor-pointer hover:text-blue-500" wire:click='toggleEditProfile'><i class="bi bi-pencil" title="Edit Profile"></i></span></h1>
+                    <p>{{ $client->email }}</p>
+                </div>
             </div>
-
-            <label class="block text-sm font-medium text-gray-700 dark:text-slate-300">
-                Are you sure you want to delete this report?
-            </label>
-            <form wire:submit.prevent='deleteData'>
-                <div class="mt-4 flex justify-end col-span-1 sm:col-span-1">
-                    <p @click="show = false" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer">
-                        Close
+            <div class="text-sm">
+                @php
+                    function safeJsonDecode($value) {
+                        if (is_string($value)) {
+                            return json_decode($value, true) ?: [$value];
+                        }
+                        return is_array($value) ? $value : [$value];
+                    }
+                    function formatMiningType($type) {
+                        if ($type === 'surface_quarry') {
+                            return 'Surface o Quarry';
+                        }
+                        return ucwords(str_replace('_', ' ', $type));
+                    }
+                @endphp
+        
+                <div>
+                    <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $client->contact_num }}</span></p>
+                </div>
+                
+                <div>
+                    <p class="ml-0 sm:ml-4">Mining Type: 
+                        <span class="font-bold">
+                            {{ implode(', ', array_map('formatMiningType', safeJsonDecode($client->mining_type))) }}
+                        </span>
                     </p>
                 </div>
-            </form>
+                
+                <div>
+                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->product)) }}</span></p> 
+                </div>
+                
+                <div>
+                    <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ implode(', ', safeJsonDecode($client->permit_type)) }}</span></p> 
+                </div>
+                
+                <div>
+                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->permit_location)) }}</span></p> 
+                </div>
+            </div> --}}
 
         </div>
     </x-modal>
