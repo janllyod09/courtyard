@@ -208,7 +208,6 @@ x-cloak
                                                     @endif
                                                 </td>
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
-                                                    {{ $report->date_encoded }}
                                                     @php
                                                         $reportMonth = \Carbon\Carbon::parse($report->month);
                                                         $deadlineMonth = $reportMonth->copy()->addMonth();
@@ -216,9 +215,10 @@ x-cloak
                                                         $dateEncoded = \Carbon\Carbon::parse($report->date_encoded);
                                                         $isLate = $dateEncoded->isAfter($deadline);
                                                     @endphp
-                                                    @if($isLate)
+                                                    <span class="{{ $isLate ? 'text-red-500' : '' }}" @if($isLate)title="Late Submission"@endif>{{ $report->date_encoded }}</span>
+                                                    {{-- @if()
                                                         <img src="{{ asset('images/late.png') }}" alt="Late Submission" class="inline-block  w-8 h-8 -rotate-12 -mt-4">
-                                                    @endif
+                                                    @endif --}}
                                                 </td>
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
                                                     {{ $report->non_lost_time_accident }}
@@ -3296,7 +3296,6 @@ x-cloak
                                                                 </button>
                                                             </div>
                                                         @elseif($date && $value != '')
-                                                            {{ $value }}
                                                             @php
                                                                 $reportMonth = \Carbon\Carbon::parse($thisMonth);
                                                                 $deadlineMonth = $reportMonth->copy()->addMonth();
@@ -3304,9 +3303,10 @@ x-cloak
                                                                 $dateEncoded = \Carbon\Carbon::parse($value);
                                                                 $isLate = $dateEncoded->isAfter($deadline);
                                                             @endphp
-                                                            @if($isLate)
+                                                            <span class="{{ $isLate ? 'text-red-500' : '' }}" @if($isLate)title="Late Submission"@endif>{{ $value }}</span>
+                                                            {{-- @if($isLate)
                                                                 <img src="{{ asset('images/late.png') }}" alt="Late Submission" class="inline-block  w-8 h-8 -rotate-12 -mt-4">
-                                                            @endif
+                                                            @endif --}}
                                                         @else
                                                             {{ $value }}
                                                         @endif
