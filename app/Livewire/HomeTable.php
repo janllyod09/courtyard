@@ -37,10 +37,10 @@ class HomeTable extends Component
         $this->email = $user->email;
         $this->contactNum = $user->contact_num;
         $this->companyName = $user->company_name;
-        $this->miningType = json_decode($user->mining_type);
-        $this->permitType = json_decode($user->permit_type);
+        $this->miningType = $user->mining_type;
+        $this->permitType = $user->permit_type;
         $this->product = json_decode($user->product);
-        $this->permitLocation = json_decode($user->permit_location);
+        $this->permitLocation = $user->permit_location;
     }
 
     public function saveProfile(){
@@ -53,10 +53,10 @@ class HomeTable extends Component
                 'company_name' => $this->companyName,
                 'registrant_name' => $this->registrantName,
                 'contact_num' => $this->contactNum,
-                'mining_type' => json_encode($this->miningType),
-                'permit_type' => json_encode($this->permitType),
+                'mining_type' => $this->miningType,
+                'permit_type' => $this->permitType,
                 'product' => json_encode($this->product),
-                'permit_location' => json_encode($this->permitLocation),
+                'permit_location' => $this->permitLocation,
             ]);
             $this->resetVariables();
             $this->dispatch('swal', [

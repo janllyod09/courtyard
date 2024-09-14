@@ -143,7 +143,7 @@ x-cloak
 
             <!-- Table -->
             <div class="flex flex-col p-3">
-                <div class="h-10 flex gap-4 items-center {{ $create ? 'hidden' : '' }}">
+                <div class="h-10 flex gap-4 items-center {{ $create ? 'hidden' : '' }} {{ Auth::user()->user_role === 'admin' ? 'hidden' : '' }}">
                     <div class="flex items-center">
                         <input class="" type="radio" name="status" id="status" value="0" wire:model.live='tableView'>
                         <label class="ml-2" for="status">Monthly View</label>
@@ -155,6 +155,7 @@ x-cloak
                 </div>
                 <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div class="inline-block w-full py-2 align-middle">
+
                         <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? 'hidden' : '' }} {{ $tableView ? 'hidden' : '' }}">
                             <div class="overflow-x-auto">
 
@@ -208,6 +209,16 @@ x-cloak
                                                 </td>
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                     {{ $report->date_encoded }}
+                                                    @php
+                                                        $reportMonth = \Carbon\Carbon::parse($report->month);
+                                                        $deadlineMonth = $reportMonth->copy()->addMonth();
+                                                        $deadline = $deadlineMonth->copy()->setDay(15);
+                                                        $dateEncoded = \Carbon\Carbon::parse($report->date_encoded);
+                                                        $isLate = $dateEncoded->isAfter($deadline);
+                                                    @endphp
+                                                    @if($isLate)
+                                                        <img src="{{ asset('images/late.png') }}" alt="Late Submission" class="inline-block  w-8 h-8 -rotate-12 -mt-4">
+                                                    @endif
                                                 </td>
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
                                                     {{ $report->non_lost_time_accident }}
@@ -235,7 +246,7 @@ x-cloak
                                                         @endphp
                                                         
                                                         <div class="flex items-center justify-center space-x-2">
-                                                            <span>{{ $fileName }}</span>
+                                                            <span>{{ Str::limit($fileName, 20, '...') }}</span>
                                                             <button wire:click="downloadFile('{{ $filePath }}')" 
                                                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded" title="Download">
                                                                     <i class="bi bi-download" style="padding-right: 2px" wire:loading.remove wire:target="downloadFile('{{ $filePath }}')"></i>
@@ -323,6 +334,7 @@ x-cloak
                                 {{ $reports->links() }}
                             </div>
                         </div>
+
                         <div class="overflow-hidden border dark:border-gray-700 rounded-lg {{ $create ? '' : 'hidden' }}">
                             <div x-data="{ currentStep: @entangle('currentStep'), totalSteps: 6 }">
                                 <div class="w-full bg-gray-200 h-2.5 dark:bg-gray-700">
@@ -386,7 +398,7 @@ x-cloak
                                         <div class="col-span-2 sm:col-span-1 grid grid-cols-2 gap-4">
                                             <div class="col-span-2 sm:col-span-1">
                                                 <label for="maleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Bilang ng Empleyado (Manpower)</label>
-                                                <label for="maleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Lalake (Male) <span class="text-red-500">*</span></label>
+                                                <label for="maleWorkers" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Lalaki (Male) <span class="text-red-500">*</span></label>
                                                 <input type="number" id="maleWorkers" wire:model='maleWorkers' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
                                                 @error('maleWorkers')
                                                     <span class="text-red-500 text-sm">The count of male manpower is required!</span>
@@ -546,15 +558,11 @@ x-cloak
                                                                         </div>
                                                                     </div>
                                                                                                         
-                                                                    <div class="col-span-full sm:col-span-1">
-                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
-                                                                        <input type="text" id="cause" wire:model='nltaPersons.{{ $index }}.cause' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                                                                        @error('nltaPersons.' . $index . '.cause')
-                                                                            <span class="text-red-500 text-sm">The cause of accident/illness is required!</span>
-                                                                        @enderror
+                                                                    <div class="col-span-full mt-4">
+                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
                                                                     </div>
 
-                                                                    <div class="col-span-full mt-4">
+                                                                    <div class="col-span-full -mt-2">
                                                                         <div class="flex items-center gap-2">
                                                                             <input type="checkbox" id="unsafeAct" wire:model.live='nltaPersons.{{ $index }}.unsafeAct' class="cursor-pointer">
                                                                             <label for="unsafeAct" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Panganib dulot ng Kapabayaan (Unsafe Acts)</label>
@@ -1387,15 +1395,11 @@ x-cloak
                                                                         </div>
                                                                     </div>
                                                                                                         
-                                                                    <div class="col-span-full sm:col-span-1">
-                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
-                                                                        <input type="text" id="cause" wire:model='nfltaPersons.{{ $index }}.cause' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                                                                        @error('nfltaPersons.' . $index . '.cause')
-                                                                            <span class="text-red-500 text-sm">The cause of accident/illness is required!</span>
-                                                                        @enderror
+                                                                    <div class="col-span-full mt-4">
+                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
                                                                     </div>
 
-                                                                    <div class="col-span-full mt-4">
+                                                                    <div class="col-span-full -mt-2">
                                                                         <div class="flex items-center gap-2">
                                                                             <input type="checkbox" id="unsafeAct" wire:model.live='nfltaPersons.{{ $index }}.unsafeAct' class="cursor-pointer">
                                                                             <label for="unsafeAct" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Panganib dulot ng Kapabayaan (Unsafe Acts)</label>
@@ -2232,15 +2236,11 @@ x-cloak
                                                                         </div>
                                                                     </div>
                                                                                                         
-                                                                    <div class="col-span-full sm:col-span-1">
-                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
-                                                                        <input type="text" id="cause" wire:model='fltaPersons.{{ $index }}.cause' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                                                                        @error('fltaPersons.' . $index . '.cause')
-                                                                            <span class="text-red-500 text-sm">The cause of accident/illness is required!</span>
-                                                                        @enderror
+                                                                    <div class="col-span-full mt-4">
+                                                                        <label for="cause" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Dahilan ng Aksidente o Karamdaman (Cause of Accident/Illness)</label>
                                                                     </div>
 
-                                                                    <div class="col-span-full mt-4">
+                                                                    <div class="col-span-full -mt-2">
                                                                         <div class="flex items-center gap-2">
                                                                             <input type="checkbox" id="unsafeAct" wire:model.live='fltaPersons.{{ $index }}.unsafeAct' class="cursor-pointer">
                                                                             <label for="unsafeAct" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Panganib dulot ng Kapabayaan (Unsafe Acts)</label>
@@ -2963,10 +2963,10 @@ x-cloak
                                                 <i class="fas fa-times flex cursor-pointer text-red-500 hover:text-red-700 absolute top-4 right-4" title="Remove" wire:click="removeDesease({{ $index }})"></i>
                                                 <div class="grid grid-cols-3 gap-4">
                                                     <div class="col-span-full sm:col-span-1">
-                                                        <label for="desease" class="block text-sm font-medium text-gray-700 dark:text-slate-400"><span class="font-bold text-gray-700 dark:text-gray-100">{{ $index + 1 }}.</span> Naitalang sakit (Recorded desease)</label>
+                                                        <label for="desease" class="block text-sm font-medium text-gray-700 dark:text-slate-400"><span class="font-bold text-gray-700 dark:text-gray-100">{{ $index + 1 }}.</span> Naitalang sakit (Recorded disease)</label>
                                                         <input type="text" id="desease" wire:model='deseases.{{ $index }}.desease' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
                                                         @error('deseases.' . $index . '.desease')
-                                                            <span class="text-red-500 text-sm">The desease is required!</span>
+                                                            <span class="text-red-500 text-sm">The disease is required!</span>
                                                         @enderror
                                                     </div>
                                 
@@ -3020,7 +3020,14 @@ x-cloak
                                 <div class="{{ $currentStep === 6 ? '' : 'hidden' }}">
                                     <p class="text-sm">Step {{ $currentStep }} of 6</p>
 
-                                    <div class="overflow-x-auto mb-6 mt-4">
+                                    <div class="flex gap-2 items-start my-6">
+                                        <input class="" id="ask" type="checkbox" wire:model.live='hasExposiveReport'>
+                                        <label class="-mt-1" for="ask">Merun ka bang Explosives Consumption Report para sa buwan eto 
+                                            (Do you have Explosives Consumption Report for this month)?
+                                        </label>
+                                    </div>
+
+                                    <div class="overflow-x-auto mb-6 mt-4 {{ $hasExposiveReport ? '' : 'hidden' }}">
                                         <table class="w-full min-w-full border border-neutral-200 dark:border-gray-400 rounded-md">
                                             <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl">
                                                 <tr class="whitespace-nowrap">
@@ -3240,9 +3247,11 @@ x-cloak
                                                             });
                                                             $value = '';
                                                             $file = false;
+                                                            $date = false;
                                                             switch($row) {
                                                                 case 'Date Encoded':
                                                                     $value = $report ? Carbon\Carbon::parse($report->date_encoded)->format('Y-m-d') : '';
+                                                                    $date = true;
                                                                     break;
                                                                 case 'Non-Lost Time Accident':
                                                                     $value = $report ? ($report->non_lost_time_accident ?: 0) : '';
@@ -3286,6 +3295,18 @@ x-cloak
                                                                     </div>
                                                                 </button>
                                                             </div>
+                                                        @elseif($date && $value != '')
+                                                            {{ $value }}
+                                                            @php
+                                                                $reportMonth = \Carbon\Carbon::parse($thisMonth);
+                                                                $deadlineMonth = $reportMonth->copy()->addMonth();
+                                                                $deadline = $deadlineMonth->copy()->setDay(15);
+                                                                $dateEncoded = \Carbon\Carbon::parse($value);
+                                                                $isLate = $dateEncoded->isAfter($deadline);
+                                                            @endphp
+                                                            @if($isLate)
+                                                                <img src="{{ asset('images/late.png') }}" alt="Late Submission" class="inline-block  w-8 h-8 -rotate-12 -mt-4">
+                                                            @endif
                                                         @else
                                                             {{ $value }}
                                                         @endif
@@ -3322,6 +3343,7 @@ x-cloak
                                 </table>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="/images/mgar-logo.png" type="image/x-icon">
 
-    <title>MGAR CP PORTAL</title>
+    <title>The Mine SHOP</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

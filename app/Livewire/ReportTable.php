@@ -27,7 +27,7 @@ class ReportTable extends Component
 
     public $search;
     public $date;
-    public $create;
+    public $create = false;
     public $currentStep = 1;
     public $encoder;
     public $company;
@@ -69,6 +69,7 @@ class ReportTable extends Component
     public $reportStatusId;
     public $tableView = 0;
     public $thisYear;
+    public $hasExposiveReport = false;
 
     public function mount(){
         $this->updateNltaCount();
@@ -380,7 +381,6 @@ class ReportTable extends Component
                         'nltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
                         'nltaPersons.*.time' => ['required'],
                         'nltaPersons.*.location' => ['required', 'string', 'max:255'],
-                        'nltaPersons.*.cause' => ['required', 'string', 'max:255'],
                         'nltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
             
@@ -398,7 +398,6 @@ class ReportTable extends Component
                         'nfltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
                         'nfltaPersons.*.time' => ['required'],
                         'nfltaPersons.*.location' => ['required', 'string', 'max:255'],
-                        'nfltaPersons.*.cause' => ['required', 'string', 'max:255'],
                         'nfltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
             
@@ -416,7 +415,6 @@ class ReportTable extends Component
                         'fltaPersons.*.dateOfAccidentIllness' => ['required', 'date'],
                         'fltaPersons.*.time' => ['required'],
                         'fltaPersons.*.location' => ['required', 'string', 'max:255'],
-                        'fltaPersons.*.cause' => ['required', 'string', 'max:255'],
                         'fltaPersons.*.incidentDescription' => ['required', 'string', 'max:1000'],
                     ];
 
@@ -425,9 +423,6 @@ class ReportTable extends Component
                 $this->currentStep += 1;
                 break;
             case 5:
-                $this->validate([
-                    'minutes' => 'required',
-                ]);
                 $this->currentStep += 1;
                 break;
         }
@@ -586,21 +581,23 @@ class ReportTable extends Component
     }
 
     private function createExplosivesConsumption($report){
-        ExplosivesConsumptions::create([
-            'report_id' => $report->id,
-            'blasting_contractor' => $this->blastingContractor ?: null,
-            'dynamite' => $this->dynamite ?: null,
-            'detonating_cord' => $this->detonatingCord ?: null,
-            'non_elec_blasting_caps' => $this->nonElecBlastingCaps ?: null,
-            'elec_blasting_caps' => $this->elecBlastingCaps ?: null,
-            'fuse_lighter' => $this->fuseLighter ?: null,
-            'connectors' => $this->connectors ?: null,
-            'ammonium_nitrate' => $this->ammoniumNitrate ?: null,
-            'shotshell_primer' => $this->shotshellPrimer ?: null,
-            'primer' => $this->primer ?: null,
-            'emulsion' => $this->emulsion ?: null,
-            'others' => $this->others ?: null,
-        ]);
+        if($this->hasExposiveReport){
+            ExplosivesConsumptions::create([
+                'report_id' => $report->id,
+                'blasting_contractor' => $this->blastingContractor ?: null,
+                'dynamite' => $this->dynamite ?: null,
+                'detonating_cord' => $this->detonatingCord ?: null,
+                'non_elec_blasting_caps' => $this->nonElecBlastingCaps ?: null,
+                'elec_blasting_caps' => $this->elecBlastingCaps ?: null,
+                'fuse_lighter' => $this->fuseLighter ?: null,
+                'connectors' => $this->connectors ?: null,
+                'ammonium_nitrate' => $this->ammoniumNitrate ?: null,
+                'shotshell_primer' => $this->shotshellPrimer ?: null,
+                'primer' => $this->primer ?: null,
+                'emulsion' => $this->emulsion ?: null,
+                'others' => $this->others ?: null,
+            ]);
+        }
     }
 
     public function downloadFile($path)

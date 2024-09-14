@@ -84,7 +84,7 @@ class ClientsExport implements WithEvents
         $sheet->setCellValue('A1', "");
 
         $sheet->mergeCells('A2:I2');
-        $sheet->setCellValue('A2', "MGAR CP PORTAL");
+        $sheet->setCellValue('A2', "The Mine SHOP");
         $sheet->mergeCells('A3:I3');
 
         $sheet->setCellValue('A3', "Client List");

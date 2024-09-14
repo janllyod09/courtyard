@@ -135,15 +135,15 @@ x-data="{
                         </label>
                         <div class="space-y-2">
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="miningType" value="surface_quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="miningType" name="miningType" value="surface_quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Surface o Quarry</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="miningType" value="underground" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="miningType" name="miningType" value="underground" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Underground</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="miningType" value="seabed" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="miningType" name="miningType" value="seabed" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Seabed</label>
                             </div>
                         </div>
@@ -156,16 +156,32 @@ x-data="{
                         </label>
                         <div class="space-y-2">
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitType" value="ep" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="ep" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">EP</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitType" value="mpp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="isag" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">ISAG</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="mpp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">MPP</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitType" value="qcp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">QCP</label>
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="mpsa" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">MPSA</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="patent" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Patent</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="qp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">QP</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" wire:model.live="permitType" name="permitType" value="smp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">SMP</label>
                             </div>
                         </div>
                         @error('permitType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
@@ -181,26 +197,26 @@ x-data="{
                         <!-- First column for locations -->
                         <div class="space-y-2">
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitLocation" value="Cavite" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Cavite" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Cavite</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitLocation" value="Laguna" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Laguna" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Laguna</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitLocation" value="Batangas" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Batangas" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Batangas</label>
                             </div>
                         </div>
                         <!-- Second column for locations -->
                         <div class="space-y-2">
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitLocation" value="Rizal" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Rizal" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Rizal</label>
                             </div>
                             <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="permitLocation" value="Quezon" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Quezon" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Quezon</label>
                             </div>
                         </div>

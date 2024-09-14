@@ -86,7 +86,7 @@ class SafetyHealthMonthlyReportExport implements WithEvents
 
         // Add custom header
         $sheet->mergeCells('A1:P1');
-        $sheet->setCellValue('A1', "MGAR CP PORTAL");
+        $sheet->setCellValue('A1', "The Mine SHOP");
 
         $sheet->mergeCells('A2:P2');
         $sheet->setCellValue('A2', "SAFETY AND HEALTH REPORT FOR THE MONTH OF " .  strtoupper($this->filters['monthYear']));

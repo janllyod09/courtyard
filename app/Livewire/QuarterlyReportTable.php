@@ -69,7 +69,6 @@ class QuarterlyReportTable extends Component
                 'yearQuarter' => 'required',
                 'dateUploaded' => 'required',
                 'drill' => 'required',
-                'reportFile' => 'required',
             ]);
 
             $user = Auth::user();
