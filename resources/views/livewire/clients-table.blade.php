@@ -260,24 +260,25 @@
                 <div>
                     <p class="ml-0 sm:ml-4">Mining Type: 
                         <span class="font-bold">
-                            {{ implode(', ', array_map('formatMiningType', safeJsonDecode($selectedClient->mining_type))) }}
+                            {{ $selectedClient->mining_type }}
                         </span>
                     </p>
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($selectedClient->product)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ ($selectedClient->product) }}</span></p> 
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ implode(', ', safeJsonDecode($selectedClient->permit_type)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ $selectedClient->permit_type }}</span></p> 
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ implode(', ', safeJsonDecode($selectedClient->permit_location)) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ $selectedClient->permit_location }}</span></p> 
                 </div>
             </div>
 
         </div>
     </x-modal>
+
 </div>

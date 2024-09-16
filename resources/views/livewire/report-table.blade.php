@@ -380,7 +380,9 @@ x-cloak
                                     <div class="grid grid-cols-2 gap-4 mt-8">
                                         <div class="col-span-2 sm:col-span-1">
                                             <label for="month" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Safety and Health Reports para sa buwan ng (month of) <span class="text-red-500">*</span></label>
-                                            <input type="month" id="month" wire:model='month' value="{{ $month }}" class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
+                                            <input type="month" id="month" wire:model='month' value="{{ $month }}" 
+                                            max="{{ date('Y-m') }}"
+                                            class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700">
                                             @error('month')
                                                 <span class="text-red-500 text-sm">The month is required!</span>
                                             @enderror
@@ -3022,8 +3024,8 @@ x-cloak
 
                                     <div class="flex gap-2 items-start my-6">
                                         <input class="" id="ask" type="checkbox" wire:model.live='hasExposiveReport'>
-                                        <label class="-mt-1" for="ask">Merun ka bang Explosives Consumption Report para sa buwan eto 
-                                            (Do you have Explosives Consumption Report for this month)?
+                                        <label class="-mt-1" for="ask">May Explosives Consumption Report sa buwan na ito? 
+                                            (Is there an Explosives Consumption Report for this month?)
                                         </label>
                                     </div>
 
