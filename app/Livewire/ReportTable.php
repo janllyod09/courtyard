@@ -446,7 +446,7 @@ class ReportTable extends Component
 
             if ($hasMonthReport && !$this->editReportId) {
                 $this->dispatch('swal', [
-                    'title' => 'Merun ka ng report para sa buwan na inilagay (You already have a report for the inputted month)',
+                    'title' => 'May report kana para sa buwan na ito (You already have a report for this month)',
                     'icon' => 'error'
                 ]);
                 return;

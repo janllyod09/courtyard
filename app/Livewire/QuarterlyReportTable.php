@@ -80,6 +80,18 @@ class QuarterlyReportTable extends Component
                 $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
             }
 
+            $thisReport = QuarterlyEmergencyDrillReports::where('year', $this->yearReport)
+                        ->where('quarter', $this->yearQuarter)
+                        ->first();
+
+            if ($thisReport && !$this->editReportId) {
+                $this->dispatch('swal', [
+                    'title' => 'May report kana para sa quarter na ito (You already have a report for this quarter)',
+                    'icon' => 'error'
+                ]);
+                return;
+            }
+
             $report = QuarterlyEmergencyDrillReports::create([
                 'user_id' => $user->id,
                 'year' => $this->yearReport,
@@ -133,7 +145,7 @@ class QuarterlyReportTable extends Component
     public function toggleEditReport($id){
         $report = QuarterlyEmergencyDrillReports::findOrFail($id);
         $this->editReport = true;
-        $this->year = $report->year;
+        $this->yearReport = $report->year;
         $this->yearQuarter =  $report->quarter;
         $this->drill = $report->type_of_emergency_drill;
         $this->reportFile = $report->report;
