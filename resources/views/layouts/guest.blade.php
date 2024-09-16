@@ -17,7 +17,7 @@
         <script defer src="build/assets/app-D9BebNPI.js"></script>
 
         <!-- Styles -->
-        <link rel="stylesheet" href="build/assets/app-ecC35IzL.css">
+        <link rel="stylesheet" href="build/assets/app-C8Njb_hL.css">
 
          @livewireStyles
 
