@@ -65,12 +65,6 @@
             }
             return is_array($value) ? $value : [$value];
         }
-        function formatMiningType($type) {
-            if ($type === 'surface_quarry') {
-                return 'Surface o Quarry';
-            }
-            return ucwords(str_replace('_', ' ', $type));
-        }
     @endphp
 
     <div class="flex justify-center w-full">
@@ -180,17 +174,17 @@
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
                                                                 {{ $client->contact_num }}
                                                             </td>
-                                                            <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
-                                                                {{ implode(', ', array_map('formatMiningType', safeJsonDecode($client->mining_type))) }}
+                                                            <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap uppercase">
+                                                                {{ $client->mining_type }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
                                                                 {{ implode(', ', safeJsonDecode($client->product)) }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap uppercase">
-                                                                {{ implode(', ', safeJsonDecode($client->permit_type)) }}
+                                                                {{ $client->permit_type }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
-                                                                {{ implode(', ', safeJsonDecode($client->permit_location)) }}
+                                                                {{ $client->permit_location }}
                                                             </td>
                                                             {{-- <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                                 <div class="relative">
@@ -259,14 +253,14 @@
                 
                 <div>
                     <p class="ml-0 sm:ml-4">Mining Type: 
-                        <span class="font-bold">
+                        <span class="font-bold uppercase">
                             {{ $selectedClient->mining_type }}
                         </span>
                     </p>
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ ($selectedClient->product) }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($selectedClient->product)) }}</span></p> 
                 </div>
                 
                 <div>

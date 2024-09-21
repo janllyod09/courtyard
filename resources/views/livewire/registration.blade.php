@@ -66,7 +66,7 @@
                                 </label>
                                 <div class="space-y-2">
                                     <div class="flex items-center">
-                                        <input type="radio" wire:model.live="miningType" value="surface_quarry" class="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 ">
+                                        <input type="radio" wire:model.live="miningType" value="surface quarry" class="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 ">
                                         <label class="text-sm text-gray-700 ml-2">Surface o Quarry</label>
                                     </div>
                                     <div class="flex items-center">

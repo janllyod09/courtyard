@@ -54,8 +54,8 @@ x-data="{
         
         <div>
             <p class="ml-0 sm:ml-4">Mining Type: 
-                <span class="font-bold">
-                    {{ implode(', ', array_map('formatMiningType', safeJsonDecode($client->mining_type))) }}
+                <span class="font-bold uppercase">
+                    {{ $client->mining_type }}
                 </span>
             </p>
         </div>
@@ -65,11 +65,11 @@ x-data="{
         </div>
         
         <div>
-            <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ implode(', ', safeJsonDecode($client->permit_type)) }}</span></p> 
+            <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ $client->permit_type }}</span></p> 
         </div>
         
         <div>
-            <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->permit_location)) }}</span></p> 
+            <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ $client->permit_location }}</span></p> 
         </div>
     </div>
 
@@ -135,7 +135,7 @@ x-data="{
                         </label>
                         <div class="space-y-2">
                             <div class="flex items-center">
-                                <input type="radio" wire:model.live="miningType" name="miningType" value="surface_quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <input type="radio" wire:model.live="miningType" name="miningType" value="surface quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                 <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Surface o Quarry</label>
                             </div>
                             <div class="flex items-center">

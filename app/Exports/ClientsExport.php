@@ -119,10 +119,10 @@ class ClientsExport implements WithEvents
                 $sheet->setCellValue("C{$this->currentRow}", $client->registrant_name);
                 $sheet->setCellValue("D{$this->currentRow}", $client->email);
                 $sheet->setCellValue("E{$this->currentRow}", $client->contact_num);
-                $sheet->setCellValue("F{$this->currentRow}", $this->formatJsonColumn($client->mining_type));
+                $sheet->setCellValue("F{$this->currentRow}", strtoupper($client->mining_type));
                 $sheet->setCellValue("G{$this->currentRow}", $this->formatJsonColumn($client->product));
-                $sheet->setCellValue("H{$this->currentRow}", $this->formatJsonColumn($client->permit_type));
-                $sheet->setCellValue("I{$this->currentRow}", $this->formatJsonColumn($client->permit_location));
+                $sheet->setCellValue("H{$this->currentRow}", strtoupper($client->permit_type));
+                $sheet->setCellValue("I{$this->currentRow}", $client->permit_location);
 
                 // Apply styling
                 $sheet->getStyle('A' . $this->currentRow . ':B' . $this->currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);

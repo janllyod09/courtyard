@@ -69,10 +69,10 @@ class Registration extends Component
             'registrant_name' => $this->registrantName,
             'user_role' => 'client',
             'contact_num' => $this->contactNum,
-            'mining_type' => json_encode($this->miningType),
-            'permit_type' => json_encode($this->permitType),
+            'mining_type' => $this->miningType,
+            'permit_type' => $this->permitType,
             'product' => json_encode($this->product),
-            'permit_location' => json_encode($this->permitLocation),
+            'permit_location' => $this->permitLocation,
         ]);
 
         // Reset form fields
