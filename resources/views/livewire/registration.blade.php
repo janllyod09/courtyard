@@ -107,8 +107,8 @@
                                         <label class="text-sm text-gray-700 ml-2">Patent</label>
                                     </div>
                                     <div class="flex items-center">
-                                        <input type="radio" wire:model.live="permitType" value="qcp" class="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 ">
-                                        <label class="text-sm text-gray-700 ml-2">QCP</label>
+                                        <input type="radio" wire:model.live="permitType" value="gsqp" class="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 ">
+                                        <label class="text-sm text-gray-700 ml-2">GSQP</label>
                                     </div>
                                     <div class="flex items-center">
                                         <input type="radio" wire:model.live="permitType" value="qp" class="h-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded-full focus:ring-blue-500 ">
@@ -218,7 +218,7 @@
                         <!-- Registrant Information -->
                         <div class="mb-6">
                             <label class="text-sm text-gray-700 font-bold" for="registrant_name">
-                                Pangalan ng Naghrehistro (Name of Registrant):
+                                Pangalan ng Nagrehistro (Name of Registrant):
                                 <span class="text-red-600">*</span>
                             </label>
                             <input type="text" id="registrant_name" wire:model.live="registrantName"
