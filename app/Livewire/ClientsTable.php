@@ -39,10 +39,11 @@ class ClientsTable extends Component
 
     public function exportClients(){
         try{
-            $clients = User::where('user_role', 'client')
-            ->when($this->search, function ($query) {
-                return $query->search(trim($this->search));
-            })->get();
+            $clients = User::where('users.user_role', 'client')
+                ->join('permits', 'permits.user_id', 'users.id')
+                ->when($this->search, function ($query) {
+                    return $query->search(trim($this->search));
+                })->get();
 
             $filters = [
                 'clients' => $clients,
