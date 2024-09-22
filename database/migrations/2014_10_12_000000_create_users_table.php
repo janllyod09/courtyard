@@ -21,11 +21,6 @@ return new class extends Migration
                 $table->string('password', 1000);
                 $table->string('user_role')->nullable();
                 $table->string('active_status')->nullable();
-                $table->string('contact_num')->unique()->nullable();
-                $table->string('mining_type')->nullable();
-                $table->string('product')->nullable();
-                $table->string('permit_type')->nullable();
-                $table->string('permit_location')->nullable();
                 $table->string('profile_photo_path')->nullable();
                 $table->rememberToken();
                 $table->timestamps();

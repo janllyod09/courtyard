@@ -2,30 +2,30 @@
 
 namespace App\Livewire;
 
+use App\Models\Permits;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class HomeTable extends Component
 {
     public $edit;
-    public $miningType = [];
-    public $permitType = [];
-    public $product = [];
-    public $permitLocation = [];
+    public $thisPermits = [];
     public $companyName;
     public $name;
     public $registrantName;
     public $email;
-    public $contactNum;
 
     public function render(){
         $client = Auth::user();
+        $permits = Permits::where('user_id', $client->id)->get();
 
         return view('livewire.home-table', [
             'client' => $client,
+            'permits' => $permits,
         ]);
     }
 
@@ -33,31 +33,54 @@ class HomeTable extends Component
         $user = Auth::user();
         $this->edit = true;
         $this->name = $user->name;
+        $this->companyName = $user->company_name;
         $this->registrantName = $user->registrant_name;
         $this->email = $user->email;
-        $this->contactNum = $user->contact_num;
-        $this->companyName = $user->company_name;
-        $this->miningType = $user->mining_type;
-        $this->permitType = $user->permit_type;
-        $this->product = json_decode($user->product);
-        $this->permitLocation = $user->permit_location;
+        $this->thisPermits = $user->permits->map(function ($permit) {
+            $permit = $permit->toArray();
+            $permit['product'] = json_decode($permit['product'], true) ?: [];
+            return $permit;
+        })->toArray();
     }
 
     public function saveProfile(){
+        $this->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'companyName' => 'required',
+            'registrantName' => 'required',
+            'thisPermits.*.permit_number' => 'required',
+            'thisPermits.*.mining_type' => 'required',
+            'thisPermits.*.permit_type' => 'required',
+            'thisPermits.*.location' => 'required',
+            'thisPermits.*.product' => 'required|array|min:1',
+        ]);
         try{
+            DB::beginTransaction();
+
             $user = Auth::user();
-            $client = User::findOrFail($user->id);
-            $client->update([
+            $userData = User::findOrFail($user->id);
+            $userData->update([
                 'name' => $this->name,
                 'email' => $this->email,
                 'company_name' => $this->companyName,
                 'registrant_name' => $this->registrantName,
-                'contact_num' => $this->contactNum,
-                'mining_type' => $this->miningType,
-                'permit_type' => $this->permitType,
-                'product' => json_encode($this->product),
-                'permit_location' => $this->permitLocation,
             ]);
+    
+            // Delete existing permits and create new ones
+            $userData->permits()->delete();
+            foreach ($this->thisPermits as $permit) {
+                $userData->permits()->create([
+                    'permit_number' => $permit['permit_number'],
+                    'mining_type' => $permit['mining_type'],
+                    'permit_type' => $permit['permit_type'],
+                    'location' => $permit['location'],
+                    'product' => json_encode($permit['product']),
+                ]);
+            }
+    
+            DB::commit();
+    
             $this->resetVariables();
             $this->dispatch('swal', [
                 'title' => 'Tagumpay na naisumite (Submitted successfully)',
@@ -71,14 +94,27 @@ class HomeTable extends Component
 
     public function resetVariables(){
         $this->edit = null;
-        $this->miningType = [];
-        $this->permitType = [];
-        $this->product = [];
-        $this->permitLocation = [];
         $this->companyName = null;
         $this->name = null;
         $this->registrantName = null;
         $this->email = null;
-        $this->contactNum = null;
+        $this->thisPermits = [];
+    }
+
+    public function addPermit(){
+        $this->thisPermits[] = [
+            'permit_number' => '',
+            'mining_type' => '',
+            'permit_type' => '',
+            'location' => '',
+            'product' => [],
+        ];
+    }
+
+    public function removePermit($index){
+        if (count($this->thisPermits) > 1) {
+            unset($this->thisPermits[$index]);
+            $this->thisPermits = array_values($this->thisPermits);
+        }
     }
 }

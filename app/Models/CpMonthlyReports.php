@@ -13,6 +13,7 @@ class CpMonthlyReports extends Model
 
     protected $fillable = [
         'user_id',
+        'permit_number',
         'month',
         'date_encoded',
         'man_hours',

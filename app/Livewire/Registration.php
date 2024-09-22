@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Permits;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -16,25 +17,22 @@ class Registration extends Component
     public $name;
     public $registrantName;
     public $email;
-    public $contactNum;
-    public $miningType = [];
-    public $permitType = [];
-    public $product = [];
-    public $permitLocation = [];
     public $showModal = false;
+
+    public $permits = [];
 
     protected $rules = [
         'companyName' => 'required',
         'registrantName' => 'required',
-        'product' => 'required|array|min:1',
-        'contactNum' => 'required',
-        'miningType' => 'required',
-        'permitType' => 'required',
-        'permitLocation' => 'required',
         'name' => 'required',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:8',
         'c_password' => 'required|same:password',
+        'permits.*.permit_number' => 'required',
+        'permits.*.mining_type' => 'required',
+        'permits.*.permit_type' => 'required',
+        'permits.*.location' => 'required',
+        'permits.*.product' => 'required|array|min:1',
     ];
 
     protected $messages = [
@@ -42,14 +40,39 @@ class Registration extends Component
         'password.min' => 'The password must be at least 8 characters long.',
         'c_password.required' => 'The password confirmation field is required.',
         'c_password.same' => 'The password confirmation does not match the password.',
-        'miningType.required' => 'Please select at least one mining type.',
-        'permitType.required' => 'Please select at least one permit type.',
-        'product.required' => 'Please select at least one product.',
-        'permitLocation.required' => 'Please select at least one permit location.',
+        'permits.*.permit_number.required' => 'The permit/contract number field is required.',
+        'permits.*.mining_type.required' => 'Please select a mining type.',
+        'permits.*.permit_type.required' => 'Please select a permit type.',
+        'permits.*.location.required' => 'Please select a permit location.',
+        'permits.*.product.required' => 'Please select at least one product.',
+        'permits.*.product.min' => 'Please select at least one product.',
     ];
 
-    public function submit()
+    public function mount()
     {
+        $this->addPermit();
+    }
+
+    public function addPermit()
+    {
+        $this->permits[] = [
+            'permit_number' => '',
+            'mining_type' => '',
+            'permit_type' => '',
+            'location' => '',
+            'product' => [],
+        ];
+    }
+
+    public function removePermit($index)
+    {
+        if (count($this->permits) > 1) {
+            unset($this->permits[$index]);
+            $this->permits = array_values($this->permits);
+        }
+    }
+
+    public function submit(){
         
         $this->validate();
 
@@ -68,15 +91,21 @@ class Registration extends Component
             'company_name' => $this->companyName,
             'registrant_name' => $this->registrantName,
             'user_role' => 'client',
-            'contact_num' => $this->contactNum,
-            'mining_type' => $this->miningType,
-            'permit_type' => $this->permitType,
-            'product' => json_encode($this->product),
-            'permit_location' => $this->permitLocation,
         ]);
 
+        foreach ($this->permits as $permitData) {
+            Permits::create([
+                'user_id' => $user->id,
+                'permit_number' => $permitData['permit_number'],
+                'mining_type' => $permitData['mining_type'],
+                'permit_type' => $permitData['permit_type'],
+                'location' => $permitData['location'],
+                'product' => json_encode($permitData['product']),
+            ]);
+        }
+
         // Reset form fields
-        $this->reset(['password', 'c_password', 'companyName', 'name', 'registrantName', 'email', 'contactNum', 'miningType', 'permitType', 'product', 'permitLocation']);
+        $this->reset(['password', 'c_password', 'companyName', 'name', 'registrantName', 'email']);
 
         $this->showModal = true;
     }

@@ -31,11 +31,6 @@ class User extends Authenticatable
         'active_status',
         'company_name',
         'registrant_name',
-        'contact_num',
-        'mining_type',
-        'product',
-        'permit_type',
-        'permit_location',
         'profile_photo_path',
     ];
 
@@ -61,6 +56,11 @@ class User extends Authenticatable
     public function quarterlyEmergencyDrillReports()
     {
         return $this->hasMany(QuarterlyEmergencyDrillReports::class);
+    }
+
+    public function permits()
+    {
+        return $this->hasMany(Permits::class);
     }
 
     /**

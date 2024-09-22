@@ -51,30 +51,31 @@ class AdminSafetyAndHealthReportsTable extends Component
     public function loadReportData()
     {
         $reports = CpMonthlyReports::select(
-                'cp_monthly_reports.user_id',
-                DB::raw('YEAR(cp_monthly_reports.month) as year'),
-                DB::raw('QUARTER(cp_monthly_reports.month) as quarter'),
-                DB::raw('SUM(cp_monthly_reports.non_lost_time_accident) as total_nlta'),
-                DB::raw('SUM(cp_monthly_reports.non_fatal_lost_time_accident) as total_lta_nf'),
-                DB::raw('SUM(cp_monthly_reports.fatal_lost_time_accident) as total_lta_f'),
-                DB::raw('SUM(COALESCE(cp_monthly_reports.nflt_days_lost, 0) + COALESCE(cp_monthly_reports.flt_days_lost, 0)) as total_days_lost'),
-                DB::raw('SUM(cp_monthly_reports.man_hours) as total_manhours'),
-                DB::raw('SUM(cp_monthly_reports.male_workers) as total_male'),
-                DB::raw('SUM(cp_monthly_reports.female_workers) as total_female'),
-                DB::raw('GROUP_CONCAT(DISTINCT monthly_deseases.desease SEPARATOR ", ") as diseases'),
-                DB::raw('SUM(monthly_deseases.no_of_cases) as total_cases')
-            )
-            ->leftJoin('monthly_deseases', 'cp_monthly_reports.id', '=', 'monthly_deseases.report_id')
-            ->whereYear('cp_monthly_reports.month', $this->selectedYear)
-            ->groupBy('cp_monthly_reports.user_id', 'year', 'quarter')
-            ->with('user')
-            ->get();
+            'cp_monthly_reports.user_id',
+            'cp_monthly_reports.permit_number',
+            DB::raw('YEAR(cp_monthly_reports.month) as year'),
+            DB::raw('QUARTER(cp_monthly_reports.month) as quarter'),
+            DB::raw('SUM(cp_monthly_reports.non_lost_time_accident) as total_nlta'),
+            DB::raw('SUM(cp_monthly_reports.non_fatal_lost_time_accident) as total_lta_nf'),
+            DB::raw('SUM(cp_monthly_reports.fatal_lost_time_accident) as total_lta_f'),
+            DB::raw('SUM(COALESCE(cp_monthly_reports.nflt_days_lost, 0) + COALESCE(cp_monthly_reports.flt_days_lost, 0)) as total_days_lost'),
+            DB::raw('SUM(cp_monthly_reports.man_hours) as total_manhours'),
+            DB::raw('SUM(cp_monthly_reports.male_workers) as total_male'),
+            DB::raw('SUM(cp_monthly_reports.female_workers) as total_female'),
+            DB::raw('GROUP_CONCAT(DISTINCT monthly_deseases.desease SEPARATOR ", ") as diseases'),
+            DB::raw('SUM(monthly_deseases.no_of_cases) as total_cases')
+        )
+        ->leftJoin('monthly_deseases', 'cp_monthly_reports.id', '=', 'monthly_deseases.report_id')
+        ->whereYear('cp_monthly_reports.month', $this->selectedYear)
+        ->groupBy('cp_monthly_reports.user_id', 'cp_monthly_reports.permit_number', 'year', 'quarter')
+        ->with('user')
+        ->get();
 
         $result = [];
 
         foreach ($reports as $report) {
             $mineOperator = $report->user->company_name ?? 'N/A';
-            $tenement = $report->user->contact_num ?? 'N/A';
+            $tenement = $report->permit_number ?? 'N/A';
             $quarterName = $this->getQuarterName($report->quarter);
 
             if (!isset($result[$mineOperator])) {

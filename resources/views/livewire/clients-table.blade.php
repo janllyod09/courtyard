@@ -152,13 +152,13 @@
                                                     @foreach ($clients as $client)
                                                         <tr class="text-neutral-800 dark:text-neutral-200">
                                                             <td class="px-2 py-2 flex justify-center items-center">
-                                                                <div class="flex justify-center items-center cursor-pointer" style="width: 50px; height: 50px" wire:click='toggleViewClient({{ $client->id }})'>
+                                                                <div class="flex justify-center items-center cursor-pointer" style="width: 50px; height: 50px" wire:click="toggleViewClient({{ $client->id }}, '{{ $client->permit_number }}')">
                                                                     @if ($client->profile_photo_path)
                                                                         <img src="{{ route('profile-photo.file', ['filename' => basename($client->profile_photo_path)]) }}" 
                                                                                 alt="{{ Auth::user()->name }}" 
-                                                                                class="w-full h-full rounded-full hover:grayscale">
+                                                                                class="w-full h-full rounded-full hover:grayscale" style="pointer-events:none">
                                                                     @else
-                                                                        <img class="w-full h-full rounded-full hover:grayscale" src="{{ asset('images/blank-profile.png') }}" alt="">
+                                                                        <img class="w-full h-full rounded-full hover:grayscale" src="{{ asset('images/blank-profile.png') }}" alt=""  style="pointer-events:none">
                                                                     @endif
                                                                 </div>
                                                             </td>
@@ -172,7 +172,7 @@
                                                                 {{ $client->email }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
-                                                                {{ $client->contact_num }}
+                                                                {{ $client->permit_number }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap uppercase">
                                                                 {{ $client->mining_type }}
@@ -184,7 +184,7 @@
                                                                 {{ $client->permit_type }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
-                                                                {{ $client->permit_location }}
+                                                                {{ $client->location }}
                                                             </td>
                                                             {{-- <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                                 <div class="relative">
@@ -230,7 +230,6 @@
     {{-- View Client Modal --}}
     <x-modal id="clientModal" maxWidth="md" wire:model="clientId" centered>
         <div class="p-4">
-         
             <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
                 @if ($selectedClient->profile_photo_path)
                     <img src="{{ route('profile-photo.file', ['filename' => basename($selectedClient->profile_photo_path)]) }}" 
@@ -248,7 +247,7 @@
 
             <div class="text-sm">
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $selectedClient->contact_num }}</span></p>
+                    <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $selectedClient->permit_number  }}</span></p>
                 </div>
                 
                 <div>
@@ -268,7 +267,7 @@
                 </div>
                 
                 <div>
-                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ $selectedClient->permit_location }}</span></p> 
+                    <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ $selectedClient->location }}</span></p> 
                 </div>
             </div>
 

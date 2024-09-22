@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Exports\ClientsExport;
+use App\Models\Permits;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
@@ -16,16 +17,19 @@ class ClientsTable extends Component
     public $search;
     public $clientId;
     public $selectedClient;
+    public $permitNum;
 
     public function mount(){
         $this->selectedClient = Auth::user();
     }
 
     public function render(){
-        $clients = User::where('user_role', 'client')
+        $clients = User::where('users.user_role', 'client')
             ->when($this->search, function ($query) {
                 return $query->search(trim($this->search));
             })
+            ->join('permits', 'permits.user_id', 'users.id')
+            ->select('users.*', 'permits.permit_number', 'permits.location','permits.product','permits.permit_type','permits.mining_type',)
             ->paginate(10);
 
         return view('livewire.clients-table', [
@@ -50,13 +54,15 @@ class ClientsTable extends Component
         }
     }
 
-    public function toggleViewClient($id){
+    public function toggleViewClient($id, $permit){
         $this->clientId = $id;
-        $this->selectedClient = User::findOrFail($id);
+        $this->selectedClient = User::where('users.id', $id)
+                ->join('permits', 'permits.user_id', 'users.id')
+                ->where('permits.permit_number', $permit)
+                ->first();
     }
 
     public function resetVariables(){
         $this->clientId = null;
-        $this->selectedClient = Auth::user();
     }
 }

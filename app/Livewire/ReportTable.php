@@ -9,6 +9,7 @@ use App\Models\FatalLostTimeAccidents;
 use App\Models\MonthlyDeseases;
 use App\Models\NonFatalLostTimeAccidents;
 use App\Models\NonLostTimeAccidents;
+use App\Models\Permits;
 use App\Models\QuarterlyEmergencyDrillReports;
 use App\Models\User;
 use Carbon\Carbon;
@@ -32,6 +33,7 @@ class ReportTable extends Component
     public $encoder;
     public $company;
     public $permitNumber;
+    public $permitNumbers = [];
     public $serviceContractor;
     public $unsafeAct;
     public $manHours;
@@ -92,7 +94,7 @@ class ReportTable extends Component
         $user = Auth::user();
         $this->encoder = $user->name;
         $this->company = $user->company_name;
-        $this->permitNumber = $user->contact_num;
+        $this->permitNumbers = Permits::where('user_id', $user->id)->select('permit_number')->get();
 
         $reports = CpMonthlyReports::query()
                     ->when($this->date, function ($query) {
@@ -367,7 +369,8 @@ class ReportTable extends Component
                     'manHours' => 'required',
                     'maleWorkers' => 'required',
                     'femaleWorkers' => 'required',
-                    'serviceContractors' => 'required'
+                    'serviceContractors' => 'required',
+                    'permitNumber' => 'required',
                 ]);
                 $this->currentStep += 1;
                 break;
@@ -467,6 +470,7 @@ class ReportTable extends Component
 
             $report = CpMonthlyReports::create([
                 'user_id' => $user->id,
+                'permit_number' => $this->permitNumber,
                 'month' => $thisMonth,
                 'date_encoded' => now(),
                 'man_hours' => $this->manHours,

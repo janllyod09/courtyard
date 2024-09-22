@@ -166,6 +166,9 @@ x-cloak
                                                 {{ Auth::user()->user_role === 'admin' ? 'Company Name' : 'Month' }}
                                             </th>
                                             <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
+                                                Permit Number
+                                            </th>
+                                            <th scope="col" class="px-5 py-3 font-medium text-left uppercase">
                                                 Date Encoded
                                             </th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">
@@ -206,6 +209,9 @@ x-cloak
                                                     @else
                                                         {{ \Carbon\Carbon::parse($report->month)->format('F') }}, {{ \Carbon\Carbon::parse($report->month)->format('Y') }}
                                                     @endif
+                                                </td>
+                                                <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                    {{ $report->permit_number }}
                                                 </td>
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                     @php
@@ -359,8 +365,13 @@ x-cloak
                                             <input type="text" id="company" wire:model='company' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
                                         </div>
                                         <div class="col-span-full sm:col-span-1">
-                                            <label for="permitNumber" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number</label>
-                                            <input type="text" id="permitNumber" wire:model='permitNumber' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" readonly>
+                                            <label for="permitNumber" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number <span class="text-red-500">*</span></label>
+                                            <select name="permitNumber" id="permitNumber" wire:model='permitNumber' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" required>
+                                                <option value="">Select permit number</option>
+                                                @foreach ($permitNumbers as $permit)
+                                                    <option value="{{ $permit->permit_number }}">{{ $permit->permit_number }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
 

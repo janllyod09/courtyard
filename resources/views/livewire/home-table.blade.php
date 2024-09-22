@@ -48,28 +48,34 @@ x-data="{
             }
         @endphp
 
-        <div>
-            <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="font-bold">{{ $client->contact_num }}</span></p>
-        </div>
-        
-        <div>
-            <p class="ml-0 sm:ml-4">Mining Type: 
-                <span class="font-bold uppercase">
-                    {{ $client->mining_type }}
-                </span>
-            </p>
-        </div>
-        
-        <div>
-            <p class="ml-0 sm:ml-4">Product: <span class="font-bold">{{ implode(', ', safeJsonDecode($client->product)) }}</span></p> 
-        </div>
-        
-        <div>
-            <p class="ml-0 sm:ml-4">Permit Type: <span class="font-bold uppercase">{{ $client->permit_type }}</span></p> 
-        </div>
-        
-        <div>
-            <p class="ml-0 sm:ml-4">Permit Location: <span class="font-bold">{{ $client->permit_location }}</span></p> 
+        <div class="w-full grid grid-cols-4 gap-4 mt-4">
+            @foreach ($permits as $index => $permit)
+                <div class="col-span-full sm:col-span-1">
+                    <div>
+                        <p class="ml-0 sm:ml-4">Permit/Contract No.: <span class="text-gray-800 dark:text-gray-100 font-bold">{{ $permit->permit_number }}</span></p>
+                    </div>
+                    
+                    <div>
+                        <p class="ml-0 sm:ml-4">Mining Type: 
+                            <span class="text-gray-800 dark:text-gray-100 font-bold uppercase">
+                                {{ $permit->mining_type }}
+                            </span>
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <p class="ml-0 sm:ml-4">Product: <span class="text-gray-800 dark:text-gray-100 font-bold">{{ implode(', ', safeJsonDecode($permit->product)) }}</span></p> 
+                    </div>
+                    
+                    <div>
+                        <p class="ml-0 sm:ml-4">Permit Type: <span class="text-gray-800 dark:text-gray-100 font-bold uppercase">{{ $permit->permit_type }}</span></p> 
+                    </div>
+                    
+                    <div>
+                        <p class="ml-0 sm:ml-4">Permit Location: <span class="text-gray-800 dark:text-gray-100 font-bold">{{ $permit->location }}</span></p> 
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 
@@ -105,7 +111,7 @@ x-data="{
                     @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="mb-6">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-slate-400" for="email">
                             Email Address:
@@ -115,177 +121,122 @@ x-data="{
                             class="w-full mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
                         @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
+                </div>
+
+                <div class="mb-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-slate-400" for="contact_num">
-                            Permit/Contract Number:
+                        <label class="block text-sm font-medium text-gray-700 dark:text-slate-400" for="registrant_name">
+                            Pangalan ng Naghrehistro (Name of Registrant):
                             <span class="text-red-600">*</span>
                         </label>
-                        <input type="text" id="contact_num" wire:model.live="contactNum"
+                        <input type="text" id="registrant_name" wire:model.live="registrantName"
                             class="w-full mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                        @error('contactNum') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        @error('registrantName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
-                <!-- Permit and Contract Details -->
-                <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-slate-400">
-                            Uri ng Pagmimina (Type of Mining):
-                            <span class="text-red-600">*</span>
-                        </label>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="miningType" name="miningType" value="surface quarry" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Surface o Quarry</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="miningType" name="miningType" value="underground" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Underground</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="miningType" name="miningType" value="seabed" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Seabed</label>
+                @foreach ($thisPermits as $index => $permit)
+                    <fieldset class="border border-gray-300 rounded-md p-2 mb-2 bg-gray-50 dark:bg-gray-600">
+                        <div class="mb-6 grid grid-cols-1 gap-4">
+                            <div>
+                                <label class="text-sm text-gray-700 dark:text-gray-100 font-bold" for="permit_number_{{ $index }}">
+                                    Permit/Contract Number:
+                                    <span class="text-red-600">*</span>
+                                </label>
+                                <input type="text" id="permit_number_{{ $index }}" wire:model="thisPermits.{{ $index }}.permit_number"
+                                    class="w-full h-12 px-4 py-2 text-black dark:text-white border rounded-lg appearance-none bg-chalk dark:bg-gray-700 border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm">
+                                @error("thisPermits.{$index}.permit_number") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
-                        @error('miningType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-slate-400">
-                            Uri ng Permit o Kontrata (Permit Type):
-                            <span class="text-red-600">*</span>
-                        </label>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="ep" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">EP</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="isag" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">ISAG</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="mpp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">MPP</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="mpsa" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">MPSA</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="patent" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Patent</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="qp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">QP</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitType" name="permitType" value="smp" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">SMP</label>
-                            </div>
-                        </div>
-                        @error('permitType') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
-                </div>
-                
-                <!-- Location and Commodities -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-slate-400">Lokasyon ng Permit o Kontrata (Location):
-                        <span class="text-red-600">*</span>
-                    </label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- First column for locations -->
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Cavite" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Cavite</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Laguna" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Laguna</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Batangas" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Batangas</label>
-                            </div>
-                        </div>
-                        <!-- Second column for locations -->
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Rizal" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Rizal</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="radio" wire:model.live="permitLocation" name="permitLocation" value="Quezon" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Quezon</label>
-                            </div>
-                        </div>
-                    </div>
-                    @error('permitLocation') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-slate-400">Produkto (Commodity):
-                        <span class="text-red-600">*</span>
-                    </label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Aggregates" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Aggregates</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Filling Materials" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Filling Materials</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Pozzolan" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Pozzolan</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Silica" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Silica</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Boulders (Marble)" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Boulders (Marble)</label>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Sand and Gravel" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Sand and Gravel</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Shale" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Shale</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Volcanic Tuff" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Volcanic Tuff</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Boulders" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Boulders</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" wire:model.live="product" value="Marine Aggregates" class="fw-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-50 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label class="block text-sm font-medium text-gray-700 dark:text-slate-400 ml-2">Marine Aggregates</label>
-                            </div>
-                        </div>
-                    </div>
-                    @error('product') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>           
 
-                <!-- Registrant Information -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-slate-400" for="registrant_name">
-                        Pangalan ng Naghrehistro (Name of Registrant):
-                        <span class="text-red-600">*</span>
-                    </label>
-                    <input type="text" id="registrant_name" wire:model.live="registrantName"
-                        class="w-full mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
-                    @error('registrantName') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                        <!-- Mining Type -->
+                        <div class="mb-6">
+                            <label class="text-sm text-gray-700 dark:text-gray-100 font-bold">
+                                Uri ng Pagmimina (Type of Mining):
+                                <span class="text-red-600">*</span>
+                            </label>
+                            <div class="space-y-2">
+                                @foreach(['surface o quarry' => 'Surface o Quarry', 'underground' => 'Underground', 'seabed' => 'Seabed'] as $value => $label)
+                                    <div class="flex items-center">
+                                        <input type="radio" wire:model="thisPermits.{{ $index }}.mining_type" value="{{ $value }}" 
+                                            class="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded-full focus:ring-blue-500">
+                                        <label class="text-sm text-gray-700 dark:text-gray-100 ml-2">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error("thisPermits.{$index}.mining_type") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Permit Type -->
+                        <div class="mb-6">
+                            <label class="text-sm text-gray-700 dark:text-gray-100 font-bold">
+                                Uri ng Permit o Kontrata (Permit Type):
+                                <span class="text-red-600">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach(['ep' => 'EP', 'isag' => 'ISAG', 'mpp' => 'MPP', 'mpsa' => 'MPSA', 'patent' => 'Patent', 'gsqp' => 'GSQP', 'qp' => 'QP', 'smp' => 'SMP'] as $value => $label)
+                                    <div class="flex items-center">
+                                        <input type="radio" wire:model="thisPermits.{{ $index }}.permit_type" value="{{ $value }}" 
+                                            class="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded-full focus:ring-blue-500">
+                                        <label class="text-sm text-gray-700 dark:text-gray-100 ml-2">{{ $label }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error("thisPermits.{$index}.permit_type") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Location -->
+                        <div class="mb-6">
+                            <label class="text-sm text-gray-700 dark:text-gray-100 font-bold">
+                                Lokasyon ng Permit o Kontrata (Location):
+                                <span class="text-red-600">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach(['Cavite', 'Laguna', 'Batangas', 'Rizal', 'Quezon'] as $location)
+                                    <div class="flex items-center">
+                                        <input type="radio" wire:model="thisPermits.{{ $index }}.location" value="{{ $location }}" 
+                                            class="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded-full focus:ring-blue-500">
+                                        <label class="text-sm text-gray-700 dark:text-gray-100 ml-2">{{ $location }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error("thisPermits.{$index}.location") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        <!-- Product -->
+                        <div class="mb-6">
+                            <label class="text-sm text-gray-700 dark:text-gray-100 font-bold">
+                                Produkto (Commodity):
+                                <span class="text-red-600">*</span>
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                @foreach(['Aggregates', 'Filling Materials', 'Pozzolan', 'Silica', 'Boulders (Marble)', 'Sand and Gravel', 'Shale', 'Volcanic Tuff', 'Boulders', 'Marine Aggregates'] as $product)
+                                    <div class="flex items-center">
+                                        <input type="checkbox" wire:model="thisPermits.{{ $index }}.product" value="{{ $product }}" 
+                                            class="h-4 w-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500">
+                                        <label class="text-sm text-gray-700 dark:text-gray-100 ml-2">{{ $product }}</label>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @error("thisPermits.{$index}.product") <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+
+                        @if (count($thisPermits) != 1)
+                            <div class="flex justify-end">
+                                <p wire:click="removePermit({{ $index }})"
+                                class="inline-flex items-center text-sm justify-center w-full h-8 cursor-pointer gap-3 px-5 py-3 font-medium text-gray-700 hover:text-white bg-red-300 rounded-md hover:bg-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                                    Tangalin and permit (Remove permit)
+                                </p>
+                            </div>
+                        @endif
+                    </fieldset>
+                @endforeach
+                <div class="flex justify-end mb-6">
+                    <p wire:click='addPermit'
+                    class="inline-flex items-center text-sm justify-center w-full h-8 cursor-pointer gap-3 px-5 py-3 font-medium text-white bg-blue-700 rounded-md hover:bg-blue-500 focus:ring-2 focus:ring-offset-2 focus:ring-black">
+                        Magdagdag pa ng permit (Add permit)
+                    </p>
+                </div>         
 
                 {{-- Save and Cancel buttons --}}
                 <div class="mt-4 flex justify-end col-span-2 sm:col-span-2 text-sm">
