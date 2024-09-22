@@ -49,4 +49,3 @@ Route::get('/profile-photo/{filename}', function ($filename) {
 
     return response($file, 200)->header('Content-Type', $type);
 })->name('profile-photo.file');
-

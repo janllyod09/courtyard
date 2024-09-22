@@ -152,7 +152,9 @@
                                                     @foreach ($clients as $client)
                                                         <tr class="text-neutral-800 dark:text-neutral-200">
                                                             <td class="px-2 py-2 flex justify-center items-center">
-                                                                <div class="flex justify-center items-center cursor-pointer" style="width: 50px; height: 50px" wire:click="toggleViewClient({{ $client->id }}, '{{ $client->permit_number }}')">
+                                                                <div class="flex justify-center items-center cursor-pointer" style="width: 50px; height: 50px" 
+                                                                {{-- wire:click="toggleViewClient({{ $client->id }}, '{{ $client->permit_number }}')" --}}
+                                                                >
                                                                     @if ($client->profile_photo_path)
                                                                         <img src="{{ route('profile-photo.file', ['filename' => basename($client->profile_photo_path)]) }}" 
                                                                                 alt="{{ Auth::user()->name }}" 
