@@ -143,9 +143,9 @@
                                                         <th scope="col" class="px-5 py-3 text-sm font-medium text-center uppercase">
                                                             Permit Location
                                                         </th>
-                                                        {{-- <th class="px-5 py-3 text-gray-100 text-sm font-medium text-center uppercase sticky right-0 z-10 bg-gray-600 dark:bg-gray-600">
+                                                        <th class="px-5 py-3 text-gray-100 text-sm font-medium text-center uppercase sticky right-0 z-10 bg-gray-600 dark:bg-gray-600">
                                                             Action
-                                                        </th> --}}
+                                                        </th>
                                                     </tr>
                                                 </thead>
                                                 <tbody class="divide-y divide-neutral-200 dark:divide-gray-400">
@@ -188,21 +188,21 @@
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
                                                                 {{ $client->location }}
                                                             </td>
-                                                            {{-- <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
+                                                            <td class="px-5 py-4 text-sm font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
                                                                 <div class="relative">
-                                                                    <button wire:click="toggleEditRole({{ $client->id }})" 
+                                                                    {{-- <button wire:click="toggleEditRole({{ $client->id }})" 
                                                                         class="peer inline-flex items-center justify-center px-4 py-2
                                                                         text-sm font-medium tracking-wide text-blue-500 hover:text-blue-600 
                                                                         focus:outline-none" title="View">
                                                                         <i class="bi bi-eye-fill"></i>
-                                                                    </button>
+                                                                    </button> --}}
                                                                     <button wire:click="toggleDelete({{ $client->id }}, 'role')" 
                                                                         class=" text-red-600 hover:text-red-900 dark:text-red-600 
                                                                         dark:hover:text-red-900" title="Delete">
                                                                         <i class="fas fa-trash"></i>
                                                                     </button>
                                                                 </div>
-                                                            </td> --}}
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>
@@ -276,4 +276,35 @@
         </div>
     </x-modal>
 
+    {{-- Delete Modal --}}
+    <x-modal id="deleteModal" maxWidth="md" wire:model="deleteId" centered>
+        <div class="p-4">
+            <div class="mb-4 text-slate-900 dark:text-gray-100 font-bold">
+                Confirm Deletion
+                <button @click="show = false" class="float-right focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <label class="block text-sm font-medium text-gray-700 dark:text-slate-300">
+                Are you sure you want to delete this client?
+            </label>
+            <form wire:submit.prevent='deleteData'>
+                <div class="mt-4 flex justify-end col-span-1 sm:col-span-1">
+                    <button class="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        <div wire:loading wire:target="deleteData" style="margin-bottom: 5px;">
+                            <div class="spinner-border small text-primary" role="status">
+                            </div>
+                        </div>
+                        Delete
+                    </button>
+                    <p @click="show = false" class="bg-gray-400 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                        Cancel
+                    </p>
+                </div>
+            </form>
+
+        </div>
+    </x-modal>
 </div>
+

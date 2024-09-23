@@ -447,13 +447,13 @@ class ReportTable extends Component
                 ->whereYear('month', $thisMonth->year)
                 ->first();
 
-            if ($hasMonthReport && !$this->editReportId) {
-                $this->dispatch('swal', [
-                    'title' => 'May report kana para sa buwan na ito (You already have a report for this month)',
-                    'icon' => 'error'
-                ]);
-                return;
-            }
+            // if ($hasMonthReport && !$this->editReportId) {
+            //     $this->dispatch('swal', [
+            //         'title' => 'May report kana para sa buwan na ito (You already have a report for this month)',
+            //         'icon' => 'error'
+            //     ]);
+            //     return;
+            // }
 
             DB::beginTransaction();
 

@@ -225,7 +225,7 @@ x-data="{
                             <div class="flex justify-end">
                                 <p wire:click="removePermit({{ $index }})"
                                 class="inline-flex items-center text-sm justify-center w-full h-8 cursor-pointer gap-3 px-5 py-3 font-medium text-gray-700 hover:text-white bg-red-300 rounded-md hover:bg-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                                    Tangalin and permit (Remove permit)
+                                    Tangalin ang permit (Remove permit)
                                 </p>
                             </div>
                         @endif

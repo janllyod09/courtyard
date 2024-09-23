@@ -18,6 +18,7 @@ class ClientsTable extends Component
     public $clientId;
     public $selectedClient;
     public $permitNum;
+    public $deleteId;
 
     public function mount(){
         $this->selectedClient = Auth::user();
@@ -63,7 +64,34 @@ class ClientsTable extends Component
                 ->first();
     }
 
+    public function toggleDelete($userId){
+        $this->deleteId = $userId;
+    }
+
+    public function deleteData(){
+        try {
+            $user = User::where('id', $this->deleteId)->first();
+            if ($user) {
+                $user->delete();
+                $message = "Client deleted successfully!";
+                $this->resetVariables();
+                $this->dispatch('swal', [
+                    'title' => $message,
+                    'icon' => 'success'
+                ]);            
+            }
+        } catch (Exception $e) {
+            $this->dispatch('swal', [
+                'title' => "Client deletion was unsuccessful!",
+                'icon' => 'error'
+            ]);
+            $this->resetVariables();
+            throw $e;
+        }
+    }
+
     public function resetVariables(){
         $this->clientId = null;
+        $this->deleteId = null;
     }
 }
