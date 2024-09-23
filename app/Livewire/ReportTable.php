@@ -299,7 +299,21 @@ class ReportTable extends Component
             $this->flta = $report->fatal_lost_time_accident;
             $this->nfltaDaysLost = $report->nflt_days_lost;
             $this->fltaDaysLost = $report->flt_days_lost;
-            $this->minutes = $report->minutes;
+            // $this->minutes = $report->minutes;
+            // if ($report->minutes) {
+            //     $storedPath = Storage::path($report->minutes);
+            //     $fileName = basename($storedPath);
+            //     $tmpFile = tempnam(sys_get_temp_dir(), 'minutes_');
+            //     copy($storedPath, $tmpFile);
+                
+            //     $this->minutes = new \Illuminate\Http\UploadedFile(
+            //         $tmpFile,
+            //         $fileName,
+            //         Storage::mimeType($report->minutes),
+            //         null,
+            //         true
+            //     );
+            // }
             $this->nltaPersons = $this->formatAccidentData($report->nonLostTimeAccidents);
             $this->nfltaPersons = $this->formatAccidentData($report->nonFatalLostTimeAccidents);
             $this->fltaPersons = $this->formatAccidentData($report->fatalLostTimeAccidents);

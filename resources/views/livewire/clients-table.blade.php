@@ -123,13 +123,13 @@
                                                             Company Name
                                                         </th>
                                                         <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
+                                                            Permit/Contract Number
+                                                        </th>
+                                                        <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
                                                             Registrant Name
                                                         </th>
                                                         <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
                                                             Email
-                                                        </th>
-                                                        <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
-                                                            Permit/Contract Number
                                                         </th>
                                                         <th scope="col" class="px-5 py-3 text-sm font-medium text-center uppercase">
                                                             Mining Type
@@ -167,14 +167,14 @@
                                                             <td class="px-5 py-4 text-left text-sm font-medium whitespace-nowrap">
                                                                 {{ $client->company_name }}
                                                             </td>
+                                                            <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
+                                                                {{ $client->permit_number }}
+                                                            </td>
                                                             <td class="px-5 py-4 text-left text-sm font-medium whitespace-nowrap">
                                                                 {{ $client->name }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
                                                                 {{ $client->email }}
-                                                            </td>
-                                                            <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
-                                                                {{ $client->permit_number }}
                                                             </td>
                                                             <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap uppercase">
                                                                 {{ $client->mining_type }}
