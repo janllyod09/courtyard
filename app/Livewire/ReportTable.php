@@ -314,6 +314,7 @@ class ReportTable extends Component
             //         true
             //     );
             // }
+            $this->permitNumber = $report->permit_number;
             $this->nltaPersons = $this->formatAccidentData($report->nonLostTimeAccidents);
             $this->nfltaPersons = $this->formatAccidentData($report->nonFatalLostTimeAccidents);
             $this->fltaPersons = $this->formatAccidentData($report->fatalLostTimeAccidents);
