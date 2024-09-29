@@ -13,6 +13,7 @@ class QuarterlyEmergencyDrillReports extends Model
 
     protected $fillable = [
         'user_id',
+        'permit_number',
         'year',
         'quarter',
         'date_uploaded',

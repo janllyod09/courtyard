@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('permit_number')->nullable();
             $table->integer('year')->nullable();
             $table->integer('quarter')->nullable();
             $table->date('date_uploaded')->nullable();

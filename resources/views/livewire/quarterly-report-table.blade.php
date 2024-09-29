@@ -105,16 +105,18 @@ x-cloak
                                 dark:text-gray-300 dark:bg-gray-800 sm:mb-0">
                 </div>
 
-                <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4">
-                    <div class="w-full sm:w-auto">
-                        <button wire:click='toggleCreateReport' 
-                            class="mt-4 sm:mt-1 px-2 py-1.5 bg-green-500 text-white rounded-md text-sm
-                            hover:bg-green-600 focus:outline-none dark:bg-gray-700 w-full
-                            dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white">
-                            Create Report
-                        </button>
+                @if(Auth::user()->user_role == 'client')
+                    <div class="w-full sm:w-2/3 flex flex-col sm:flex-row sm:justify-end sm:space-x-4">
+                        <div class="w-full sm:w-auto">
+                            <button wire:click='toggleCreateReport' 
+                                class="mt-4 sm:mt-1 px-2 py-1.5 bg-green-500 text-white rounded-md text-sm
+                                hover:bg-green-600 focus:outline-none dark:bg-gray-700 w-full
+                                dark:hover:bg-green-600 dark:text-gray-300 dark:hover:text-white">
+                                Create Report
+                            </button>
+                        </div>
                     </div>
-                </div>
+                @endif
 
             </div>
 
@@ -129,39 +131,80 @@ x-cloak
                                     <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl text-xs">
                                         <tr class="whitespace-nowrap">
                                             <th scope="col" class="px-5 py-3 font-medium text-left uppercase">Year</th>
+                                            @if(Auth::user()->user_role == 'admin')
+                                                <th scope="col" class="px-5 py-3 font-medium text-left uppercase">Company</th>
+                                            @endif
+                                            <th scope="col" class="px-5 py-3 font-medium text-left uppercase">Permit Number</th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">1st Quarter</th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">2nd Quarter</th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">3rd Quarter</th>
                                             <th scope="col" class="px-5 py-3 font-medium text-center uppercase">4th Quarter</th>
                                         </tr>
                                     </thead>
+
                                     <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-sm">
-                                        @forelse ($years as $yearItem)
-                                            <tr class="text-neutral-800 dark:text-neutral-200">
-                                                <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
-                                                    {{ $yearItem->year }}
-                                                </td>
-                                                @for ($quarter = 1; $quarter <= 4; $quarter++)
-                                                    <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
-                                                        @if (isset($reports[$yearItem->year][$quarter]))
-                                                            @php
-                                                                $report = $reports[$yearItem->year][$quarter]->first();
-                                                            @endphp
-                                                            <span class="text-gray-700 dark:text-gray-100">
-                                                                {{ $report->type_of_emergency_drill }}
-                                                            </span>
-                                                            <div>
-                                                                <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
-                                                                {{-- <i class="bi bi-file-earmark-arrow-down-fill text-sm text-green-500 cursor-pointer" title="Export"></i> --}}
-                                                            </div>
-                                                        @else
-                                                            <span class="text-gray-400 dark:text-gray-500">No Report</span> 
-                                                        @endif
+                                        @if(Auth::user()->user_role == 'client')
+                                            @forelse ($years as $yearItem)
+                                                <tr class="text-neutral-800 dark:text-neutral-200">
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                        {{ $yearItem->year }}
                                                     </td>
-                                                @endfor
-                                            </tr>
-                                        @empty
-                                        @endforelse
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->permit_number }}</td>
+                                                    @for ($quarter = 1; $quarter <= 4; $quarter++)
+                                                        <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                            @if (isset($reports[$yearItem->year][$quarter]))
+                                                                @php
+                                                                    $report = $reports[$yearItem->year][$quarter]->first();
+                                                                @endphp
+                                                                <span class="text-gray-700 dark:text-gray-100">
+                                                                    {{ $report->type_of_emergency_drill }}
+                                                                </span>
+                                                                <div>
+                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
+                                                                    {{-- <i class="bi bi-file-earmark-arrow-down-fill text-sm text-green-500 cursor-pointer" title="Export"></i> --}}
+                                                                </div>
+                                                            @else
+                                                                <span class="text-gray-400 dark:text-gray-500">No Report</span> 
+                                                            @endif
+                                                        </td>
+                                                    @endfor
+                                                </tr>
+                                            @empty
+                                            @endforelse
+                                        @else
+                                            @forelse ($years as $yearItem)
+                                                <tr class="text-neutral-800 dark:text-neutral-200">
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                        {{ $yearItem->year }}
+                                                    </td>
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->company_name }}</td>
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->permit_number }}</td>
+                                                    @for ($quarter = 1; $quarter <= 4; $quarter++)
+                                                        <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                            @if (isset($reports[$yearItem->year][$quarter]))
+                                                                @php
+                                                                    $report = $reports[$yearItem->year][$quarter]->first();
+                                                                @endphp
+                                                                <span class="text-gray-700 dark:text-gray-100">
+                                                                    {{ $report->type_of_emergency_drill }}
+                                                                </span>
+                                                                <div>
+                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
+                                                                </div>
+                                                            @else
+                                                                <span class="text-gray-400 dark:text-gray-500">No Report</span> 
+                                                            @endif
+                                                        </td>
+                                                    @endfor
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="7" class="px-5 py-4 text-center font-medium whitespace-nowrap">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @endif
                                     </tbody>
                                 </table>
 
@@ -240,12 +283,14 @@ x-cloak
 
                 {{-- Save and Cancel buttons --}}
                 <div class="mt-4 flex justify-end col-span-1 text-sm">
-                    <button class="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleEditReport({{ $reportId }})'>
-                        <span>Edit</span>
-                    </button>
-                    <button class="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleDelete({{ $reportId }})'>
-                        <span>Delete</span>
-                    </button>
+                    @if(Auth::user()->user_role == 'client')
+                        <button class="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleEditReport({{ $reportId }})'>
+                            <span>Edit</span>
+                        </button>
+                        <button class="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" wire:click='toggleDelete({{ $reportId }})'>
+                            <span>Delete</span>
+                        </button>
+                    @endif
                     {{-- <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" wire:click='exportReport'>
                         <div wire:loading wire:target="exportReport" style="margin-bottom: 5px;">
                             <div class="spinner-border small text-primary" role="status">
@@ -276,6 +321,19 @@ x-cloak
             <form wire:submit.prevent='saveReport'>
                 <div class="grid grid-cols-2 gap-4">
 
+                    <div class="col-span-full sm:col-span-1">
+                        <label for="permitNumber" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number <span class="text-red-500">*</span></label>
+                        <select name="permitNumber" id="permitNumber" wire:model='permitNumber' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md dark:text-gray-300 dark:bg-gray-700" required>
+                            <option value="">Select permit number</option>
+                            @foreach ($permitNumbers as $permit)
+                                <option value="{{ $permit->permit_number }}">{{ $permit->permit_number }}</option>
+                            @endforeach
+                        </select>
+                        @error('permitNumber')
+                            <span class="text-red-500 text-sm">The permit number is required!</span>
+                        @enderror
+                    </div>
+
                     <div class="col-span-2 sm:col-span-1">
                         <label for="yearReport" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Year <span class="text-red-500">*</span></label>
                         <input type="number" id="yearReport" wire:model='yearReport' 
@@ -300,7 +358,7 @@ x-cloak
                         @enderror
                     </div>
 
-                    <div class="col-span-2">
+                    <div class="col-span-2 sm:col-span-1">
                         <label for="drill" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Uri (Type of Emergency Drill Conducted) <span class="text-red-500">*</span></label>
                         <select name="drill" id="drill" wire:model.live='drill' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
                             <option value="">Select a Drill</option>

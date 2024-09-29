@@ -2,7 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Permits;
 use App\Models\QuarterlyEmergencyDrillReports;
+use App\Models\User;
 use Livewire\Component;
 use Carbon\Carbon;
 use Exception;
@@ -29,27 +31,54 @@ class QuarterlyReportTable extends Component
     public $reportId;
     public $deleteId;
     public $editReportId;
+    public $permitNumbers = [];
+    public $permitNumber;
     public $yearReport;
 
     public function render()
     {
         $user = Auth::user();
-        $years = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
-            ->select('year')
-            ->distinct()
-            ->when($this->year, function ($query) {
-                return $query->where('year', $this->year);
-            })
-            ->orderBy('year', 'desc')
-            ->paginate(10);
+        $years = collect();
+        $reports = collect();
 
-        $reports = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
-            ->whereIn('year', $years->pluck('year'))
-            ->get()
-            ->groupBy('year')
-            ->map(function ($yearReports) {
-                return $yearReports->groupBy('quarter');
-            });
+        if($user->user_role == 'client'){
+            $this->permitNumbers = Permits::where('user_id', $user->id)->select('permit_number')->get();
+            $years = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
+                ->select('year', 'permit_number')
+                ->distinct('year', 'permit_number')
+                ->when($this->year, function ($query) {
+                    return $query->where('year', $this->year);
+                })
+                ->orderBy('year', 'desc')
+                ->paginate(10);
+    
+            $reports = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
+                ->whereIn('year', $years->pluck('year'))
+                ->get()
+                ->groupBy('year')
+                ->map(function ($yearReports) {
+                    return $yearReports->groupBy('quarter');
+                });
+        }else{
+            $yearsQuery = User::join('quarterly_emergency_drill_reports', 'quarterly_emergency_drill_reports.user_id', 'users.id')
+                ->select('quarterly_emergency_drill_reports.year', 'users.company_name', 'quarterly_emergency_drill_reports.permit_number')
+                ->distinct('quarterly_emergency_drill_reports.year', 'users.company_name', 'quarterly_emergency_drill_reports.permit_number')
+                ->when($this->year, function ($query) {
+                    return $query->where('year', $this->year);
+                })
+                ->orderBy('year', 'desc');
+
+            $years = $yearsQuery->paginate(10);
+
+            $reportYears = $years->pluck('year')->unique();
+
+            $reports = QuarterlyEmergencyDrillReports::whereIn('year', $reportYears)
+                ->get()
+                ->groupBy('year')
+                ->map(function ($yearReports) {
+                    return $yearReports->groupBy('quarter');
+                });
+        }
 
         return view('livewire.quarterly-report-table', [
             'reports' => $reports,
@@ -69,6 +98,7 @@ class QuarterlyReportTable extends Component
                 'yearReport' => 'required',
                 'yearQuarter' => 'required',
                 'dateUploaded' => 'required',
+                'permitNumber' => 'required',
                 'drill' => 'required',
             ]);
 
@@ -94,6 +124,7 @@ class QuarterlyReportTable extends Component
 
             $report = QuarterlyEmergencyDrillReports::create([
                 'user_id' => $user->id,
+                'permit_number' => $this->permitNumber,
                 'year' => $this->yearReport,
                 'quarter' => $this->yearQuarter,
                 'date_uploaded' => now(),
@@ -178,5 +209,6 @@ class QuarterlyReportTable extends Component
         $this->deleteId = null;
         $this->editReportId = null;
         $this->yearReport = null;
+        $this->permitNumber = null;
     }
 }

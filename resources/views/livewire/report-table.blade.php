@@ -372,6 +372,9 @@ x-cloak
                                                     <option value="{{ $permit->permit_number }}">{{ $permit->permit_number }}</option>
                                                 @endforeach
                                             </select>
+                                            @error('permitNumber')
+                                                <span class="text-red-500 text-sm">The permit number is required!</span>
+                                            @enderror
                                         </div>
                                     </div>
 

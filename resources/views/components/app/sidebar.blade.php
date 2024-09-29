@@ -66,17 +66,36 @@
                         
                         <!-- Report Approval -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
-                            @if (in_array(Request::segment(1), ['monthly-report-approval'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['monthly-report-approval']) ? 1 : 0 }} }">
+                            @if (in_array(Request::segment(1), ['monthly-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['monthly-reports']) ? 1 : 0 }} }">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition 
-                            @if (Route::is('monthly-report-approval')) {{ '!text-blue-500' }} @endif"
-                                href="{{ route('monthly-report-approval') }}" wire:navigate>
+                            @if (Route::is('monthly-reports')) {{ '!text-blue-500' }} @endif"
+                                href="{{ route('monthly-reports') }}" wire:navigate>
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
                                         <i class="bi bi-journal-check text-slate-400 dark:text-slate-300 mr-3"></i>
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Report Approval
+                                            Monthly Reports
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        
+                        <!-- Report Approval -->
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
+                            @if (in_array(Request::segment(1), ['quarterly-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['quarterly-reports']) ? 1 : 0 }} }">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition 
+                            @if (Route::is('quarterly-reports')) {{ '!text-blue-500' }} @endif"
+                                href="{{ route('quarterly-reports') }}" wire:navigate>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i class="bi bi-calendar3 text-slate-400 dark:text-slate-300 mr-3"></i>
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Quarterly Reports
                                         </span>
                                     </div>
                                 </div>
