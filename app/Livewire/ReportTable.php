@@ -85,7 +85,7 @@ class ReportTable extends Component
 
         $user = Auth::user();
         if($user->user_role === 'admin'){
-            $this->date = now()->format('Y-m');
+            // $this->date = now()->format('Y-m');
         }
         $this->thisYear = 2024;
     }
