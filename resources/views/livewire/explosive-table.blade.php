@@ -58,7 +58,7 @@
                         <td class="px-4 py-2 text-center">{{ $consumption['mine_operator'] }}</td>
                         <td class="px-4 py-2 text-center">
                             @foreach ($consumption['permit_no'] as $item)
-                                {{ $item->permit_number }}
+                                {{ $item->permit_number }} <br>
                             @endforeach
                         </td>
                         <td class="px-4 py-2 text-center">{{ $consumption['blasting_contractor'] }}</td>
