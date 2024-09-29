@@ -43,7 +43,7 @@ class ExplosiveTable extends Component
 
             return [
                 'mine_operator' => $user ? $user->company_name : 'N/A',
-                'permit_no' => $user ? $user->permits->permit_number : 'N/A',
+                'permit_no' => $user ? $user->permits()->get() : 'N/A',
                 'blasting_contractor' => $consumption->blasting_contractor,
                 'dynamite' => $consumption->dynamite,
                 'detonating_cord' => $consumption->detonating_cord,

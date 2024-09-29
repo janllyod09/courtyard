@@ -59,7 +59,11 @@
                             <tr class="whitespace-nowrap">
                                 <td class="px-4 py-2 text-center">{{ $accident['accident_type'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $accident['mine_operator'] }}</td>
-                                <td class="px-4 py-2 text-center">{{ $accident['permit_no'] }}</td>
+                                <td class="px-4 py-2 text-center">
+                                    @foreach ($accident['permit_no'] as $item)  
+                                        {{ $item->permit_number }} <br>
+                                    @endforeach
+                                </td>
                                 <td class="px-4 py-2 text-center">{{ $accident['days_lost'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $accident['name'] }}</td>
                                 <td class="px-4 py-2 text-center">{{ $accident['gender'] }}</td>

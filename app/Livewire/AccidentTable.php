@@ -55,7 +55,7 @@ class AccidentTable extends Component
             return [
                 'accident_type' => $accidentType,
                 'mine_operator' => $user ? $user->company_name : 'N/A',
-                'permit_no' => $user ? $user->permits->permit_number : 'N/A',
+                'permit_no' => $user ? $user->permits()->get() : 'N/A',
                 'days_lost' => $this->getDaysLost($accidentType, $cpMonthlyReport),
                 'name' => $accident->name,
                 'gender' => $accident->gender,

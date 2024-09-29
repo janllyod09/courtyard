@@ -56,7 +56,11 @@
                     @foreach($consumptions as $consumption)
                     <tr class="whitespace-nowrap">
                         <td class="px-4 py-2 text-center">{{ $consumption['mine_operator'] }}</td>
-                        <td class="px-4 py-2 text-center">{{ $consumption['permit_no'] }}</td>
+                        <td class="px-4 py-2 text-center">
+                            @foreach ($consumption['permit_no'] as $item)
+                                {{ $item->permit_number }}
+                            @endforeach
+                        </td>
                         <td class="px-4 py-2 text-center">{{ $consumption['blasting_contractor'] }}</td>
                         <td class="px-4 py-2 text-center">{{ $consumption['dynamite'] }}</td>
                         <td class="px-4 py-2 text-center">{{ $consumption['detonating_cord'] }}</td>
