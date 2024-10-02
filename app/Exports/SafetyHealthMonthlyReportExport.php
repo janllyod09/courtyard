@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\CpMonthlyReports;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -18,9 +19,26 @@ class SafetyHealthMonthlyReportExport implements WithEvents
 
     protected $filters;
     protected $currentRow;
+    protected $allReports;
+    protected $specificReport;
 
     public function __construct($filters){
         $this->filters = $filters;
+        $this->specificReport = $filters['report'];
+        $this->fetchAllReports();
+    }
+
+    protected function fetchAllReports()
+    {
+        $year = Carbon::parse($this->specificReport->month)->year;
+        $this->allReports = CpMonthlyReports::with(['nonLostTimeAccidents', 'nonFatalLostTimeAccidents', 'fatalLostTimeAccidents', 'monthlyDeseases'])
+            ->where('user_id', $this->specificReport->user_id)
+            ->whereYear('month', $year)
+            ->orderBy('month')
+            ->get()
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->month)->format('F');
+            });
     }
 
     public function registerEvents(): array{
@@ -116,381 +134,68 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         ]);
     }
 
-    private function monthlyData($sheet){
-        $formatDate = function($value) {
-            $date = Carbon::parse($value)->format('m/d/Y');
-            return $date;
-        };
-
+    private function monthlyData($sheet)
+    {
         $this->currentRow = 5;
         $firstRow = $this->currentRow;
-        $report = $this->filters['report'];
-
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Date Encoded');
-        $sheet->getStyle("P{$this->currentRow}")
+    
+        $dataPoints = [
+            'Date Encoded' => 'date_encoded',
+            'Non-Lost Time Accident' => 'non_lost_time_accident',
+            'Lost Time Accident (Non-Fatal)' => 'non_fatal_lost_time_accident',
+            'Lost Time Accident (Fatal)' => 'fatal_lost_time_accident',
+            'Days Lost' => ['nflt_days_lost', 'flt_days_lost'],
+            'Manhours Worked' => 'man_hours',
+            'Number of Employees' => ['male_workers', 'female_workers'],
+            'Minutes of CSHC Meetings' => 'minutes'
+        ];
+    
+        foreach ($dataPoints as $label => $field) {
+            $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
+            $sheet->setCellValue("A{$this->currentRow}", $label);
+    
+            $cumulativeValue = 0;
+            foreach (['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'] as $index => $month) {
+                $cellAddress = chr(68 + $index) . $this->currentRow;
+                $report = $this->allReports[$month] ?? null;
+    
+                if ($report) {
+                    if (is_array($field)) {
+                        $value = array_sum(array_map(function($f) use ($report) {
+                            return $report->$f;
+                        }, $field));
+                    } else {
+                        $value = $field === 'minutes' ? basename($report->$field) : $report->$field;
+                    }
+    
+                    $sheet->setCellValue($cellAddress, $value);
+    
+                    if ($report->id === $this->specificReport->id) {
+                        $sheet->getStyle($cellAddress)->getFont()->setBold(true);
+                    }
+    
+                    // Update cumulative calculation
+                    if ($field !== 'minutes' && $field !== 'date_encoded' && $label !== 'Number of Employees') {
+                        $cumulativeValue += $value;
+                    }
+                }
+            }
+    
+            // Set cumulative value and cell styling
+            if ($field !== 'minutes' && $field !== 'date_encoded' && $label !== 'Number of Employees') {
+                $sheet->setCellValue("P{$this->currentRow}", $cumulativeValue);
+            } else {
+                $sheet->getStyle("P{$this->currentRow}")
                     ->getFill()
                     ->setFillType(Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('595959');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $formatDate($report->date_encoded));
-                break;
-            default:
-                break;
+            }
+    
+            $this->currentRow++;
         }
-                    
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Non-Lost Time Accident');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->non_lost_time_accident);
-                break;
-            default:
-                break;
-        }
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Lost Time Accident (Non-Fatal)');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->non_fatal_lost_time_accident);
-                break;
-            default:
-                break;
-        }
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Lost Time Accident (Fatal)');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->fatal_lost_time_accident);
-                break;
-            default:
-                break;
-        }
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Days Lost');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->nflt_days_lost + $report->flt_days_lost);
-                break;
-            default:
-                break;
-        }
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Manhours Worked');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->man_hours);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->man_hours);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->man_hours);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->man_hours);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->man_hours);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->man_hours);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->man_hours);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->man_hours);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->man_hours);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->man_hours);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->man_hours);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->man_hours);
-                break;
-            default:
-                break;
-        }
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Number of Employees');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", $report->male_workers + $report->female_workers);
-                break;
-            default:
-                break;
-        }
-        $sheet->getStyle("P{$this->currentRow}")
-                    ->getFill()
-                    ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('595959');
-
-        $this->currentRow ++;
-        $sheet->mergeCells("A{$this->currentRow}:C{$this->currentRow}");
-        $sheet->setCellValue("A{$this->currentRow}", 'Minutes of CSHC Meetings');
-        switch($this->filters['month']) {
-            case 'January':
-                $sheet->setCellValue("D{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'February':
-                $sheet->setCellValue("E{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'March':
-                $sheet->setCellValue("F{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'April':
-                $sheet->setCellValue("G{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'May':
-                $sheet->setCellValue("H{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'June':
-                $sheet->setCellValue("I{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'July':
-                $sheet->setCellValue("J{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'August':
-                $sheet->setCellValue("K{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'September':
-                $sheet->setCellValue("L{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'October':
-                $sheet->setCellValue("M{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'November':
-                $sheet->setCellValue("N{$this->currentRow}", basename($report->minutes));
-                break;
-            case 'December':
-                $sheet->setCellValue("O{$this->currentRow}", basename($report->minutes));
-                break;
-            default:
-                break;
-        }
-        $sheet->getStyle("P{$this->currentRow}")
-                    ->getFill()
-                    ->setFillType(Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('595959');
-
-        $lastRow = $this->currentRow;
-
+    
+        $lastRow = $this->currentRow - 1;
+    
         $sheet->getStyle("D{$firstRow}:P{$lastRow}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         $sheet->getStyle("D{$firstRow}:P{$lastRow}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
         $sheet->getStyle("A{$firstRow}:P{$lastRow}")->applyFromArray([

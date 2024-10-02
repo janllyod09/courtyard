@@ -32,7 +32,7 @@
 
     <!-- Welcome Message -->
     <h1 class="text-3xl text-slate-800 font-bold mb-6 animate-slide-in-left">
-        {{ __('Welcome back!') }}
+        {{ __('The Mine SHOP') }}
     </h1>
 
     @if (session('status'))

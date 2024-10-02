@@ -201,7 +201,7 @@ x-cloak
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-neutral-200 dark:divide-gray-400 text-sm">
-                                        @foreach ($reports as $report)
+                                        @foreach ($reports as $index => $report)
                                             <tr class="text-neutral-800 dark:text-neutral-200">
                                                 <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                     @if(Auth::user()->user_role === 'admin')
@@ -267,28 +267,30 @@ x-cloak
                                                     @endif
                                                 </td>
                                                 <td class="px-5 py-4 text-center font-medium whitespace-nowrap sm:sticky sm:right-20 sm:z-10 bg-white dark:bg-gray-800">
-                                                    <div class="relative" @click.outside="$wire.set('reportStatusId', null)">
+                                                    <div class="relative">
                                                         @if($report->status)
                                                             <span class="text-xs text-white bg-green-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-green-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Recieved</span>
                                                         @else
                                                             <span class="text-xs text-white bg-orange-500 rounded-lg py-1.5 px-4 {{ Auth::user()->user_role === 'admin' ? 'cursor-pointer hover:bg-orange-600' : '' }}" wire:click='toggleEditReportStatus({{ $report->id }})'>Pending</span>
                                                         @endif
-                                                        <div class="block absolute bottom-2 right-16 rounded-md border border-gray-400 bg-white dark:bg-gray-800 shadow-4xl px-4 py-2 {{ $reportStatusId ? '' : 'hidden' }}">
-                                                            <div class="flex items-center">
-                                                                <input class="" type="radio" name="status" id="status" value="1" wire:model='reportStatus'>
-                                                                <label class="ml-2" for="status">Recieved</label>
-                                                                <p class="w-16 bg-green-500 hover:bg-green-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click='saveReportStatus'>
-                                                                    Save
-                                                                </p>
+                                                        @if($reportStatusId && $reportStatusId == $report->id)
+                                                            <div class="block absolute bottom-2 right-16 rounded-md border border-gray-400 bg-white dark:bg-gray-800 shadow-4xl px-4 py-2">
+                                                                <div class="flex items-center">
+                                                                    <input class="" type="radio" name="status" id="status" value="1" wire:model='reportStatus'>
+                                                                    <label class="ml-2" for="status">Recieved</label>
+                                                                    <p class="w-16 bg-green-500 hover:bg-green-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click='saveReportStatus'>
+                                                                        Save
+                                                                    </p>
+                                                                </div>
+                                                                <div class="flex items-center mt-2">
+                                                                    <input class="" type="radio" name="status" id="status" value="0" wire:model="reportStatus">
+                                                                    <label class="ml-2" for="status">Pending&nbsp;&nbsp;</label>
+                                                                    <p class="w-16 bg-gray-500 hover:bg-gray-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click="$set('reportStatusId', null)">
+                                                                        Cancel
+                                                                    </p>
+                                                                </div>
                                                             </div>
-                                                            <div class="flex items-center mt-2">
-                                                                <input class="" type="radio" name="status" id="status" value="0" wire:model="reportStatus">
-                                                                <label class="ml-2" for="status">Pending&nbsp;&nbsp;</label>
-                                                                <p class="w-16 bg-gray-500 hover:bg-gray-600 text-white text-sm ml-4 rounded-md cursor-pointer" wire:click="$set('reportStatusId', null)">
-                                                                    Cancel
-                                                                </p>
-                                                            </div>
-                                                        </div>
+                                                        @endif
                                                     </div>
                                                 </td>
                                                 <td class="px-5 py-4 font-medium text-center whitespace-nowrap sticky right-0 z-10 bg-white dark:bg-gray-800">
