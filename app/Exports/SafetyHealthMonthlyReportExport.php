@@ -22,6 +22,8 @@ class SafetyHealthMonthlyReportExport implements WithEvents
     protected $allReports;
     protected $specificReport;
 
+    protected $cumulative = [];
+
     public function __construct($filters){
         $this->filters = $filters;
         $this->specificReport = $filters['report'];
@@ -33,6 +35,7 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         $year = Carbon::parse($this->specificReport->month)->year;
         $this->allReports = CpMonthlyReports::with(['nonLostTimeAccidents', 'nonFatalLostTimeAccidents', 'fatalLostTimeAccidents', 'monthlyDeseases'])
             ->where('user_id', $this->specificReport->user_id)
+            ->where('permit_number', $this->specificReport->permit_number)
             ->whereYear('month', $year)
             ->orderBy('month')
             ->get()
@@ -109,7 +112,8 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         $sheet->mergeCells('A2:P2');
         $sheet->setCellValue('A2', "SAFETY AND HEALTH REPORT FOR THE MONTH OF " .  strtoupper($this->filters['monthYear']));
         $sheet->mergeCells('A3:P3');
-        $sheet->setCellValue('A3', $this->filters['client'] ? 'Company: ' . $this->filters['client']->company_name : '' );
+        // $sheet->setCellValue('A3', $this->filters['client'] ? 'Company: ' . $this->filters['client']->company_name : '' );
+        $sheet->setCellValue('A3', 'Permit No.: ' . $this->specificReport->permit_number);
 
         // Apply some basic styling
         $sheet->getStyle('A1:P3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
@@ -177,6 +181,7 @@ class SafetyHealthMonthlyReportExport implements WithEvents
                     // Update cumulative calculation
                     if ($field !== 'minutes' && $field !== 'date_encoded' && $label !== 'Number of Employees') {
                         $cumulativeValue += $value;
+                        $this->cumulative[$label] = $cumulativeValue;
                     }
                 }
             }
@@ -345,6 +350,15 @@ class SafetyHealthMonthlyReportExport implements WithEvents
         $sheet->setCellValue("E{$row}", "No. of Cases");
         $sheet->mergeCells("F{$row}:H{$row}");
         $sheet->setCellValue("F{$row}", "Treatment");
+        
+        // Frequency
+        $sheet->mergeCells("K{$row}:L{$row}");
+        $sheet->setCellValue("K{$row}", "Frequency Rate");
+        $sheet->mergeCells("M{$row}:N{$row}");
+        $sheet->setCellValue("M{$row}", "Severity Rate");
+        $sheet->mergeCells("O{$row}:P{$row}");
+        $sheet->setCellValue("O{$row}", "Incindent Rate");
+
 
         $sheet->getRowDimension($row)->setRowHeight(20); 
         $sheet->getStyle("A{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
@@ -364,12 +378,59 @@ class SafetyHealthMonthlyReportExport implements WithEvents
             ],
         ]);
 
+        $sheet->getStyle("K{$row}:P{$row}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle("K{$row}:P{$row}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle("K{$row}:P{$row}")->getFont()->setBold(true);
+        $sheet->getStyle("K{$row}:P{$row}")->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'], // Black color
+                ],
+            ],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'color' => ['argb' => 'FFC1F0C8'], // Light green background
+            ],
+        ]);
+
         $this->getDeseases($sheet, $row);
     }
 
     private function getDeseases($sheet, $row){
         $this->currentRow = $row + 1;
         $injuredPersonnel = $this->filters['injuredPersonnel'];
+
+        // Frequency
+        $frequencyRate = ($this->cumulative['Lost Time Accident (Non-Fatal)'] + 
+                          $this->cumulative['Lost Time Accident (Fatal)']) / 
+                          $this->cumulative['Manhours Worked'] * 1000000;
+
+        $severityRate = $this->cumulative['Days Lost'] / 
+                        $this->cumulative['Manhours Worked'] * 1000000;
+
+        $incidentRate = ($this->cumulative['Non-Lost Time Accident'] + 
+                        $this->cumulative['Lost Time Accident (Non-Fatal)'] +
+                        $this->cumulative['Lost Time Accident (Fatal)']) * 200000 / 
+                        $this->cumulative['Manhours Worked'];
+
+        $sheet->mergeCells("K{$this->currentRow}:L{$this->currentRow}");
+        $sheet->setCellValue("K{$this->currentRow}", number_format((float)$frequencyRate,2, '.', ','));
+        $sheet->mergeCells("M{$this->currentRow}:N{$this->currentRow}");
+        $sheet->setCellValue("M{$this->currentRow}", number_format((float)$severityRate,2, '.', ','));
+        $sheet->mergeCells("O{$this->currentRow}:P{$this->currentRow}");
+        $sheet->setCellValue("O{$this->currentRow}", number_format((float)$incidentRate,2, '.', ','));
+
+        $sheet->getStyle('K' . $this->currentRow . ':P' . $this->currentRow)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('K' . $this->currentRow . ':P' . $this->currentRow)->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+        $sheet->getStyle('K' . $this->currentRow . ':P' . $this->currentRow)->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ]);
 
         // Process deseases
         foreach ($injuredPersonnel['monthlyDeseases'] as $desease) {

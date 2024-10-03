@@ -663,6 +663,7 @@ class ReportTable extends Component
 
                 $quarterlyEmergencyReports = QuarterlyEmergencyDrillReports::where('user_id', $userId)
                                         ->where('year', $thisMonth->format('Y'))
+                                        ->where('permit_number', $report->permit_number)
                                         ->get();
                 $filters = [
                     'monthYear' => $monthYear,
