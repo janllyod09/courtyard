@@ -34,6 +34,7 @@ class QuarterlyReportTable extends Component
     public $permitNumbers = [];
     public $permitNumber;
     public $yearReport;
+    public $submitAble = true;
 
     public function render()
     {
@@ -78,6 +79,14 @@ class QuarterlyReportTable extends Component
                 ->map(function ($yearReports) {
                     return $yearReports->groupBy('quarter');
                 });
+        }
+
+        if ($this->reportFile && !is_string($this->reportFile)){
+            if ($this->reportFile->isValid()) {
+                $this->submitAble = true;
+            }else{
+                $this->submitAble = false;
+            }
         }
 
         return view('livewire.quarterly-report-table', [

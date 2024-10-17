@@ -396,7 +396,7 @@ x-cloak
 
                     {{-- Save and Cancel buttons --}}
                     <div class="mt-4 flex justify-end col-span-2 sm:col-span-2 text-sm">
-                        <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" {{ $submitAble ?: 'disabled' }}>
                             <div wire:loading wire:target="saveReport" style="margin-bottom: 5px;">
                                 <div class="spinner-border small text-primary" role="status">
                                 </div>
