@@ -113,6 +113,7 @@ class QuarterlyReportTable extends Component
             }
 
             $thisReport = QuarterlyEmergencyDrillReports::where('year', $this->yearReport)
+                        ->where('permit_number', $this->permitNumber)
                         ->where('quarter', $this->yearQuarter)
                         ->first();
 
