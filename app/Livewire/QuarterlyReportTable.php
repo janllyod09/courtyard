@@ -114,7 +114,7 @@ class QuarterlyReportTable extends Component
                         ->where('quarter', $this->yearQuarter)
                         ->first();
 
-            if ($thisReport && !$this->editReportId && !$this->editReport) {
+            if ($thisReport && $this->addReport) {
                 $this->dispatch('swal', [
                     'title' => 'May report kana para sa quarter na ito (You already have a report for this quarter)',
                     'icon' => 'error'

@@ -338,7 +338,7 @@ x-cloak
                         <label for="yearReport" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Year <span class="text-red-500">*</span></label>
                         <input type="number" id="yearReport" wire:model='yearReport' 
                         min="1900" max="{{ date('Y') }}" step="1"
-                        class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                        class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700" {{ $addReport ? '' : 'readonly' }}>
                         @error('yearReport')
                             <span class="text-red-500 text-sm">The year is required!</span>
                         @enderror
@@ -346,7 +346,7 @@ x-cloak
 
                     <div class="col-span-2 sm:col-span-1">
                         <label for="yearQuarter" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Reporting for Quarter <span class="text-red-500">*</span></label>
-                        <select name="yearQuarter" id="yearQuarter" wire:model='yearQuarter' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700">
+                        <select name="yearQuarter" id="yearQuarter" wire:model='yearQuarter' class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700" {{ $addReport ? '' : 'disabled' }}>
                             <option value="">Select Quarter</option>
                             <option value="1">1st Quarter</option>
                             <option value="2">2nd Quarter</option>
