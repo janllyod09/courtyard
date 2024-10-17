@@ -206,6 +206,7 @@ class QuarterlyReportTable extends Component
         $report = QuarterlyEmergencyDrillReports::findOrFail($this->deleteId);
         $report->delete();
         $this->deleteId = null;
+        $this->resetVariables();
         $this->dispatch('swal', [
             'title' => 'Tagumpay na nabura (Deleted successfully)',
             'icon' => 'success'

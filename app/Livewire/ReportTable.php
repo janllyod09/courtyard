@@ -718,6 +718,7 @@ class ReportTable extends Component
         $report = CpMonthlyReports::findOrFail($this->deleteId);
         $report->delete();
         $this->deleteId = null;
+        $this->resetVariables();
         $this->dispatch('swal', [
             'title' => 'Tagumpay na nabura (Deleted successfully)',
             'icon' => 'success'
