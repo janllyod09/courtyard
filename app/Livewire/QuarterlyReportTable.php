@@ -105,9 +105,11 @@ class QuarterlyReportTable extends Component
             $user = Auth::user();
 
             $reportFilePath = null;
-            if($this->reportFile){
+            if ($this->reportFile && !is_string($this->reportFile)) {
                 $fileName = $this->reportFile->getClientOriginalName();
                 $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
+            } elseif (is_string($this->reportFile)) {
+                $reportFilePath = $this->reportFile;
             }
 
             $thisReport = QuarterlyEmergencyDrillReports::where('year', $this->yearReport)

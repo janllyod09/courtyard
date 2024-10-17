@@ -478,9 +478,11 @@ class ReportTable extends Component
             }
 
             $minutesPath = null;
-            if($this->minutes){
+            if ($this->minutes && !is_string($this->minutes)) {
                 $fileName = $this->minutes->getClientOriginalName();
-                $minutesPath = $this->minutes->storeAs('public/upload/minutes', $fileName); 
+                $minutesPath = $this->minutes->storeAs('public/upload/minutes', $fileName);
+            } elseif (is_string($this->minutes)) {
+                $minutesPath = $this->minutes;
             }
 
             $report = CpMonthlyReports::create([
