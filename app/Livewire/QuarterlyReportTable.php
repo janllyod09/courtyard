@@ -122,7 +122,7 @@ class QuarterlyReportTable extends Component
                 return;
             }
 
-            if($this->editReport){
+            if(!$this->addReport){
                 $report = QuarterlyEmergencyDrillReports::where('id', $this->reportId)->first();
                 $report->update([
                     'permit_number' => $this->permitNumber,
