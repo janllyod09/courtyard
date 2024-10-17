@@ -114,7 +114,7 @@ class QuarterlyReportTable extends Component
                         ->where('quarter', $this->yearQuarter)
                         ->first();
 
-            if ($thisReport && !$this->editReportId) {
+            if ($thisReport && !$this->editReportId && !$this->editReport) {
                 $this->dispatch('swal', [
                     'title' => 'May report kana para sa quarter na ito (You already have a report for this quarter)',
                     'icon' => 'error'
@@ -122,15 +122,27 @@ class QuarterlyReportTable extends Component
                 return;
             }
 
-            $report = QuarterlyEmergencyDrillReports::create([
-                'user_id' => $user->id,
-                'permit_number' => $this->permitNumber,
-                'year' => $this->yearReport,
-                'quarter' => $this->yearQuarter,
-                'date_uploaded' => now(),
-                'type_of_emergency_drill' => $this->drill,
-                'report' => $reportFilePath,
-            ]);
+            if($this->editReport){
+                $report = QuarterlyEmergencyDrillReports::where('id', $this->reportId)->first();
+                $report->update([
+                    'permit_number' => $this->permitNumber,
+                    'year' => $this->yearReport,
+                    'quarter' => $this->yearQuarter,
+                    'date_uploaded' => now(),
+                    'type_of_emergency_drill' => $this->drill,
+                    'report' => $reportFilePath,
+                ]);
+            }else{
+                $report = QuarterlyEmergencyDrillReports::create([
+                    'user_id' => $user->id,
+                    'permit_number' => $this->permitNumber,
+                    'year' => $this->yearReport,
+                    'quarter' => $this->yearQuarter,
+                    'date_uploaded' => now(),
+                    'type_of_emergency_drill' => $this->drill,
+                    'report' => $reportFilePath,
+                ]);
+            }
 
             $this->resetVariables();
             $this->dispatch('swal', [
@@ -175,6 +187,8 @@ class QuarterlyReportTable extends Component
 
     public function toggleEditReport($id){
         $report = QuarterlyEmergencyDrillReports::findOrFail($id);
+        $this->reportId = $id;
+        $this->permitNumber = $report->permit_number;
         $this->editReport = true;
         $this->yearReport = $report->year;
         $this->yearQuarter =  $report->quarter;
