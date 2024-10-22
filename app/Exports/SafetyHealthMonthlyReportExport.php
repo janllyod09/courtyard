@@ -533,19 +533,25 @@ class SafetyHealthMonthlyReportExport implements WithEvents
                         $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
                         break;
                     case 2:
+                        $oldData = $data;
                         $data++;
                         $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
                         $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        $data = $oldData;
                         break;
                     case 3:
+                        $oldData = $data;
                         $data+=2;
                         $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
                         $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        $data = $oldData;
                         break;
                     case 4:
+                        $oldData = $data;
                         $data+=3;
                         $sheet->setCellValue("C{$data}", $report->type_of_emergency_drill);
                         $sheet->setCellValue("G{$data}", $formatDate($report->date_uploaded));
+                        $data = $oldData;
                         break;
                     default:
                         break;
