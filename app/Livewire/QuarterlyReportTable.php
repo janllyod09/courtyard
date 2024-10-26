@@ -35,6 +35,8 @@ class QuarterlyReportTable extends Component
     public $permitNumber;
     public $yearReport;
     public $submitAble = true;
+    public $thisYear;
+    public $thisPermitNumber;
 
     public function render()
     {
@@ -56,28 +58,43 @@ class QuarterlyReportTable extends Component
             $reports = QuarterlyEmergencyDrillReports::where('user_id', $user->id)
                 ->whereIn('year', $years->pluck('year'))
                 ->get()
-                ->groupBy('year')
-                ->map(function ($yearReports) {
-                    return $yearReports->groupBy('quarter');
+                ->groupBy('permit_number') // First group by permit_number
+                ->map(function ($permitReports) {
+                    return $permitReports->groupBy('year') // Then group by year
+                        ->map(function ($yearReports) {
+                            return $yearReports->groupBy('quarter'); // Finally group by quarter
+                        });
                 });
-        }else{
+        } else {
             $yearsQuery = User::join('quarterly_emergency_drill_reports', 'quarterly_emergency_drill_reports.user_id', 'users.id')
-                ->select('quarterly_emergency_drill_reports.year', 'users.company_name', 'quarterly_emergency_drill_reports.permit_number')
-                ->distinct('quarterly_emergency_drill_reports.year', 'users.company_name', 'quarterly_emergency_drill_reports.permit_number')
+                ->select(
+                    'quarterly_emergency_drill_reports.year', 
+                    'users.company_name', 
+                    'quarterly_emergency_drill_reports.permit_number',
+                )
+                ->distinct()
                 ->when($this->year, function ($query) {
                     return $query->where('year', $this->year);
                 })
                 ->orderBy('year', 'desc');
-
+        
             $years = $yearsQuery->paginate(10);
-
+        
             $reportYears = $years->pluck('year')->unique();
-
-            $reports = QuarterlyEmergencyDrillReports::whereIn('year', $reportYears)
+        
+            $reports = QuarterlyEmergencyDrillReports::join('users', 'quarterly_emergency_drill_reports.user_id', 'users.id')
+                ->select(
+                    'quarterly_emergency_drill_reports.*',  // This ensures we get all fields including id
+                    'users.company_name'
+                )
+                ->whereIn('year', $reportYears)
                 ->get()
-                ->groupBy('year')
-                ->map(function ($yearReports) {
-                    return $yearReports->groupBy('quarter');
+                ->groupBy('permit_number')
+                ->map(function ($permitReports) {
+                    return $permitReports->groupBy('year')
+                        ->map(function ($yearReports) {
+                            return $yearReports->groupBy('quarter');
+                        });
                 });
         }
 
@@ -115,8 +132,10 @@ class QuarterlyReportTable extends Component
 
             $reportFilePath = null;
             if ($this->reportFile && !is_string($this->reportFile)) {
-                $fileName = $this->reportFile->getClientOriginalName();
-                $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
+                if ($this->reportFile->isValid()) {
+                    $fileName = $this->reportFile->getClientOriginalName();
+                    $reportFilePath = $this->reportFile->storeAs('public/upload/drill-reports', $fileName);
+                }
             } elseif (is_string($this->reportFile)) {
                 $reportFilePath = $this->reportFile;
             }
@@ -173,11 +192,12 @@ class QuarterlyReportTable extends Component
         try{
             $report = QuarterlyEmergencyDrillReports::findOrFail($id);
             if($report){
+                $this->thisPermitNumber = $report->permit_number;
                 $this->dateUploaded = $report->date_uploaded;
                 $this->reportFile = $report->report;
                 $this->drill = $report->type_of_emergency_drill;
                 $this->yearQuarter = $report->quarter;
-                $this->year = $report->year;
+                $this->thisYear = $report->year;
             }
         }catch(Exception $e){
             throw $e;

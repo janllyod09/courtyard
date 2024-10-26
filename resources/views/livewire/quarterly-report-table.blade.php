@@ -149,19 +149,23 @@ x-cloak
                                                     <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                         {{ $yearItem->year }}
                                                     </td>
-                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->permit_number }}</td>
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                        {{ $yearItem->permit_number }}
+                                                    </td>
                                                     @for ($quarter = 1; $quarter <= 4; $quarter++)
                                                         <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
-                                                            @if (isset($reports[$yearItem->year][$quarter]))
+                                                            @if (isset($reports[$yearItem->permit_number][$yearItem->year][$quarter]))
                                                                 @php
-                                                                    $report = $reports[$yearItem->year][$quarter]->first();
+                                                                    $report = $reports[$yearItem->permit_number][$yearItem->year][$quarter]->first();
                                                                 @endphp
                                                                 <span class="text-gray-700 dark:text-gray-100">
                                                                     {{ $report->type_of_emergency_drill }}
                                                                 </span>
                                                                 <div>
-                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
-                                                                    {{-- <i class="bi bi-file-earmark-arrow-down-fill text-sm text-green-500 cursor-pointer" title="Export"></i> --}}
+                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" 
+                                                                    title="View" 
+                                                                    wire:click='viewReport({{ $report->id }})'>
+                                                                    </i>
                                                                 </div>
                                                             @else
                                                                 <span class="text-gray-400 dark:text-gray-500">No Report</span> 
@@ -177,19 +181,26 @@ x-cloak
                                                     <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
                                                         {{ $yearItem->year }}
                                                     </td>
-                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->company_name }}</td>
-                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">{{ $yearItem->permit_number }}</td>
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                        {{ $yearItem->company_name }}
+                                                    </td>
+                                                    <td class="px-5 py-4 text-left font-medium whitespace-nowrap">
+                                                        {{ $yearItem->permit_number }}
+                                                    </td>
                                                     @for ($quarter = 1; $quarter <= 4; $quarter++)
                                                         <td class="px-5 py-4 text-center font-medium whitespace-nowrap">
-                                                            @if (isset($reports[$yearItem->year][$quarter]))
+                                                            @if (isset($reports[$yearItem->permit_number][$yearItem->year][$quarter]))
                                                                 @php
-                                                                    $report = $reports[$yearItem->year][$quarter]->first();
+                                                                    $report = $reports[$yearItem->permit_number][$yearItem->year][$quarter]->first();
                                                                 @endphp
                                                                 <span class="text-gray-700 dark:text-gray-100">
                                                                     {{ $report->type_of_emergency_drill }}
                                                                 </span>
                                                                 <div>
-                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" title="View" wire:click='viewReport({{ $report->id }})'></i>
+                                                                    <i class="bi bi-eye-fill text-sm text-blue-500 cursor-pointer" 
+                                                                       title="View" 
+                                                                       wire:click='viewReport({{ $report->id }})'>
+                                                                    </i>
                                                                 </div>
                                                             @else
                                                                 <span class="text-gray-400 dark:text-gray-500">No Report</span> 
@@ -230,7 +241,7 @@ x-cloak
     <x-modal id="view" maxWidth="2xl" wire:model="viewThisReport" centered>
         <div class="p-4">
             <div class="bg-slate-800 rounded-t-lg mb-4 dark:bg-gray-200 p-4 text-gray-50 dark:text-slate-900 font-bold">
-                Emergency Drill Report for {{ $year }} 
+                Emergency Drill Report for {{ $thisYear }} 
                 @if($yearQuarter == 1)
                     1st Quarter
                 @elseif($yearQuarter == 2)
@@ -246,6 +257,11 @@ x-cloak
             </div>
 
             <div class="grid grid-cols-1 gap-4">
+
+                <div class="col-span-1">
+                    <label for="drill" class="text-sm block text-sm font-medium text-gray-700 dark:text-slate-400">Permit Number</label>
+                    <p class="mt-1 block w-full dark:text-gray-100">{{ $thisPermitNumber }}</p>
+                </div>
 
                 <div class="col-span-1">
                     <label for="drill" class="text-sm block text-sm font-medium text-gray-700 dark:text-slate-400">Uri (Type of Emergency Drill Conducted)</label>
@@ -377,9 +393,13 @@ x-cloak
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                        <label for="reportFile" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Report (PDF) <span class="text-red-500">*</span>
+                        <label for="reportFile" class="block text-sm font-medium text-gray-700 dark:text-slate-400">Report (PDF) 
+                            <span class="text-red-500">*</span>
+                            <span class="opacity-80" wire:loading wire:target="reportFile"> Uploading...</span>
                         </label>
-                        <input type="file" id="reportFile" wire:model="reportFile" class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700" accept="application/pdf">
+                        <input type="file" id="reportFile" wire:model="reportFile" 
+                        class="mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md  dark:text-gray-300 dark:bg-gray-700" 
+                        accept="application/pdf">
 
                         @error('reportFile')
                             <span class="text-red-500 text-sm">The report file is required!</span>
@@ -396,7 +416,10 @@ x-cloak
 
                     {{-- Save and Cancel buttons --}}
                     <div class="mt-4 flex justify-end col-span-2 sm:col-span-2 text-sm">
-                        <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" {{ $submitAble ?: 'disabled' }}>
+                        <button class="mr-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" 
+                            wire:loading.attr="disabled" 
+                            wire:loading.class="opacity-50 cursor-not-allowed"
+                            wire:target="reportFile, saveReport">
                             <div wire:loading wire:target="saveReport" style="margin-bottom: 5px;">
                                 <div class="spinner-border small text-primary" role="status">
                                 </div>
