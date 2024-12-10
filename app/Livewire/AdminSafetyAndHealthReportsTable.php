@@ -72,14 +72,17 @@ class AdminSafetyAndHealthReportsTable extends Component
         ->get();
 
         $result = [];
-
         foreach ($reports as $report) {
             $mineOperator = $report->user->company_name ?? 'N/A';
             $tenement = $report->permit_number ?? 'N/A';
             $quarterName = $this->getQuarterName($report->quarter);
 
-            if (!isset($result[$mineOperator])) {
-                $result[$mineOperator] = [
+            // Create a unique key for each company-permit combination
+            $key = $mineOperator . ' - ' . $tenement;
+
+            if (!isset($result[$key])) {
+                $result[$key] = [
+                    'Company' => $mineOperator,
                     'Tenement' => $tenement,
                     'First Quarter' => $this->getDefaultQuarterData(),
                     'Second Quarter' => $this->getDefaultQuarterData(),
@@ -88,7 +91,7 @@ class AdminSafetyAndHealthReportsTable extends Component
                 ];
             }
 
-            $result[$mineOperator][$quarterName] = [
+            $result[$key][$quarterName] = [
                 'NLTA' => $report->total_nlta,
                 'LTA-NF' => $report->total_lta_nf,
                 'LTA-F' => $report->total_lta_f,

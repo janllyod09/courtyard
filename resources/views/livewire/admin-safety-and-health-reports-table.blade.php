@@ -30,7 +30,7 @@
             <table class="min-w-full bg-white dark:bg-gray-800 overflow-hidden">
                 <thead class="bg-gray-200 dark:bg-gray-700 rounded-xl">
                     <tr class="whitespace-nowrap">
-                        <th class="px-4 py-2 text-center">Mine Operator</th>
+                        <th class="px-4 py-2 text-left">Mine Operator</th>
                         <th class="px-4 py-2 text-center">Tenement / Permit No.</th>
                         <th class="px-4 py-2 text-center">Quarter</th>
                         <th class="px-4 py-2 text-center">NLTA</th>
@@ -46,10 +46,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($reports as $mineOperator => $data)
+                    @foreach ($reports as $key => $data)
                     @foreach (['First Quarter', 'Second Quarter', 'Third Quarter', 'Fourth Quarter'] as $quarterName)
                     <tr class="whitespace-nowrap">
-                        <td class="px-4 py-2 text-center">{{ $mineOperator }}</td>
+                        <td class="px-4 py-2 text-left">{{ $data['Company'] }}</td>
                         <td class="px-4 py-2 text-center">{{ $data['Tenement'] }}</td>
                         <td class="px-4 py-2 text-center">{{ $quarterName }}</td>
                         <td class="px-4 py-2 text-center">{{ $data[$quarterName]['NLTA'] }}</td>
