@@ -24,13 +24,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'firstname',
+        'middlename',
+        'lastname',
         'email',
         'password',
         'user_role',
         'active_status',
-        'company_name',
-        'registrant_name',
         'profile_photo_path',
     ];
 
@@ -40,7 +40,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'name',
+        'firstname',
+        'middlename',
+        'lastname',
         'email',
         'password',
         'remember_token',
@@ -86,9 +88,9 @@ class User extends Authenticatable
     public function scopeSearch($query, $term){
         $term = "%$term%";
         $query->where(function ($query) use ($term) {
-            $query->where('users.name', 'like', $term)
-                ->orWhere('users.company_name', 'like', $term)
-                ->orWhere('users.registrant_name', 'like', $term);
+            $query->where('users.firstname', 'like', $term)
+                ->orWhere('users.middlename', 'like', $term)
+                ->orWhere('users.lastname', 'like', $term);
         });
     }
 

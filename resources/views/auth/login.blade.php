@@ -5,6 +5,7 @@
                 transform: translateX(-100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -32,7 +33,7 @@
 
     <!-- Welcome Message -->
     <h1 class="text-3xl text-slate-800 font-bold mb-6 animate-slide-in-left">
-        {{ __('The Mine SHOP') }}
+        {{ __('Homeowners Association Courtyard of Maia Alta, Inc.') }}
     </h1>
 
     @if (session('status'))
@@ -48,7 +49,8 @@
         <div class="space-y-4 w-full">
             <div>
                 <x-label for="email" value="{{ __('Email') }}" />
-                <x-input id="email" type="email" name="email" :value="old('email')" required autofocus class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm" />
+                <x-input id="email" type="email" name="email" :value="old('email')" required autofocus
+                    class="w-full h-12 px-4 py-2 text-black border rounded-lg appearance-none bg-chalk border-zinc-300 placeholder-zinc-300 focus:border-zinc-300 focus:outline-none focus:ring-zinc-300 sm:text-sm" />
             </div>
             <div class="relative w-full" x-data="{ show: false }">
                 <x-label for="password" value="{{ __('Password') }}" />
@@ -67,12 +69,8 @@
             <div class="flex items-center justify-between w-full mt-6">
                 <!-- Remember Me Checkbox -->
                 <div class="flex items-center">
-                    <input
-                        id="remember_me"
-                        type="checkbox"
-                        wire:model.defer="remember"
-                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                    />
+                    <input id="remember_me" type="checkbox" wire:model.defer="remember"
+                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
                     <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                         {{ __('Remember me') }}
                     </label>
@@ -80,7 +78,8 @@
 
                 <!-- Forgot Password Link -->
                 @if (Route::has('password.request'))
-                    <a class="text-sm underline hover:no-underline text-gray-900 dark:text-gray-300" href="{{ route('password.request') }}">
+                    <a class="text-sm underline hover:no-underline text-gray-900 dark:text-gray-300"
+                        href="{{ route('password.request') }}">
                         {{ __('Forgot Password?') }}
                     </a>
                 @endif
@@ -89,18 +88,18 @@
 
         <!-- Buttons Row -->
         <div class="flex items-center space-x-4 mt-6">
-            
+
             <x-button type="submit">
                 {{ __('Sign in') }}
             </x-button>
-            
-           
+
+
             <div class="ml-4">
-            <x-button>
-            <a href="{{ route('register') }}">
-                {{ __('Register') }}
-            </a>
-            </x-button>
+                <x-button>
+                    <a href="{{ route('register') }}">
+                        {{ __('Register') }}
+                    </a>
+                </x-button>
             </div>
         </div>
     </form>
