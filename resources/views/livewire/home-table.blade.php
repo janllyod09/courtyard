@@ -93,14 +93,33 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <a href="{{ Storage::url($user->property_title_path) }}" target="_blank"
-                                                    class="text-sky-800 dark:text-sky-600 hover:underline">
-                                                    Property Title
-                                                </a>
+                                                <div class="file-container fit-container">
+                                                    <!-- Display file name with extension -->
+                                                    <span>
+                                                        {{ pathinfo(Storage::url($user->property_title_path), PATHINFO_FILENAME) }}.
+                                                        {{ pathinfo(Storage::url($user->property_title_path), PATHINFO_EXTENSION) }}
+                                                    </span>
+                                                </div>
+                                                <div class="req-files-buttons">
+                                                    <!-- Download button -->
+                                                    <a href="{{ Storage::url($user->property_title_path) }}"
+                                                        class="text-sky-800 dark:text-sky-600 hover:underline" download>
+                                                        Download
+                                                    </a>
+                                                    <!-- View button for supported file types -->
+                                                    @if (in_array(pathinfo(Storage::url($user->property_title_path), PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
+                                                        <a href="{{ Storage::url($user->property_title_path) }}"
+                                                            target="_blank"
+                                                            class="text-sky-800 dark:text-sky-600 hover:underline">
+                                                            View
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
+
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->hoa_due_certificate_path)
                                                 <a href="{{ Storage::url($user->hoa_due_certificate_path) }}"
