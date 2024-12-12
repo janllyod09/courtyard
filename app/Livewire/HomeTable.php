@@ -39,23 +39,22 @@ class HomeTable extends Component
 
     public function submit()
     {
-        $this->validate([
-            'files.property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
-            'files.hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
-            'files.special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
-        ]);
+        // 'files.property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        // 'files.hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        // 'files.special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
+        $this->validate();
         $user = Auth::user();
 
         if ($user) {
             $user->update([
                 'position' => $this->position,
                 'qualification' => implode(',', $this->qualification),
-                'property_title_path' => $this->storeFile($this->files['property_title']),
-                'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
-                'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
-                'property_title_name' => $this->files['property_title']->getClientOriginalName(),
-                'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
-                'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
+                // 'property_title_path' => $this->storeFile($this->files['property_title']),
+                // 'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
+                // 'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
+                // 'property_title_name' => $this->files['property_title']->getClientOriginalName(),
+                // 'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
+                // 'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
             ]);
         }
 
@@ -301,6 +300,9 @@ class HomeTable extends Component
     {
         $this->validate([
             'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
 
         // Retrieve the logged-in user
@@ -312,6 +314,12 @@ class HomeTable extends Component
             // Update the user's record with the file path
             $user->update([
                 'upload_file_path' => $filePath,
+                'property_title_path' => $this->storeFile($this->files['property_title']),
+                'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
+                'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
+                'property_title_name' => $this->files['property_title']->getClientOriginalName(),
+                'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
+                'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
             ]);
 
             // Reset the file input field
@@ -324,6 +332,7 @@ class HomeTable extends Component
             ]);
 
             $this->closeUpload();
+            $this->resetForm();
         }
     }
 

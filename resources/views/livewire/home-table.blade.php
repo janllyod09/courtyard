@@ -265,8 +265,48 @@
                     </form>
                 </div>
 
+                <div class="bg-gray-800 dark:bg-gray-200 p-2 text-white flex justify-center rounded-b-lg border">
+                    <button wire:click="submit" role="status"
+                        class="btn bg-emerald-200 dark:bg-emerald-500 hover:bg-emerald-600 text-gray-800 dark:text-white whitespace-nowrap mx-2">
+                        Submit
+                    </button>
+                    <button wire:click="closeForm" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded mx-2">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </x-modal>
+
+        <x-modal id="uploadFile" maxWidth="xl" centered wire:model="uploadFile">
+            <div class="p-4">
+                <div class="bg-slate-800 rounded-t-lg dark:bg-gray-200 p-4 text-gray-50 dark:text-slate-900 font-bold">
+                    File Upload
+                </div>
+
                 {{-- Form fields --}}
                 <div class="border p-4 flex flex-col gap-6">
+                    <!-- File Upload Field -->
+                    <div class="flex flex-col">
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileUpload">
+                            Upload the Signed Certificate of Candidacy file
+                        </label>
+                        <input
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            wire:model="file" id="fileUpload" type="file">
+
+                        <button type="button" wire:click="removeFileUpload"
+                            class="mt-2 text-red-600 hover:underline">
+                            Remove File
+                        </button>
+
+                        @error('file')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div>
+
+                {{-- Form fields --}}
+                <div class="border p-4 flex flex-col gap-6 mb-4">
                     <!-- Property Title -->
                     <div class="flex flex-col">
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -316,47 +356,6 @@
                                 wire:click="removeFile('special_power_of_attorney')">Remove</button>
                         @endif
                         @error('files.special_power_of_attorney')
-                            <span class="text-red-500">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
-
-                <div class="bg-gray-800 dark:bg-gray-200 p-2 text-white flex justify-center rounded-b-lg border">
-                    <button wire:click="submit" role="status"
-                        class="btn bg-emerald-200 dark:bg-emerald-500 hover:bg-emerald-600 text-gray-800 dark:text-white whitespace-nowrap mx-2">
-                        Submit
-                    </button>
-                    <button wire:click="closeForm" class="mr-2 bg-gray-500 text-white px-4 py-2 rounded mx-2">
-                        Close
-                    </button>
-                </div>
-            </div>
-        </x-modal>
-
-        <x-modal id="uploadFile" maxWidth="xl" centered wire:model="uploadFile">
-            <div class="p-4">
-                <div class="bg-slate-800 rounded-t-lg dark:bg-gray-200 p-4 text-gray-50 dark:text-slate-900 font-bold">
-                    File Upload
-                </div>
-
-                {{-- Form fields --}}
-                <div class="border p-4 flex flex-col gap-6">
-                    <!-- File Upload Field -->
-                    <div class="flex flex-col">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileUpload">
-                            Upload the Signed Certificate of Candidacy file
-                        </label>
-                        <input
-                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                            wire:model="file" id="fileUpload" type="file">
-
-                        <button type="button" wire:click="removeFileUpload"
-                            class="mt-2 text-red-600 hover:underline">
-                            Remove File
-                        </button>
-
-                        @error('file')
                             <span class="text-red-500">{{ $message }}</span>
                         @enderror
                     </div>
