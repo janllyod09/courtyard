@@ -84,9 +84,8 @@ class HomeTable extends Component
     //     // Return the relative path to be stored in the database
     //     return 'attachments/' . $file->getClientOriginalName();
     // }
-    protected function storeFile($file)
-    {
-        return $file->store('uploads', 'public');
+    private function storeFile($file) {
+        return $file->move(public_path('attachments'), $file->getClientOriginalName());
     }
 
     public function removeFile($key)
