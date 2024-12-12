@@ -11,9 +11,10 @@
         <div class="flex justify-left mb-10 ml-1" style="width: 200px; height: 32px;">
             <!-- Logo -->
             <a class="flex items-center" href="{{ route('dashboard') }}">
-                <img class="mx-auto" src="/images/mgar-logo.png" alt="mgar logo" width="45">
+                <img class="mx-auto" src="/images/logo1.png" alt="mgar logo" width="45">
                 <span
-                    class="text-black dark:text-white ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">The Mine SHOP</span>
+                    class="text-black dark:text-white ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 text-center">HACMAI
+                    ELECTION 2025</span>
             </a>
         </div>
 
@@ -24,7 +25,6 @@
                     <!-- Admin Tabs ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     @if (Auth::user()->user_role === 'admin')
-
                         <!-- Dashboard -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['dashboard'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -63,7 +63,7 @@
                             </a>
                         </li>
 
-                        
+
                         <!-- Report Approval -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['monthly-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -82,7 +82,7 @@
                                 </div>
                             </a>
                         </li>
-                        
+
                         <!-- Report Approval -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['quarterly-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -102,7 +102,7 @@
                             </a>
                         </li>
 
-                        
+
                         <!-- Admin Reports -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['admin-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -121,7 +121,7 @@
                                 </div>
                             </a>
                         </li>
-                        
+
                         <!-- Monthly Reports -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['accident-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -140,7 +140,7 @@
                                 </div>
                             </a>
                         </li>
-                        
+
                         <!-- Explosive Reports -->
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['explosive-reports'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
@@ -159,13 +159,11 @@
                                 </div>
                             </a>
                         </li>
-
                     @endif
 
                     <!-- Client Tabs ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
 
                     @if (Auth::user()->user_role === 'client')
-
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['home'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['home']) ? 1 : 0 }} }">
@@ -177,13 +175,13 @@
                                         <i class="bi bi-house-fill text-slate-400 dark:text-slate-300 mr-3"></i>
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Home
+                                            Dashboard
                                         </span>
                                     </div>
                                 </div>
                             </a>
                         </li>
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
+                        {{-- <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 bg-[linear-gradient(135deg,var(--tw-gradient-stops))] 
                             @if (in_array(Request::segment(1), ['monthly-report'])) {{ 'bg-gray-200 dark:bg-slate-900' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['monthly-report']) ? 1 : 0 }} }">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition 
@@ -216,8 +214,7 @@
                                     </div>
                                 </div>
                             </a>
-                        </li>
-                        
+                        </li> --}}
                     @endif
 
                 </ul>
