@@ -77,13 +77,16 @@ class HomeTable extends Component
             return null;
         }
     
-        // Generate a unique filename with original extension
-        $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+        // Generate a unique filename while preserving the original extension
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $filename = pathinfo($originalName, PATHINFO_FILENAME);
+        
+        // Create a unique filename that includes the original filename
+        $uniqueFilename = $filename . '_' . uniqid() . '.' . $extension;
         
         // Store the file in the attachments directory
-        $path = $file->storeAs('attachments', $filename, 'public');
-        
-        return $path;
+        return $file->store('attachments', 'public');
     }
 
     public function removeFile($key)
