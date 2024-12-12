@@ -96,7 +96,7 @@
                                                 <a href="{{ asset('storage/' . $user->property_title_path) }}"
                                                     target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
-                                                    Property Title
+                                                    {{ $user->property_title_name }} {{-- This shows the original filename --}}
                                                 </a>
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
