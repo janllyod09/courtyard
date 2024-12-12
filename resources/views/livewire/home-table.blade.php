@@ -93,7 +93,8 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <a href="{{ Storage::url($user->property_title_path) }}" target="_blank"
+                                                <a href="{{ asset('storage/' . $user->property_title_path) }}"
+                                                    target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
                                                     Property Title
                                                 </a>
