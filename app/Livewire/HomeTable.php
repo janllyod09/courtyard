@@ -28,11 +28,8 @@ class HomeTable extends Component
     public $address;
     public $position;
     public $qualification = [];
-    // public $files = [];
+    public $files = [];
     public $file;
-    public $property_title;
-    public $hoa_due_certificate;
-    public $special_power_of_attorney;
 
     protected $rules = [
         'position' => 'required|string',
@@ -87,7 +84,6 @@ class HomeTable extends Component
         // Return the relative path to be stored in the database
         return 'attachments/' . $file->getClientOriginalName();
     }
-    
 
     public function removeFile($key)
     {
@@ -313,75 +309,43 @@ class HomeTable extends Component
         $this->uploadFile = false;
     }
 
-    // public function submitFile()
-    // {
-    //     $this->validate([
-    //         'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
-    //         'files.property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
-    //         'files.hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
-    //         'files.special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
-    //     ]);
-
-    //     // Retrieve the logged-in user
-    //     $user = auth()->user();
-
-    //     if ($this->file && $user) {
-    //         $filePath = $this->file->store('uploads', 'public');
-
-    //         // Update the user's record with the file path
-    //         $user->update([
-    //             'upload_file_path' => $filePath,
-    //             'property_title_path' => $this->storeFile($this->files['property_title']),
-    //             'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
-    //             'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
-    //             'property_title_name' => $this->files['property_title']->getClientOriginalName(),
-    //             'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
-    //             'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
-    //         ]);
-
-    //         // Reset the file input field
-    //         $this->file = null;
-
-    //         // Emit a success message
-    //         $this->dispatch('swal', [
-    //             'title' => "You have successfully uploaded the file!",
-    //             'icon' => 'success'
-    //         ]);
-
-    //         $this->closeUpload();
-    //         $this->resetForm();
-    //     }
-    // }
-    public function submitFiles()
+    public function submitFile()
     {
         $this->validate([
-            'property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
-            'hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
-            'special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'file' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.property_title' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.hoa_due_certificate' => 'required|file|mimes:pdf,jpg,png|max:2048',
+            'files.special_power_of_attorney' => 'required|file|mimes:pdf,jpg,png|max:2048',
         ]);
 
         // Retrieve the logged-in user
         $user = auth()->user();
 
-        if ($user) {
-            // Store files and update the user's record
+        if ($this->file && $user) {
+            $filePath = $this->file->store('uploads', 'public');
+
+            // Update the user's record with the file path
             $user->update([
-                'property_title_path' => $this->storeFile($this->property_title),
-                'hoa_due_certificate_path' => $this->storeFile($this->hoa_due_certificate),
-                'special_power_of_attorney_path' => $this->storeFile($this->special_power_of_attorney),
-                'property_title_name' => $this->property_title->getClientOriginalName(),
-                'hoa_due_certificate_name' => $this->hoa_due_certificate->getClientOriginalName(),
-                'special_power_of_attorney_name' => $this->special_power_of_attorney->getClientOriginalName(),
+                'upload_file_path' => $filePath,
+                'property_title_path' => $this->storeFile($this->files['property_title']),
+                'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
+                'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
+                'property_title_name' => $this->files['property_title']->getClientOriginalName(),
+                'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
+                'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
             ]);
 
-            // Reset file inputs
-            $this->reset(['property_title', 'hoa_due_certificate', 'special_power_of_attorney']);
+            // Reset the file input field
+            $this->file = null;
 
-            // Emit success message
+            // Emit a success message
             $this->dispatch('swal', [
-                'title' => "Files have been successfully uploaded!",
+                'title' => "You have successfully uploaded the file!",
                 'icon' => 'success'
             ]);
+
+            $this->closeUpload();
+            $this->resetForm();
         }
     }
 
