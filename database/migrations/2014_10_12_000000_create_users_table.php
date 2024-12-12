@@ -19,7 +19,7 @@ return new class extends Migration
                 $table->string('lastname');
                 $table->string('address')->nullable();
                 $table->string('position')->nullable();
-                $table->string('qualification')->nullable();
+                $table->string('qualification', 500)->nullable();
                 // $table->string('file_name')->nullable();
                 // $table->string('file_path')->nullable();
                 $table->string('property_title_path')->nullable();

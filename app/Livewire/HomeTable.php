@@ -181,36 +181,29 @@ class HomeTable extends Component
         ];
     
         try {
-            // Path to your PDF template
             $templatePath = storage_path('app/templates/Certificate-of-Candidacy-2022-to-2023.pdf');
     
-            // Create a new FPDI instance
             $pdf = new Fpdi();
     
-            // Add the template page
             $pdf->AddPage();
             $pdf->setSourceFile($templatePath);
             $templatePage = $pdf->importPage(1);
             $pdf->useTemplate($templatePage);
 
-            // Add centered title "CERTIFICATE OF CANDIDACY"
-            $pdf->SetFont('Helvetica', 'B', 24); // Bold, larger font
+            $pdf->SetFont('Helvetica', 'B', 24);
             $pageWidth = $pdf->GetPageWidth();
             $titleText = 'CERTIFICATE OF CANDIDACY';
             $titleWidth = $pdf->GetStringWidth($titleText);
             $centerX = ($pageWidth - $titleWidth) / 2;
-            $pdf->SetXY($centerX, 30); // Adjust Y value (20) as needed
+            $pdf->SetXY($centerX, 30);
             $pdf->Cell($titleWidth, 10, $titleText, 0, 1, 'C');
     
-            // Set font and position text
             $pdf->SetFont('Helvetica', '', 12);
     
-            // Add user data
-            $pdf->SetXY(25, 45); // Adjust position as needed
+            $pdf->SetXY(25, 45);
             $text = 'I, ' . $userData['fullname'] . ' of legal age and a resident of ' . $userData['address'] . " Courtyard of Maia Alta Dalig 2, Antipolo City Rizal is filing my candidacy to run on the below position (Choose only the most desired and suitable position):";
             $pdf->MultiCell(160, 7, $text, 0, 'J');
     
-            // List positions
             $positionOptions = [
                 'President', 'Vice President', 'Secretary', 'Treasurer', 'Auditor', 'Board of Director (1 of 3 Slots)'
             ];
@@ -248,22 +241,19 @@ class HomeTable extends Component
                 $yOffset = $pdf->GetY() + 2;
             }
 
-            $indent = 25; // Left alignment same as positions
-            $yOffset = $pdf->GetY() + 15; // Make sure to update the Y offset based on the last used position
+            $indent = 25;
+            $yOffset = $pdf->GetY() + 15;
 
-            // Add the user's name
             $pdf->SetXY($indent, $yOffset);
             $pdf->SetFont('Arial', 'U', 12); 
             $pdf->Cell(0, 6, "{$userData['name']}", 0, 1, 'L');
 
-            // Add 'Candidates Signature Over Printed Name' text
             $pdf->SetXY($indent, $pdf->GetY());
             $pdf->SetFont('Arial', '', 12);
             $pdf->Cell(0, 6, 'Candidates Signature Over Printed Name', 0, 1, 'L');
 
-            // Add 'to be signed during personal filing' text
             $pdf->SetXY($indent, $pdf->GetY());
-            $pdf->SetFont('Arial', 'I', 10); // Italic font for this text
+            $pdf->SetFont('Arial', 'I', 10);
             $pdf->Cell(0, 6, '(to be signed during personal filing / candidate presentation)', 0, 1, 'L');
 
 
@@ -282,7 +272,6 @@ class HomeTable extends Component
                 'icon' => 'success'
             ]);
     
-            // Force download
             return response()->download($filepath, $filename, [
                 'Content-Type' => 'application/pdf',
             ])->deleteFileAfterSend(true);
