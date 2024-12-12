@@ -93,8 +93,7 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <a href="{{ asset('storage/' . $user->property_title_path) }}"
-                                                    target="_blank"
+                                                <a href="{{ Storage::url($user->property_title_path) }}" target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
                                                     Property Title
                                                 </a>
@@ -104,7 +103,7 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->hoa_due_certificate_path)
-                                                <a href="{{ asset('storage/' . $user->hoa_due_certificate_path) }}"
+                                                <a href="{{ Storage::url($user->hoa_due_certificate_path) }}"
                                                     target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
                                                     HOA Due Certificate
@@ -115,7 +114,7 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->special_power_of_attorney_path)
-                                                <a href="{{ asset('storage/' . $user->special_power_of_attorney_path) }}"
+                                                <a href="{{ Storage::url($user->special_power_of_attorney_path) }}"
                                                     target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
                                                     Special Power of Attorney
@@ -124,6 +123,7 @@
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
+
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if (auth()->user()->upload_file_path)
                                                 <a href="{{ Storage::url(auth()->user()->upload_file_path) }}"
