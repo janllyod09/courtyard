@@ -93,10 +93,28 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <a href="{{ Storage::url($user->property_title_path) }}" target="_blank"
-                                                    class="text-sky-800 dark:text-sky-600 hover:underline">
-                                                    Property Title
-                                                </a>
+                                                <div class="file-container fit-container">
+                                                    <span>{{ pathinfo($user->property_title_path, PATHINFO_FILENAME) }}.{{ pathinfo($user->property_title_path, PATHINFO_EXTENSION) }}</span>
+                                                </div>
+                                                <div class="req-files-buttons">
+                                                    <a class="btn-submit"
+                                                        href="{{ asset('storage/' . $user->property_title_path) }}"
+                                                        download>
+                                                        <i class="bi bi-file-earmark-arrow-down"></i>
+                                                    </a>
+                                                    @php
+                                                        $extension = pathinfo(
+                                                            $user->property_title_path,
+                                                            PATHINFO_EXTENSION,
+                                                        );
+                                                    @endphp
+                                                    @if (in_array($extension, ['pdf', 'docx', 'txt', 'csv']))
+                                                        <a class="btn-submit" href="#"
+                                                            onclick="window.open('{{ asset('storage/' . $user->property_title_path) }}', '_blank')">
+                                                            <i class="bi bi-eye"></i>
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif

@@ -69,7 +69,15 @@ class HomeTable extends Component
 
     private function storeFile($file)
     {
-        return $file->storeAs('attachments', $file->getClientOriginalName(), 'public');
+        if (!$file) {
+            return null;
+        }
+    
+        // Generate a unique filename
+        $filename = uniqid() . '_' . $file->getClientOriginalName();
+        
+        // Store in public disk
+        return $file->storeAs('attachments', $filename, 'public');
     }
 
     public function removeFile($key)
