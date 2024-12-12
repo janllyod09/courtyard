@@ -84,25 +84,46 @@ class HomeTable extends Component
     //     // Return the relative path to be stored in the database
     //     return 'attachments/' . $file->getClientOriginalName();
     // }
-    private function storeFile($file) {
-        return $file->move(public_path('attachments'), $file->getClientOriginalName());
+
+    private function storeFile($file)
+    {
+        // Generate a unique filename to prevent overwriting
+        $filename = uniqid() . '_' . $file->getClientOriginalName();
+        return $file->storeAs('', $filename, 'public');
     }
 
     public function removeFile($key)
     {
         $user = Auth::user();
-    
+
         if ($user && isset($this->files[$key])) {
+            // Use public disk to delete the file
             Storage::disk('public')->delete($user->{$key . '_path'});
-    
+
             $user->update([
                 "{$key}_path" => null,
                 "{$key}_name" => null,
             ]);
-    
+
             unset($this->files[$key]);
         }
     }
+
+    // public function removeFile($key)
+    // {
+    //     $user = Auth::user();
+    
+    //     if ($user && isset($this->files[$key])) {
+    //         Storage::disk('public')->delete($user->{$key . '_path'});
+    
+    //         $user->update([
+    //             "{$key}_path" => null,
+    //             "{$key}_name" => null,
+    //         ]);
+    
+    //         unset($this->files[$key]);
+    //     }
+    // }
     
     protected $queryString = ['search'];
 

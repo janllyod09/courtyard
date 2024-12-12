@@ -94,28 +94,27 @@
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
                                                 Property Title
-                                                @if (pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'pdf' ||
-                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'docx' ||
-                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'txt' ||
-                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'csv')
-                                                    <a class="btn-submit" href="#"
-                                                        onclick="window.open('{{ asset($user->property_title_path) }}', '_blank')"><i
-                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @if (in_array(pathinfo($user->property_title_path, PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
+                                                    <a class="btn-submit"
+                                                        href="{{ asset('attachments/' . $user->property_title_path) }}"
+                                                        target="_blank">
+                                                        <i class="bi bi-eye text-blue-500"></i>
+                                                    </a>
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
+
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->hoa_due_certificate_path)
-                                                HOA Due Certificate
-                                                @if (pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'pdf' ||
-                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'docx' ||
-                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'txt' ||
-                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'csv')
-                                                    <a class="btn-submit" href="#"
-                                                        onclick="window.open('{{ asset($user->hoa_due_certificate_path) }}', '_blank')"><i
-                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                Hoa Due Certificate
+                                                @if (in_array(pathinfo($user->hoa_due_certificate_path, PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
+                                                    <a class="btn-submit"
+                                                        href="{{ asset('attachments/' . $user->hoa_due_certificate_path) }}"
+                                                        target="_blank">
+                                                        <i class="bi bi-eye text-blue-500"></i>
+                                                    </a>
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
@@ -123,29 +122,28 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->special_power_of_attorney_path)
-                                                Special Power of Attorney
-                                                @if (pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'pdf' ||
-                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'docx' ||
-                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'txt' ||
-                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'csv')
-                                                    <a class="btn-submit" href="#"
-                                                        onclick="window.open('{{ asset($user->special_power_of_attorney_path) }}', '_blank')"><i
-                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                Hoa Due Certificate
+                                                @if (in_array(pathinfo($user->special_power_of_attorney_path, PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
+                                                    <a class="btn-submit"
+                                                        href="{{ asset('attachments/' . $user->special_power_of_attorney_path) }}"
+                                                        target="_blank">
+                                                        <i class="bi bi-eye text-blue-500"></i>
+                                                    </a>
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
+
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->upload_file_path)
                                                 Signed Certificate of Candidacy
-                                                @if (pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'pdf' ||
-                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'docx' ||
-                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'txt' ||
-                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'csv')
-                                                    <a class="btn-submit" href="#"
-                                                        onclick="window.open('{{ asset($user->upload_file_path) }}', '_blank')"><i
-                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @if (in_array(pathinfo($user->upload_file_path, PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
+                                                    <a class="btn-submit"
+                                                        href="{{ asset('attachments/' . $user->upload_file_path) }}"
+                                                        target="_blank">
+                                                        <i class="bi bi-eye text-blue-500"></i>
+                                                    </a>
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
