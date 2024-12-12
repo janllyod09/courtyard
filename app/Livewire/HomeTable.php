@@ -69,7 +69,20 @@ class HomeTable extends Component
 
     private function storeFile($file)
     {
-        return $file->storeAs('attachments', $file->getClientOriginalName(), 'public');
+        if (!$file) {
+            return null;
+        }
+    
+        // Generate a unique filename
+        $filename = uniqid() . '_' . $file->getClientOriginalName();
+        
+        // Explicitly store in public disk
+        $path = $file->storeAs('attachments', $filename, 'public');
+        
+        // Log the path for debugging
+        \Log::info('Stored file path: ' . $path);
+        
+        return $path;
     }
 
     public function removeFile($key)
@@ -310,14 +323,16 @@ class HomeTable extends Component
 
         if ($this->file && $user) {
             $filePath = $this->file->store('uploads', 'public');
+            $propertyTitlePath = $this->storeFile($this->files['property_title']);
 
             // Update the user's record with the file path
             $user->update([
                 'upload_file_path' => $filePath,
-                'property_title_path' => $this->storeFile($this->files['property_title']),
+                // 'property_title_path' => $this->storeFile($this->files['property_title']),
+                'property_title_path' => $propertyTitlePath,
                 'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
                 'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
-                'property_title_name' => $this->files['property_title']->getClientOriginalName(),
+                // 'property_title_name' => $this->files['property_title']->getClientOriginalName(),
                 'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
                 'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
             ]);

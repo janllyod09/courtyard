@@ -93,9 +93,10 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <a href="{{ Storage::url($user->property_title_path) }}" target="_blank"
+                                                <a href="{{ Storage::disk('public')->url($user->property_title_path) }}"
+                                                    target="_blank"
                                                     class="text-sky-800 dark:text-sky-600 hover:underline">
-                                                    Property Title
+                                                    {{ $user->property_title_name }}
                                                 </a>
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
