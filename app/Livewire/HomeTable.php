@@ -70,10 +70,24 @@ class HomeTable extends Component
         $this->closeForm();
     }
 
-    // private function storeFile($file)
-    // {
-    //     return $file->storeAs('attachments', $file->getClientOriginalName(), 'public');
-    // }
+    private function storeFile($file)
+    {
+        // Define the target directory in the public folder
+        $targetDirectory = public_path('attachments');
+    
+        // Ensure the directory exists
+        if (!file_exists($targetDirectory)) {
+            mkdir($targetDirectory, 0777, true);
+        }
+    
+        // Move the file to the public/attachments folder
+        $filePath = $targetDirectory . '/' . $file->getClientOriginalName();
+        $file->move($targetDirectory, $file->getClientOriginalName());
+    
+        // Return the relative path to be stored in the database
+        return 'attachments/' . $file->getClientOriginalName();
+    }
+    
 
     public function removeFile($key)
     {
@@ -369,11 +383,6 @@ class HomeTable extends Component
                 'icon' => 'success'
             ]);
         }
-    }
-
-    protected function storeFile($file)
-    {
-        return $file->store('uploads', 'public');
     }
 
     public function removeFileUpload()

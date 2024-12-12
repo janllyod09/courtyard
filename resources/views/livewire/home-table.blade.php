@@ -93,96 +93,60 @@
                                         </td>
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->property_title_path)
-                                                <div class="file-container">
-                                                    <span>
-                                                        {{ pathinfo(Storage::url($user->property_title_path), PATHINFO_FILENAME) }}.
-                                                        {{ pathinfo(Storage::url($user->property_title_path), PATHINFO_EXTENSION) }}
-                                                    </span>
-                                                </div>
-                                                <div class="req-files-buttons">
-                                                    <a href="{{ Storage::url($user->property_title_path) }}" download
-                                                        class="btn-submit text-sky-800 dark:text-sky-600 hover:underline">
-                                                        Download
-                                                    </a>
-                                                    @if (in_array(pathinfo(Storage::url($user->property_title_path), PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
-                                                        <a href="#"
-                                                            class="btn-submit text-sky-800 dark:text-sky-600 hover:underline"
-                                                            onclick="window.open('{{ Storage::url($user->property_title_path) }}', '_blank')">View</a>
-                                                    @endif
-                                                </div>
+                                                Property Title
+                                                @if (pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'pdf' ||
+                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'docx' ||
+                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'txt' ||
+                                                        pathinfo(asset($user->property_title_path), PATHINFO_EXTENSION) === 'csv')
+                                                    <a class="btn-submit" href="#"
+                                                        onclick="window.open('{{ asset($user->property_title_path) }}', '_blank')"><i
+                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
-
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->hoa_due_certificate_path)
-                                                <div class="file-container">
-                                                    <span>
-                                                        {{ pathinfo(Storage::url($user->hoa_due_certificate_path), PATHINFO_FILENAME) }}.
-                                                        {{ pathinfo(Storage::url($user->hoa_due_certificate_path), PATHINFO_EXTENSION) }}
-                                                    </span>
-                                                </div>
-                                                <div class="req-files-buttons">
-                                                    <a href="{{ Storage::url($user->hoa_due_certificate_path) }}"
-                                                        download
-                                                        class="btn-submit text-sky-800 dark:text-sky-600 hover:underline">
-                                                        Download
-                                                    </a>
-                                                    @if (in_array(pathinfo(Storage::url($user->hoa_due_certificate_path), PATHINFO_EXTENSION), [
-                                                            'pdf',
-                                                            'docx',
-                                                            'txt',
-                                                            'csv',
-                                                        ]))
-                                                        <a href="#"
-                                                            class="btn-submit text-sky-800 dark:text-sky-600 hover:underline"
-                                                            onclick="window.open('{{ Storage::url($user->hoa_due_certificate_path) }}', '_blank')">View</a>
-                                                    @endif
-                                                </div>
+                                                HOA Due Certificate
+                                                @if (pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'pdf' ||
+                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'docx' ||
+                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'txt' ||
+                                                        pathinfo(asset($user->hoa_due_certificate_path), PATHINFO_EXTENSION) === 'csv')
+                                                    <a class="btn-submit" href="#"
+                                                        onclick="window.open('{{ asset($user->hoa_due_certificate_path) }}', '_blank')"><i
+                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
-
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                             @if ($user->special_power_of_attorney_path)
-                                                <div class="file-container">
-                                                    <span>
-                                                        {{ pathinfo(Storage::url($user->special_power_of_attorney_path), PATHINFO_FILENAME) }}.
-                                                        {{ pathinfo(Storage::url($user->special_power_of_attorney_path), PATHINFO_EXTENSION) }}
-                                                    </span>
-                                                </div>
-                                                <div class="req-files-buttons">
-                                                    <a href="{{ Storage::url($user->special_power_of_attorney_path) }}"
-                                                        download
-                                                        class="btn-submit text-sky-800 dark:text-sky-600 hover:underline">
-                                                        Download
-                                                    </a>
-                                                    @if (in_array(pathinfo(Storage::url($user->special_power_of_attorney_path), PATHINFO_EXTENSION), [
-                                                            'pdf',
-                                                            'docx',
-                                                            'txt',
-                                                            'csv',
-                                                        ]))
-                                                        <a href="#"
-                                                            class="btn-submit text-sky-800 dark:text-sky-600 hover:underline"
-                                                            onclick="window.open('{{ Storage::url($user->special_power_of_attorney_path) }}', '_blank')">View</a>
-                                                    @endif
-                                                </div>
+                                                Special Power of Attorney
+                                                @if (pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'pdf' ||
+                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'docx' ||
+                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'txt' ||
+                                                        pathinfo(asset($user->special_power_of_attorney_path), PATHINFO_EXTENSION) === 'csv')
+                                                    <a class="btn-submit" href="#"
+                                                        onclick="window.open('{{ asset($user->special_power_of_attorney_path) }}', '_blank')"><i
+                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
                                         </td>
-
-
                                         <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
-                                            @if (auth()->user()->upload_file_path)
-                                                <a href="{{ Storage::url(auth()->user()->upload_file_path) }}"
-                                                    target="_blank"
-                                                    class="text-sky-800 dark:text-sky-600 hover:underline">
-                                                    Uploaded File
-                                                </a>
+                                            @if ($user->upload_file_path)
+                                                Signed Certificate of Candidacy
+                                                @if (pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'pdf' ||
+                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'docx' ||
+                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'txt' ||
+                                                        pathinfo(asset($user->upload_file_path), PATHINFO_EXTENSION) === 'csv')
+                                                    <a class="btn-submit" href="#"
+                                                        onclick="window.open('{{ asset($user->upload_file_path) }}', '_blank')"><i
+                                                            class="bi bi-eye text-blue-500"></i></a>
+                                                @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
                                             @endif
