@@ -47,15 +47,12 @@ class HomeTable extends Component
         $user = Auth::user();
 
         if ($user) {
-            $propertyTitlePath = $this->storeFile($this->files['property_title']);
             $user->update([
                 'position' => $this->position,
                 'qualification' => implode(',', $this->qualification),
-                // 'property_title_path' => $this->storeFile($this->files['property_title']),
-                'property_title_path' => $propertyTitlePath,
+                'property_title_path' => $this->storeFile($this->files['property_title']),
                 'hoa_due_certificate_path' => $this->storeFile($this->files['hoa_due_certificate']),
                 'special_power_of_attorney_path' => $this->storeFile($this->files['special_power_of_attorney']),
-                // 'property_title_name' => $this->files['property_title']->getClientOriginalName(),
                 'property_title_name' => $this->files['property_title']->getClientOriginalName(),
                 'hoa_due_certificate_name' => $this->files['hoa_due_certificate']->getClientOriginalName(),
                 'special_power_of_attorney_name' => $this->files['special_power_of_attorney']->getClientOriginalName(),
@@ -73,12 +70,7 @@ class HomeTable extends Component
 
     private function storeFile($file)
     {
-        if (!$file) {
-            return null;
-        }
-    
-        // Use Storage facade to put the file
-        return Storage::disk('public')->putFile('attachments', $file);
+        return $file->storeAs('attachments', $file->getClientOriginalName(), 'public');
     }
 
     public function removeFile($key)
