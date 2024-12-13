@@ -5,10 +5,11 @@
         <x-dashboard.welcome-banner />
 
         <!-- Cards -->
-        <div class="grid grid-cols-12 gap-6">
-            <x-dashboard.dashboard-card-01 />
+        <div class="">
+            {{-- <x-dashboard.dashboard-card-01 />
             <x-dashboard.dashboard-card-02 />
-            <x-dashboard.dashboard-card-03 />
+            <x-dashboard.dashboard-card-03 /> --}}
+            @livewire('candidates-table')
         </div>
     </div>
 </x-app-layout>

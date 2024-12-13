@@ -21,8 +21,9 @@
 
     <!-- Content -->
     <div class="relative">
-        <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good day, {{ Auth::user()->registrant_name }} 👋</h1>
-        <p class="dark:text-indigo-200">The Mine SHOP</p>
+        <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good day,
+        </h1>
+        <p class="dark:text-slate-100">Mr. {{ Auth::user()->firstname }} 👋</p>
     </div>
 
 </div>

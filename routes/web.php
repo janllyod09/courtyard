@@ -17,6 +17,8 @@ Route::middleware(['auth', 'checkrole:admin'])->group(function () {
 
     Route::get('/clients', function () {
         return view('livewire.clients'); })->name('clients');
+        Route::get('/candidates', function () {
+        return view('livewire.candidates'); })->name('candidates');
     Route::get('/monthly-reports', function () {
         return view('livewire.report'); })->name('monthly-reports');
     Route::get('/quarterly-reports', function () {
