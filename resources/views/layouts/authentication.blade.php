@@ -130,7 +130,8 @@
                 </div>
 
                 <div class="flex items-center justify-center w-full h-full login-logo animate-slide-in-right-delay">
-                    <img class="w-1/2 h-1/2 object-contain" src="" width="760" height="1024" />
+                    {{-- <img class="w-1/2 h-1/2 object-contain" src="{{ asset('images/logo1.png') }}" width="760"
+                        height="1024" alt="Authentication image" /> --}}
                 </div>
             </div>
 
