@@ -63,6 +63,9 @@
                                     <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
                                         Uploaded File
                                     </th>
+                                    <th scope="col" class="px-5 py-3 text-sm font-medium text-left uppercase">
+                                        Status
+                                    </th>
                                     <th
                                         class="px-5 py-3 text-gray-100 text-sm font-medium text-center sticky top-0 right-0 z-10 bg-gray-600 dark:bg-gray-600 uppercase">
                                         Actions</th>
@@ -147,6 +150,30 @@
                                                 @endif
                                             @else
                                                 <span class="text-gray-500">Not uploaded</span>
+                                            @endif
+                                        </td>
+                                        <td class="px-5 py-4 text-center text-sm font-medium whitespace-nowrap">
+                                            @if ($user->status === 'Approved')
+                                                <span
+                                                    class="w-fit inline-flex overflow-hidden rounded-2xl border border-green-600 bg-white text-xs font-medium text-green-600 dark:border-green-600 dark:bg-slate-900 dark:text-green-600">
+                                                    <span class="px-2 py-1 bg-green-600/10 dark:bg-green-600/10">
+                                                        {{ $user->status }}
+                                                    </span>
+                                                </span>
+                                            @elseif ($user->status === 'Disapproved')
+                                                <span
+                                                    class="w-fit inline-flex overflow-hidden rounded-2xl border border-red-600 bg-white text-xs font-medium text-red-600 dark:border-red-600 dark:bg-slate-900 dark:text-red-600">
+                                                    <span class="px-2 py-1 bg-red-600/10 dark:bg-red-600/10">
+                                                        {{ $user->status }}
+                                                    </span>
+                                                </span>
+                                            @else
+                                                <span
+                                                    class="w-fit inline-flex overflow-hidden rounded-2xl border border-amber-500 bg-white text-xs font-medium text-amber-500 dark:border-amber-500 dark:bg-slate-900 dark:text-amber-500">
+                                                    <span class="px-2 py-1 bg-amber-500/10 dark:bg-amber-500/10">
+                                                        {{ $user->status }}
+                                                    </span>
+                                                </span>
                                             @endif
                                         </td>
 
