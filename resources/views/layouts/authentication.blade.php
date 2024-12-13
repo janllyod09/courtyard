@@ -126,7 +126,7 @@
                 aria-hidden="true">
                 <div class="right-side-login animate-slide-in-right">
                     <div></div>
-                    <img src="images/Vector.png" alt="login bg" style="height: 101%;">
+                    <img src="images/Vector (1).png" alt="login bg" style="height: 101%;">
                 </div>
 
                 <div class="flex items-center justify-center w-full h-full login-logo animate-slide-in-right-delay">
