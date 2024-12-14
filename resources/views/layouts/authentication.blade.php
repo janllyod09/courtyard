@@ -14,10 +14,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script src="https://cdn.jsdelivr.net/npm/@marcreichel/alpine-auto-animate@latest/dist/alpine-auto-animate.min.js"
+        defer></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/alpine.min.js" defer></script>
 
     <!-- Scripts -->
     <script defer src="build/assets/app-D9BebNPI.js"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Styles -->
     <link rel="stylesheet" href="build/assets/app--UUk-3lr.css">
@@ -108,7 +116,7 @@
                         <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                             <!-- Logo -->
                             <a class="block" href="{{ route('dashboard') }}">
-                                <img src="images/logo1.png" alt="logo" class="h-12">
+                                <img src="/images/logo1.png" alt="logo" class="h-12">
                             </a>
                         </div>
                     </div>
@@ -126,7 +134,7 @@
                 aria-hidden="true">
                 <div class="right-side-login animate-slide-in-right">
                     <div></div>
-                    <img src="images/Vector (1).png" alt="login bg" style="height: 101%;">
+                    <img src="/images/Vector (1).png" alt="login bg" style="height: 101%;">
                 </div>
 
                 <div class="flex items-center justify-center w-full h-full login-logo animate-slide-in-right-delay">

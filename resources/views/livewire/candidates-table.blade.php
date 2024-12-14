@@ -112,7 +112,8 @@
                                                 </th>
                                                 <th scope="col"
                                                     class="px-5 py-3 text-sm font-medium text-center uppercase">
-                                                    Special Power of Attorney
+                                                    Special Power of Attorney for Non-Owner <br> (Relative / Care Taker,
+                                                    Renters)
                                                 </th>
                                                 <th scope="col"
                                                     class="px-5 py-3 text-sm font-medium text-center uppercase">
@@ -248,7 +249,7 @@
                                                     </td>
                                                     <td class="px-5 py-3 text-sm text-gray-800 dark:text-gray-200">
                                                         @if ($user->special_power_of_attorney_path)
-                                                            Hoa Due Certificate
+                                                            Special Power of Attorney for Non-Owner
                                                             @if (in_array(pathinfo($user->special_power_of_attorney_path, PATHINFO_EXTENSION), ['pdf', 'docx', 'txt', 'csv']))
                                                                 <a class="btn-submit"
                                                                     href="{{ asset('attachments/' . $user->special_power_of_attorney_path) }}"
